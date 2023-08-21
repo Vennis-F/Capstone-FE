@@ -4,10 +4,16 @@
     "form": {
       "title": "title",
       "body": "body",
+      "name": "name",
+      "description": "description",
+      "imgUrl": "imgUrl",
       "validation": {
         "title-required": "title can't be empty",
         "title-max": "title must not exceed {{num}} characters",
-        "body-required": "body can't be empty"
+        "body-required": "body can't be empty",
+        "name-required": "Name can't be empty",
+        "name-max": "Name must not exceed {{num}} characters",
+        "description-required": "Description can't be empty"
       }
     },
     "buttons": {

@@ -5,7 +5,8 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Outlet } from 'react-router-dom'
 
-import Header from 'components/Header/Header'
+// import Header from 'components/Header/Header'
+import HeaderLOL from 'components/Header/HeaderLOL'
 
 const Layout = () => {
   const [mode, setMode] = React.useState<'light' | 'dark'>('light')
@@ -39,7 +40,7 @@ const Layout = () => {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Header
+        <HeaderLOL
           currentThemeMode={theme.palette.mode}
           onChangeThemeClick={colorMode.toggleColorMode}
           onChangeLanguage={onChangeLanguage}
@@ -48,8 +49,8 @@ const Layout = () => {
           <Box
             sx={{
               bgcolor: 'background.paper',
-              pt: 3,
-              pb: 3,
+              // pt: 3,
+              // pb: 3,
             }}
           >
             <Outlet />

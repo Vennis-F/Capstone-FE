@@ -8,7 +8,7 @@ import {
   updateCharacter,
 } from 'features/characters/api/index'
 import { charactersAction } from 'features/characters/store/characters.slice'
-import { Character } from 'features/characters/types/index'
+import { Character, CharacterFormInput } from 'features/characters/types/index'
 
 // Worker Sagas
 export function* onGetCharacters(): SagaIterator {
@@ -30,10 +30,22 @@ function* onUpdateCharacter({
   payload,
 }: {
   type: typeof charactersAction.update
-  payload: Character
+  payload: { id: string; character: CharacterFormInput; callbackFn: (status: string) => void }
 }): SagaIterator {
-  yield call(updateCharacter, payload)
-  yield put(charactersAction.fetchAll())
+  try {
+    yield call(updateCharacter, payload.id, payload.character)
+    payload.callbackFn('success')
+  } catch (error) {
+    console.log('[ERROR in Saga]', error)
+    // yield put(
+    //   charactersAction.functionDispatchFailed({
+    //     type: charactersAction.update.type,
+    //     error: { message: (error as Error).message } as Error,
+    //   }),
+    // )
+    payload.callbackFn('fail')
+  }
+  // yield put(charactersAction.fetchAll())
 }
 
 function* onDeleteCharacter({

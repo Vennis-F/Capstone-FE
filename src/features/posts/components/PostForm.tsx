@@ -36,6 +36,7 @@ export const PostForm = (props: PostFormProps) => {
     defaultValues,
     resolver: yupResolver(newPostValidationSchema),
   })
+
   const { handleSubmit, reset, control } = methods
 
   return (

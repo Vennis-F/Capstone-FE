@@ -19,6 +19,7 @@ export const PostContainer = () => {
   useEffect(() => {
     fetchAllPosts()
   }, [fetchAllPosts])
+
   return (
     <>
       <Container maxWidth="xs">

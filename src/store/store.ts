@@ -26,7 +26,13 @@ const makeStore = () => {
     },
     devTools: Env.isDev(),
     middleware: getDefaultMiddleware =>
-      getDefaultMiddleware({ thunk: false })
+      getDefaultMiddleware({
+        thunk: false,
+        serializableCheck: {
+          // Ignore these field paths in all actions
+          ignoredActionPaths: ['payload.callbackFn'],
+        },
+      })
         .concat(sagaMiddleware)
         .concat(routerMiddleware)
         .concat(logger),
