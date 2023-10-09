@@ -43,7 +43,6 @@ interface CouresDetailGuestContainerProps {
 }
 
 export const CouresDetailGuestContainer = ({ id }: CouresDetailGuestContainerProps) => {
-  console.log('[CourseDetailGuestPage id]', id)
   const currentCourse = {
     id,
     title: 'Linux for Network Engineers: Practical Linux with GNS3',
@@ -435,7 +434,7 @@ David`,
           </Box>
         </Container>
         <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
-          <Box sx={{ width: '%' }}>
+          <Box sx={{ width: '67%' }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <StarIcon sx={{ color: '#FAAF00', marginRight: '10px' }} />
               <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
