@@ -13,9 +13,9 @@ type ButtonLinkHeaderProps = {
 const style: StyleSxProps = {
   link: {
     paddingBottom: 2,
-    borderBottom: '3px solid #111111',
+    borderBottom: '3px solid #eab308',
     ':hover': {
-      borderBottomColor: '#047C8F',
+      borderBottomColor: 'white',
     },
   },
   title: {
@@ -24,10 +24,10 @@ const style: StyleSxProps = {
     fontWeight: '500',
     paddingX: 2,
     paddingY: 1,
-    ':hover': {
-      backgroundColor: '#303030',
-      borderRadius: 2,
-    },
+    // ':hover': {
+    //   backgroundColor: '#303030',
+    //   borderRadius: 2,
+    // },
   },
 } as const
 

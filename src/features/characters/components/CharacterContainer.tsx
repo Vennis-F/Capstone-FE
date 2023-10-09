@@ -49,7 +49,6 @@ export const CharacterContainer = () => {
   }
   useEffect(() => {
     fetchAllCharacters()
-    console.log('123')
   }, [fetchAllCharacters])
   return (
     <>

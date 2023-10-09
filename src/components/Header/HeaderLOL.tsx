@@ -1,14 +1,53 @@
-import Brightness4Icon from '@mui/icons-material/Brightness4'
-import Brightness7Icon from '@mui/icons-material/Brightness7'
-import { Button, ButtonGroup, IconButton, Menu, MenuItem } from '@mui/material'
+import SearchIcon from '@mui/icons-material/Search'
 import AppBar from '@mui/material/AppBar'
+import InputBase from '@mui/material/InputBase'
+import { styled, alpha } from '@mui/material/styles'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import React from 'react'
+import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import ButtonDropdownHeader from 'libs/ui/components/ButtonDropdownHeader'
 import ButtonLinkHeader from 'libs/ui/components/ButtonLinkHeader'
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginRight: theme.spacing(2),
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(3),
+    width: 'auto',
+  },
+}))
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}))
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+    },
+  },
+}))
 
 type HeaderLOLProps = {
   currentThemeMode: 'light' | 'dark'
@@ -18,38 +57,50 @@ type HeaderLOLProps = {
 
 const HeaderLOL = (props: HeaderLOLProps) => {
   const { t } = useTranslation()
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
+  console.log(props)
+  // const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  // const open = Boolean(anchorEl)
+  // const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  //   setAnchorEl(event.currentTarget)
+  // }
+  // const handleClose = () => {
+  //   setAnchorEl(null)
+  // }
 
-  const { currentThemeMode, onChangeThemeClick, onChangeLanguage } = props
+  // const { currentThemeMode, onChangeThemeClick, onChangeLanguage } = props
 
   return (
     <>
       <AppBar
         position="static"
-        color="primary"
+        // color="secondary"
         elevation={0}
         sx={{
           borderBottom: theme => `1px solid ${theme.palette.divider}`,
-          backgroundColor: '#111111',
+          backgroundColor: '#146C94',
         }}
       >
         <Toolbar sx={{ flexWrap: 'wrap' }}>
           <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-            {'RIOT GAMES'}
+            {'DRAWING PLATFORM'}
           </Typography>
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Tìm kiếm khóa học"
+              inputProps={{ 'aria-label': 'search' }}
+            />
+          </Search>
           <nav>
-            <ButtonLinkHeader to="/" title={t('navigation.links.home')} />
-            <ButtonLinkHeader to="/about" title={t('navigation.links.about')} />
-            <ButtonLinkHeader to="/characters" title={t('navigation.links.characters')} />
+            <ButtonLinkHeader to="/cart" title={t('Cart')} />
+            <ButtonLinkHeader to="/list-course" title={t('ListCoursePage')} />
+            <ButtonLinkHeader to="/guest-login" title={t('Đăng nhập')} />
+            <ButtonLinkHeader to="/" title={t('Đăng ký')} />
+            <ButtonLinkHeader to="/order-list" title={t('Danh sách đơn hàng')} />
 
-            <ButtonDropdownHeader title="Tin tức" handlerClick={handleClick} />
+            {/* <ButtonDropdownHeader title="Tin tức" handlerClick={handleClick} />
             <Menu
               id="basic-menu"
               anchorEl={anchorEl}
@@ -83,14 +134,14 @@ const HeaderLOL = (props: HeaderLOLProps) => {
               </MenuItem>
               <MenuItem onClick={handleClose}>Cập nhật trò chơi</MenuItem>
               <MenuItem onClick={handleClose}>Esport</MenuItem>
-            </Menu>
-            <ButtonGroup variant="text" color="inherit">
+            </Menu> */}
+            {/* <ButtonGroup variant="text" color="inherit">
               <Button onClick={() => onChangeLanguage('en')}>🇺🇸</Button>
               <Button onClick={() => onChangeLanguage('pl')}>🇵🇱</Button>
-            </ButtonGroup>
-            <IconButton sx={{ ml: 1 }} onClick={onChangeThemeClick} color="inherit">
+            </ButtonGroup> */}
+            {/* <IconButton sx={{ ml: 1 }} onClick={onChangeThemeClick} color="inherit">
               {currentThemeMode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-            </IconButton>
+            </IconButton> */}
           </nav>
         </Toolbar>
       </AppBar>
