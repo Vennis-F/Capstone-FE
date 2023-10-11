@@ -7,9 +7,6 @@ const api = makeApi(`${Env.API_BASE_URL}`)
 
 const CHARACTERS_BASE_URL = `/character`
 
-// typescript định nghĩa type
-// 2 4 1 3
-
 export const getCharacters = (): Promise<Character[]> => api.get(CHARACTERS_BASE_URL)
 
 export const getCharacterById = (id: string): Promise<Character> =>

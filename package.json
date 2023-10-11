@@ -34,6 +34,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start2": "react-scripts start",
     "build": "react-scripts build",
     "serve": "serve -s build",
     "test": "react-scripts test",
@@ -120,8 +121,5 @@
       "pretty-quick --staged",
       "yarn run lint:fix"
     ]
-  },
-  "msw": {
-    "workerDirectory": "public"
   }
 }
