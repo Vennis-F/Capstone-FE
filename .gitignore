@@ -21,7 +21,7 @@ TODO.md
 
 # production
 /build
-.env
+/.env
 
 # misc
 .DS_Store
