@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Outlet } from 'react-router-dom'
 
 // import Header from 'components/Header/Header'
+import Footer from 'components/Footer/Footer'
 import HeaderLOL from 'components/Header/HeaderLOL'
 
 const Layout = () => {
@@ -14,7 +15,7 @@ const Layout = () => {
 
   // TODO: move state to redux
   const onChangeLanguage = (lang: string) => {
-    i18n.changeLanguage(lang)
+    i18n.changeLanguage(lang) // eslint-disable-line @typescript-eslint/no-floating-promises
   }
 
   const colorMode = React.useMemo(
@@ -40,22 +41,25 @@ const Layout = () => {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <HeaderLOL
-          currentThemeMode={theme.palette.mode}
-          onChangeThemeClick={colorMode.toggleColorMode}
-          onChangeLanguage={onChangeLanguage}
-        />
-        <main>
-          <Box
-            sx={{
-              bgcolor: 'background.paper',
-              // pt: 3,
-              // pb: 3,
-            }}
-          >
-            <Outlet />
-          </Box>
-        </main>
+        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+          <HeaderLOL
+            currentThemeMode={theme.palette.mode}
+            onChangeThemeClick={colorMode.toggleColorMode}
+            onChangeLanguage={onChangeLanguage}
+          />
+          <main>
+            <Box
+              sx={{
+                bgcolor: 'background.paper',
+                pt: '50px',
+                pb: '50px',
+              }}
+            >
+              <Outlet />
+            </Box>
+          </main>
+          <Footer />
+        </Box>
       </ThemeProvider>
     </>
   )

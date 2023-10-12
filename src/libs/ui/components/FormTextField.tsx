@@ -16,7 +16,7 @@ export const FormTextField = ({ name, control, label }: FormInputProps) => (
     render={({ field: { onChange, value }, fieldState: { error } }) => (
       <TextField
         helperText={error ? error.message : null}
-        size="small"
+        size="medium"
         error={!!error}
         onChange={onChange}
         value={value}

@@ -10,6 +10,9 @@ import DetailCoursePage from 'pages/DetailCoursePage'
 import GuestLoginPage from 'pages/GuestLoginPage'
 import ListCoursePage from 'pages/ListCoursePage'
 import MyLearningPage from 'pages/MyLearningPage'
+import { UserRole } from 'types'
+
+import { PrivateRoute } from '../components/Common/PrivateRoute'
 
 // const HomePage = React.lazy(() => import('pages/HomePage'))
 const AboutPage = React.lazy(() => import('pages/AboutPage'))
@@ -29,7 +32,9 @@ const AppRoutes = () => (
           <Route path="/detail-course" element={<DetailCoursePage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/order-list" element={<CustomerOrderListPage />} />
-          <Route path="/my-learning" element={<MyLearningPage />} />
+          <Route path="/my-learning" element={<PrivateRoute roles={[UserRole.CUSTOMER]} />}>
+            <Route path="/my-learning" element={<MyLearningPage />} />
+          </Route>
         </Route>
       </Routes>
     </Suspense>

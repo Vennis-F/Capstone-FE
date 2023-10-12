@@ -1,3 +1,4 @@
+import PaletteIcon from '@mui/icons-material/Palette'
 import SearchIcon from '@mui/icons-material/Search'
 import AppBar from '@mui/material/AppBar'
 import InputBase from '@mui/material/InputBase'
@@ -81,8 +82,19 @@ const HeaderLOL = (props: HeaderLOLProps) => {
         }}
       >
         <Toolbar sx={{ flexWrap: 'wrap' }}>
-          <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-            {'DRAWING PLATFORM'}
+          <Typography
+            variant="h6"
+            color="inherit"
+            noWrap
+            sx={{
+              // display: 'flex',
+              // alignItems: 'center',
+              // justifyContent: 'space-between',
+              flexGrow: 1,
+              color: '#B0DAFF',
+            }}
+          >
+            <PaletteIcon /> {'DRAWING PLATFORM'}
           </Typography>
           <Search>
             <SearchIconWrapper>

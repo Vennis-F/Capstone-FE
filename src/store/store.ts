@@ -5,7 +5,7 @@ import { createReduxHistoryContext } from 'redux-first-history'
 import logger from 'redux-logger'
 
 import { Env } from 'config/Env'
-// import authReducer from 'features/auth/store/auth.slice'
+import authReducer from 'features/auth/store/auth.slice'
 import charactersReducer from 'features/characters/store/characters.slice'
 import postsReducer from 'features/posts/store/posts.slice'
 import { rootSaga } from 'store/rootSaga'
@@ -23,7 +23,7 @@ const makeStore = () => {
     reducer: {
       posts: postsReducer,
       characters: charactersReducer,
-      // auth: authReducer,
+      auth: authReducer,
       router: routerReducer,
     },
     devTools: Env.isDev(),

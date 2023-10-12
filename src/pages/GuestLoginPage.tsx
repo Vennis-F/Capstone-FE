@@ -1,12 +1,8 @@
-import React from 'react'
-
-// import { GuestLoginContainer } from 'features/auth/components/GuestLoginContainer'
-import TitleTypography from 'libs/ui/components/TitleTypography'
+import { GuestLoginContainer } from 'features/auth/components/GuestLoginContainer'
 
 const GuestLoginPage = () => (
   <>
-    <TitleTypography title="Đăng nhập" />
-    {/* <GuestLoginContainer /> */}
+    <GuestLoginContainer />
   </>
 )
 

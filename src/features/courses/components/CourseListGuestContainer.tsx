@@ -85,7 +85,7 @@ export const CourseListGuestContainer = () => {
   ]
 
   return (
-    <Container maxWidth="lg" sx={{ paddingTop: '50px' }}>
+    <Container maxWidth="lg">
       <Typography variant="h4" sx={{ marginBottom: '20px' }}>
         2,026 kết quả cho từ khóa &quot;NodeJS&ldquo;
       </Typography>

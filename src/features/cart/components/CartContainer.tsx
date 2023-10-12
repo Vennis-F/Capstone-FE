@@ -84,7 +84,7 @@ export const CartContainer = () => {
     setOpenModalDeleteAll(false)
   }
   return (
-    <Container maxWidth="lg" sx={{ paddingTop: '50px' }}>
+    <Container maxWidth="lg">
       <Typography variant="h4" sx={{ marginBottom: '20px', fontWeight: '600' }}>
         Giỏ hàng
       </Typography>
