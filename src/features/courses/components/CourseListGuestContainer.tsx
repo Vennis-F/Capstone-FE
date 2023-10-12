@@ -1,29 +1,30 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { Container, Pagination, Rating, Stack } from '@mui/material'
-import Accordion from '@mui/material/Accordion'
-import AccordionDetails from '@mui/material/AccordionDetails'
-import AccordionSummary from '@mui/material/AccordionSummary'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
-import Checkbox from '@mui/material/Checkbox'
 import Fade from '@mui/material/Fade'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Typography from '@mui/material/Typography'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+
+import { getCategories } from 'features/category/api'
+import { Category } from 'features/category/types'
+import { getLevels } from 'features/level/api'
+import { Level } from 'features/level/types'
+
+import CourseFilterAccordion from './CourseFilterAccordion'
 
 export const CourseListGuestContainer = () => {
   const navigate = useNavigate()
-  const [checked, setChecked] = useState([0])
+  const [listLevels, setListLevels] = useState<Level[]>([])
+  const [listCategories, setListCategories] = useState<Category[]>([])
+  const [checkedLevelIds, setCheckedLevelIds] = useState<string[]>([])
+  const [checkedCategoryIds, setCheckedCategoryIds] = useState<string[]>([])
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [page, setPage] = useState(1)
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -37,9 +38,9 @@ export const CourseListGuestContainer = () => {
     setAnchorEl(null)
   }
 
-  const handleToggle = (value: number) => () => {
-    const currentIndex = checked.indexOf(value)
-    const newChecked = [...checked]
+  const handleToggleLevel = (value: string) => () => {
+    const currentIndex = checkedLevelIds.findIndex(id => id === value)
+    const newChecked = [...checkedLevelIds]
 
     if (currentIndex === -1) {
       newChecked.push(value)
@@ -47,7 +48,19 @@ export const CourseListGuestContainer = () => {
       newChecked.splice(currentIndex, 1)
     }
 
-    setChecked(newChecked)
+    setCheckedLevelIds(newChecked)
+  }
+  const handleToggleCategory = (value: string) => () => {
+    const currentIndex = checkedCategoryIds.findIndex(id => id === value)
+    const newChecked = [...checkedCategoryIds]
+
+    if (currentIndex === -1) {
+      newChecked.push(value)
+    } else {
+      newChecked.splice(currentIndex, 1)
+    }
+
+    setCheckedCategoryIds(newChecked)
   }
   const listcourses = [
     {
@@ -83,6 +96,18 @@ export const CourseListGuestContainer = () => {
       img: 'https://img-b.udemycdn.com/course/240x135/3830262_2c3b_3.jpg',
     },
   ]
+
+  console.log('[checked]', checkedLevelIds, checkedCategoryIds)
+
+  useEffect(() => {
+    async function asyncFn() {
+      const levels = await getLevels()
+      const categories = await getCategories()
+      setListLevels([...levels])
+      setListCategories([...categories])
+    }
+    asyncFn()
+  }, [])
 
   return (
     <Container maxWidth="lg">
@@ -134,58 +159,18 @@ export const CourseListGuestContainer = () => {
       </Menu>
       <Box maxWidth="lg" sx={{ display: 'flex', padding: '0' }}>
         <Box sx={{ width: '30%', paddingRight: '20px' }}>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography variant="h5" sx={{ fontSize: '20px', fontWeight: 'bold' }}>
-                Level
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                {[0, 1, 2, 3].map(value => {
-                  const labelId = `checkbox-list-label-${value}`
-
-                  return (
-                    <ListItem key={value} disablePadding>
-                      <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
-                        <ListItemIcon>
-                          <Checkbox
-                            edge="start"
-                            checked={checked.indexOf(value) !== -1}
-                            tabIndex={-1}
-                            disableRipple
-                            inputProps={{ 'aria-labelledby': labelId }}
-                          />
-                        </ListItemIcon>
-                        <ListItemText id={labelId} primary={`Line item ${value + 1}`} />
-                      </ListItemButton>
-                    </ListItem>
-                  )
-                })}
-              </List>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel2a-content"
-              id="panel2a-header"
-            >
-              <Typography variant="h5" sx={{ fontSize: '20px', fontWeight: 'bold' }}>
-                Rating
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus
-                ex, sit amet blandit leo lobortis eget.
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
+          <CourseFilterAccordion
+            title="Cấp độ"
+            checkedList={checkedLevelIds}
+            listData={listLevels}
+            handleToggle={handleToggleLevel}
+          />
+          <CourseFilterAccordion
+            title="Thể loại"
+            checkedList={checkedCategoryIds}
+            listData={listCategories}
+            handleToggle={handleToggleCategory}
+          />
         </Box>
         <Box sx={{ width: '70%', display: 'block' }}>
           {listcourses.map(course => (
