@@ -11,3 +11,20 @@ export enum UserRole {
 export type ResponseError = {
   response: { data: { message: string } }
 }
+export enum OrderType {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
+export type PageOptions = {
+  take: number
+  page: number
+  order: OrderType
+}
+export type PageMetaResponse = {
+  page: number
+  take: number
+  itemCount: number
+  pageCount: number
+  hasPreviousPage: boolean
+  hasNextPage: boolean
+}

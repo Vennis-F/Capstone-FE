@@ -24,7 +24,7 @@ type Props = {
 }
 
 const CourseFilterAccordion = ({ title, listData, checkedList, handleToggle }: Props) => (
-  <Accordion>
+  <Accordion expanded={true}>
     <AccordionSummary
       expandIcon={<ExpandMoreIcon />}
       aria-controls="panel1a-content"
@@ -34,8 +34,8 @@ const CourseFilterAccordion = ({ title, listData, checkedList, handleToggle }: P
         {title}
       </Typography>
     </AccordionSummary>
-    <AccordionDetails>
-      <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+    <AccordionDetails sx={{ padding: 0 }}>
+      <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', padding: 0 }}>
         {listData.map(data => {
           const labelId = `checkbox-list-label-${data.id}`
 
