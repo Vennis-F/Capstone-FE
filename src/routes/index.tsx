@@ -14,7 +14,7 @@ import { UserRole } from 'types'
 
 import { PrivateRoute } from '../components/Common/PrivateRoute'
 
-// const HomePage = React.lazy(() => import('pages/HomePage'))
+const HomePage = React.lazy(() => import('pages/HomePage'))
 const AboutPage = React.lazy(() => import('pages/AboutPage'))
 
 const AppRoutes = () => (
@@ -22,7 +22,7 @@ const AppRoutes = () => (
     <Suspense fallback={<div>Loading</div>}>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<AboutPage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/guest-login" element={<GuestLoginPage />} />
           <Route path="/posts" element={<AboutPage />} />
           <Route path="/about" element={<AboutPage />} />

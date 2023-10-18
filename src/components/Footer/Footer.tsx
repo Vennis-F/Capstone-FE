@@ -9,7 +9,7 @@ import React from 'react'
 const Copyright = () => (
   <Typography variant="body2" color="text.secondary">
     {'Copyright © '}
-    <Link color="inherit" href="https://mui.com/">
+    <Link color="inherit" href="https://capstone-40kqzzr0x-vennis-f.vercel.app/">
       Drawing platform
     </Link>{' '}
     {new Date().getFullYear()}

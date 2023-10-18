@@ -2,7 +2,12 @@ import { SagaIterator } from '@redux-saga/core'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { take, fork, call, delay, put } from 'redux-saga/effects'
 
-import decodeToken from 'libs/utils/decode-token'
+import {
+  decodeToken,
+  getAccessToken,
+  removeAccessToken,
+  setAccessToken,
+} from 'libs/utils/handle-token'
 import { ResponseError } from 'types'
 
 import { guestSignIn } from '../api'
@@ -15,7 +20,7 @@ function* handleLogin(payload: GuestLoginFormInputPayload) {
   try {
     console.log('[SAGA LOGGGING]')
     const { accessToken }: Token = yield call(guestSignIn, payload.guessLoginFormInput)
-    yield call(() => localStorage.setItem('access_token', accessToken))
+    yield call(() => setAccessToken(accessToken))
     const decoded = decodeToken(accessToken)
     const userInfor: UserInfor = {
       id: decoded.id,
@@ -37,13 +42,13 @@ function* handleLogin(payload: GuestLoginFormInputPayload) {
 function* handleLogout() {
   console.log('[SAGA LOGOUT]')
   yield delay(1000)
-  localStorage.removeItem('access_token')
+  removeAccessToken()
   // redirect to login page
 }
 
 function* watchLoginFlow() {
   while (true) {
-    const isLoggedIn = Boolean(localStorage.getItem('access_token'))
+    const isLoggedIn = Boolean(getAccessToken())
     console.log('WATCH LOGIN')
     if (!isLoggedIn) {
       const action: PayloadAction<GuestLoginFormInputPayload> = yield take(authActions.login.type)
@@ -51,7 +56,7 @@ function* watchLoginFlow() {
     }
 
     yield take([authActions.logout.type, authActions.loginFailed.type])
-    if (localStorage.getItem('access_token')) yield call(handleLogout)
+    if (getAccessToken()) yield call(handleLogout)
   }
 }
 

@@ -7,6 +7,7 @@ export type Course = {
   price: number
   discount: number
   discountPrice: number
+  promotionCourseByStaffId: string | null
   ratedStar: number
   author: string
   totalLength: number
@@ -14,7 +15,7 @@ export type Course = {
   prepareMaterial: string
   status: string
   totalChapter: number
-  publishedDate: Date
+  publishedDate: string
   totalBought: number
   thumbnailUrl: string
   active: boolean
@@ -43,6 +44,10 @@ export type GetCoursesBySearchResponse = {
   data: Course[]
   meta: PageMetaResponse
 }
+
+export type GetCourseDetailResponse = {
+  authorId: string
+} & Course
 
 export enum SortFieldCourse {
   PRICE = 'price',
