@@ -1,7 +1,6 @@
-import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 
-import decodeToken from 'libs/utils/decode-token'
+import { decodeToken, getAccessToken } from 'libs/utils/handle-token'
 import { UserRole } from 'types'
 
 type Props = {
@@ -9,7 +8,7 @@ type Props = {
 }
 
 export const PrivateRoute = ({ roles }: Props) => {
-  const token = localStorage.getItem('access_token')
+  const token = getAccessToken()
   const isLoggedIn = Boolean(token)
   if (!isLoggedIn) return <Navigate to="/guest-login" replace />
 

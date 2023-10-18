@@ -3,8 +3,9 @@ import { Box, Link, Typography } from '@mui/material'
 import Container from '@mui/material/Container'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
 
+import { toastError } from 'libs/utils/handle-toast'
+import { getAccessToken } from 'libs/utils/handle-token'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 
 import { authActions, selectIsLogging } from '../store'
@@ -19,8 +20,8 @@ export const GuestLoginContainer = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (localStorage.getItem('access_token')) {
-      navigate('/cart')
+    if (getAccessToken()) {
+      navigate('/')
     }
   }, [navigate])
 
@@ -41,16 +42,7 @@ export const GuestLoginContainer = () => {
               authActions.login({
                 guessLoginFormInput: data,
                 callbackFail: (message: string) => {
-                  toast.error(message, {
-                    position: 'top-center',
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: 'colored',
-                  })
+                  toastError({ message })
                 },
                 callbackSuccess: () => {
                   navigate('/my-learning')

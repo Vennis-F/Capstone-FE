@@ -13,9 +13,9 @@ type ButtonLinkHeaderProps = {
 const style: StyleSxProps = {
   link: {
     paddingBottom: 2,
-    borderBottom: '3px solid #eab308',
+    // borderBottom: '3px solid #eab308',
     ':hover': {
-      borderBottomColor: 'white',
+      borderBottom: '3px solid #B0DAFF',
     },
   },
   title: {

@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 
 import { authActions, selectCurrentUser, selectIsLoggedIn, selectIsLogging } from '../store'
-import { GuestLoginFormInput, GuestLoginFormInputPayload, UserInfor } from '../types'
+import { GuestLoginFormInputPayload, UserInfor } from '../types'
 
 export type AuthServiceOperators = {
   isLoggedIn: boolean

@@ -1,14 +1,20 @@
 import PaletteIcon from '@mui/icons-material/Palette'
 import SearchIcon from '@mui/icons-material/Search'
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
+import { Badge, Button } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import InputBase from '@mui/material/InputBase'
 import { styled, alpha } from '@mui/material/styles'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import * as React from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+// import { Link, useNavigate } from 'react-router-dom'
 
+import useAuthService from 'features/auth/hook/useAuthService'
+import { useCartService } from 'features/cart/hooks'
 import ButtonLinkHeader from 'libs/ui/components/ButtonLinkHeader'
+import { getAccessToken } from 'libs/utils/handle-token'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -58,7 +64,16 @@ type HeaderLOLProps = {
 
 const HeaderLOL = (props: HeaderLOLProps) => {
   const { t } = useTranslation()
-  console.log(props)
+  const { cart, fetchCart } = useCartService()
+  const { isLoggedIn } = useAuthService()
+  // const navigate = useNavigate()
+  console.log('[cart]', cart, props)
+
+  useEffect(() => {
+    const accessToken = getAccessToken()
+    if (accessToken) fetchCart()
+  }, [fetchCart, isLoggedIn])
+
   // const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   // const open = Boolean(anchorEl)
   // const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -106,6 +121,10 @@ const HeaderLOL = (props: HeaderLOLProps) => {
             />
           </Search>
           <nav>
+            <Badge color="secondary" badgeContent={cart ? cart.cartItems.length : 0} max={999}>
+              <ShoppingCartOutlinedIcon />
+            </Badge>
+            <Button>LOGOUT</Button>
             <ButtonLinkHeader to="/cart" title={t('Cart')} />
             <ButtonLinkHeader to="/list-course" title={t('ListCoursePage')} />
             <ButtonLinkHeader to="/guest-login" title={t('Đăng nhập')} />

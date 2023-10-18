@@ -1,48 +1,55 @@
 import { Avatar, Grid } from '@material-ui/core'
-import {
-  PersonalVideoOutlined,
-  AccessTimeOutlined,
-  SmartphoneOutlined,
-  AllInclusiveOutlined,
-} from '@material-ui/icons'
-import CircleSharpIcon from '@mui/icons-material/CircleSharp'
+// import CircleSharpIcon from '@mui/icons-material/CircleSharp'
 import EventIcon from '@mui/icons-material/Event'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import GrainIcon from '@mui/icons-material/Grain'
 import HomeIcon from '@mui/icons-material/Home'
-import OndemandVideoIcon from '@mui/icons-material/OndemandVideo'
 import StarIcon from '@mui/icons-material/Star'
 import WhatshotIcon from '@mui/icons-material/Whatshot'
 import {
   Box,
-  Button,
   Container,
   Typography,
   Rating,
   List,
   ListItem,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Card,
   CardHeader,
-  CardMedia,
   CardContent,
+  Dialog,
+  DialogTitle,
+  DialogContent,
   // CardActions,
 } from '@mui/material'
 import Breadcrumbs from '@mui/material/Breadcrumbs'
 import Link from '@mui/material/Link'
+import { useEffect, useState } from 'react'
 
 import ReadMoreText from 'libs/ui/components/ReadMoreText'
+import VideoPlayer from 'libs/ui/components/VideoPlayer'
+import { getStringDayMonthYear } from 'libs/utils/handle-date'
+
+import { getCoursesDetailById } from '../api'
+import { GetCourseDetailResponse } from '../types'
+
+import CourseCartBougthCardView from './CourseCartBougthCardView'
+import ListCoursePreview from './ListCoursePreview'
 
 interface CouresDetailGuestContainerProps {
   id: string
 }
 
 export const CouresDetailGuestContainer = ({ id }: CouresDetailGuestContainerProps) => {
+  const [courseDetail, setCourseDetail] = useState<GetCourseDetailResponse | null>(null)
+  const [open, setOpen] = useState(false)
+
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
   const currentCourse = {
     id,
     title: 'Linux for Network Engineers: Practical Linux with GNS3',
@@ -119,11 +126,31 @@ David`,
       },
     ],
   }
-  return (
+
+  const getCourseDetail = async (idCourse: string) => {
+    try {
+      const response = await getCoursesDetailById(idCourse)
+      setCourseDetail(response)
+    } catch (error) {
+      throw new Error(`Cannot get detail for course by the id ${id}`)
+    }
+  }
+
+  useEffect(() => {
+    getCourseDetail(id)
+  }, [id])
+
+  console.log('course', courseDetail)
+  return courseDetail ? (
     <>
       <Container
         maxWidth={false}
-        sx={{ backgroundColor: '#2D2F31', paddingTop: '30px', paddingBottom: '22px' }}
+        sx={{
+          backgroundColor: '#2D2F31',
+          paddingTop: '30px',
+          paddingBottom: '22px',
+          marginTop: '-50px',
+        }}
       >
         <Container maxWidth="lg" sx={{ display: 'flex' }}>
           <Box sx={{ width: '70%' }}>
@@ -151,11 +178,11 @@ David`,
                 color="text.primary"
               >
                 <GrainIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                {currentCourse.title}
+                {courseDetail.title}
               </Typography>
             </Breadcrumbs>
             <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>
-              {currentCourse.title}
+              {courseDetail?.title}
             </Typography>
             <Box
               sx={{
@@ -169,152 +196,33 @@ David`,
                 color="text.primary"
                 sx={{ fontWeight: 'bold', marginRight: 1, color: '#FAAF00', fontSize: '16px' }}
               >
-                {currentCourse.rating}
+                {courseDetail.ratedStar}
               </Typography>
               <Rating
                 name="read-only"
-                value={currentCourse.rating}
+                value={courseDetail.ratedStar}
                 readOnly
                 sx={{ fontSize: '16px', marginRight: '10px' }}
               />
               <Typography component="span" sx={{ color: 'white', fontSize: '16px' }}>
-                {currentCourse.numsOfEnroll} students
+                {courseDetail.totalBought} Học sinh
               </Typography>
             </Box>
             <Typography sx={{ color: 'white', fontWeight: 'bold', marginBottom: '10px' }}>
               Được tạo bởi
-              <Link
-                component="button"
-                sx={{ fontSize: '16px', marginLeft: '10px' }}
-                onClick={() => {
-                  console.info("I'm a button.")
-                }}
-              >
-                {currentCourse.author}
+              <Link component="button" sx={{ fontSize: '16px', marginLeft: '10px' }}>
+                {courseDetail.author}
               </Link>
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <EventIcon sx={{ color: 'white', marginRight: '10px' }} />
               <Typography sx={{ color: 'white' }}>
-                Last updated {currentCourse.updatedAt}
+                Cập nhật {getStringDayMonthYear(courseDetail.publishedDate)}
               </Typography>
             </Box>
           </Box>
           <Box sx={{ width: '30%', position: 'relative' }}>
-            <Card sx={{ width: '100%', position: 'absolute', top: 0, right: 0 }}>
-              <CardMedia
-                sx={{ height: 200 }}
-                image="https://img-c.udemycdn.com/course/240x135/3959106_03de_6.jpg"
-                title="green iguana"
-              />
-              <CardContent sx={{ padding: '20px' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography
-                    // component={'span'}
-                    sx={{ color: 'black', fontWeight: 'bold', fontSize: 32, marginRight: 2 }}
-                  >
-                    ₫299,000
-                  </Typography>
-                  <Typography
-                    sx={{ color: 'gray', fontSize: 14, textDecorationLine: 'line-through' }}
-                  >
-                    ₫1,699,000
-                  </Typography>
-                </Box>
-                <Button
-                  variant="contained"
-                  disableElevation
-                  sx={{
-                    backgroundColor: '#19A7CE',
-                    fontWeight: '500',
-                    width: '100%',
-                    '&:hover': {
-                      backgroundColor: '#146C94',
-                    },
-                  }}
-                >
-                  Thêm vào giỏ hàng
-                </Button>
-                <Button
-                  variant="outlined"
-                  disableElevation
-                  sx={{
-                    borderColor: 'black',
-                    color: 'black',
-                    width: '100%',
-                    fontWeight: '600',
-                    '&:hover': {
-                      borderColor: 'black',
-                    },
-                    marginTop: '10px',
-                  }}
-                >
-                  Mua ngay
-                </Button>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ textAlign: 'center', marginTop: '10px', fontSize: '12px' }}
-                >
-                  Đảm bảo hoàn tiền trong 30 ngày
-                </Typography>
-                <Typography
-                  variant="h5"
-                  sx={{
-                    fontSize: '18px',
-                    fontWeight: 'bold',
-                    marginTop: '12px',
-                    marginBottom: '8px',
-                  }}
-                >
-                  Khóa học này bao gồm
-                </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '6px' }}>
-                  <AccessTimeOutlined fontSize="small" />
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ textAlign: 'center', marginLeft: '18px' }}
-                  >
-                    40.5 giờ video theo yêu cầu
-                  </Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '6px' }}>
-                  <PersonalVideoOutlined fontSize="small" />
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ textAlign: 'center', marginLeft: '18px' }}
-                  >
-                    10 video bài giảng
-                  </Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '6px' }}>
-                  <SmartphoneOutlined fontSize="small" />
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ textAlign: 'center', marginLeft: '18px' }}
-                  >
-                    Truy cập trên thiết bị di động và máy tính
-                  </Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '6px' }}>
-                  <AllInclusiveOutlined fontSize="small" />
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ textAlign: 'center', marginLeft: '18px' }}
-                  >
-                    Quyền truy cập suốt đời
-                  </Typography>
-                </Box>
-              </CardContent>
-              {/* <CardActions>
-                <Button size="small">Share</Button>
-                <Button size="small">Learn More</Button>
-              </CardActions> */}
-            </Card>
+            <CourseCartBougthCardView courseDetail={courseDetail} />
           </Box>
         </Container>
       </Container>
@@ -324,84 +232,7 @@ David`,
             <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
               Nội dung khóa học
             </Typography>
-            <Accordion disableGutters={true}>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <Typography variant="h5" sx={{ fontSize: '20px', fontWeight: 'bold' }}>
-                  Danh sách bài giảng
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                  {[
-                    {
-                      id: 1,
-                      title: 'DB transaction lock & How to handle deadlock in Golang',
-                      isPreview: true,
-                      totalContentLength: '30:29',
-                    },
-                    {
-                      id: 2,
-                      title: 'How to avoid deadlock in DB transaction? Queries order matters!',
-                      isPreview: true,
-                      totalContentLength: '03:00',
-                    },
-                    {
-                      id: 3,
-                      title: 'Deeply understand transaction isolation levels & read phenomena',
-                      isPreview: true,
-                      totalContentLength: '01:29',
-                    },
-                    {
-                      id: 4,
-                      title: 'Setup Github Actions for Golang + Postgres to run automated tests',
-                      isPreview: false,
-                      totalContentLength: '04:12',
-                    },
-                  ].map(chapterLecture => (
-                    <ListItem
-                      key={chapterLecture.id}
-                      disablePadding
-                      secondaryAction={
-                        <ListItemText>
-                          {chapterLecture.isPreview && (
-                            <Typography
-                              component={'span'}
-                              sx={{ textDecorationLine: 'underline', color: '#146C94' }}
-                            >
-                              Xem trước
-                            </Typography>
-                          )}
-                          {` ${chapterLecture.totalContentLength}`}
-                        </ListItemText>
-                      }
-                    >
-                      {chapterLecture.isPreview ? (
-                        <ListItemButton role={undefined} dense onClick={() => console.log(123)}>
-                          <ListItemIcon>
-                            <OndemandVideoIcon />
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={chapterLecture.title}
-                            sx={{ textDecorationLine: 'underline', color: '#146C94' }}
-                          />
-                        </ListItemButton>
-                      ) : (
-                        <ListItemButton role={undefined} dense>
-                          <ListItemIcon>
-                            <OndemandVideoIcon />
-                          </ListItemIcon>
-                          <ListItemText primary={chapterLecture.title} />
-                        </ListItemButton>
-                      )}
-                    </ListItem>
-                  ))}
-                </List>
-              </AccordionDetails>
-            </Accordion>
+            <ListCoursePreview onClickPreview={handleClickOpen} />
           </Box>
         </Container>
         <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
@@ -420,7 +251,7 @@ David`,
                   display: 'list-item',
                 }}
               >
-                <Typography variant="body2">{currentCourse.requirement}</Typography>
+                <Typography variant="body2">{courseDetail.prepareMaterial}</Typography>
               </ListItem>
             </List>
           </Box>
@@ -430,7 +261,7 @@ David`,
             <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
               Miêu tả
             </Typography>
-            <ReadMoreText maxCharacterCount={400} text={currentCourse.description} />
+            <ReadMoreText maxCharacterCount={400} text={courseDetail.description} />
           </Box>
         </Container>
         <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
@@ -438,9 +269,9 @@ David`,
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <StarIcon sx={{ color: '#FAAF00', marginRight: '10px' }} />
               <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-                {currentCourse.rating} đánh giá khóa học
+                {courseDetail.ratedStar} đánh giá khóa học
               </Typography>
-              <CircleSharpIcon
+              {/* <CircleSharpIcon
                 sx={{
                   fontSize: '10px !important',
                   margin: '0 10px',
@@ -449,7 +280,7 @@ David`,
               />
               <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
                 {`1k`} lượt đánh giá
-              </Typography>
+              </Typography> */}
             </Box>
             <Grid container spacing={2}>
               {currentCourse.comments.map(comment => (
@@ -479,6 +310,40 @@ David`,
             </Grid>
           </Box>
         </Container>
+        <Container maxWidth="lg">
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            fullWidth={true}
+            maxWidth="sm"
+          >
+            <Box
+              sx={{
+                backgroundColor: '#2D2F31',
+              }}
+            >
+              <DialogTitle id="alert-dialog-title" sx={{ color: 'white' }}>
+                <Typography sx={{ fontSize: '14px', fontWeight: '600', color: '#d1d5db' }}>
+                  Xem trước khóa học
+                </Typography>
+                <Typography variant="h6" sx={{ fontWeight: '600' }}>
+                  Bài giảng 1: Các em hãy nghe cô hãy học làm bánh nha
+                </Typography>
+              </DialogTitle>
+              <DialogContent>
+                <VideoPlayer />
+              </DialogContent>
+            </Box>
+          </Dialog>
+        </Container>
+      </Container>
+    </>
+  ) : (
+    <>
+      <Container>
+        <Typography>NotFound</Typography>
       </Container>
     </>
   )

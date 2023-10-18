@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
+import { getAccessToken } from 'libs/utils/handle-token'
 import { RootState } from 'store/store' // eslint-disable-line
 
 import { GuestLoginFormInputPayload, UserInfor } from '../types'
@@ -23,7 +24,7 @@ export const authSlice = createSlice({
   reducers: {
     /* eslint-disable  @typescript-eslint/no-unused-vars */
     login(state, action: PayloadAction<GuestLoginFormInputPayload>) {
-      const isLoggedIn = Boolean(localStorage.getItem('access_token'))
+      const isLoggedIn = Boolean(getAccessToken())
       if (!isLoggedIn) {
         console.log('[SLICE LOGGGING]')
         state.isLogging = true
@@ -39,7 +40,7 @@ export const authSlice = createSlice({
     },
 
     logout(state) {
-      const isLoggedIn = Boolean(localStorage.getItem('access_token'))
+      const isLoggedIn = Boolean(getAccessToken())
       if (isLoggedIn) {
         console.log('[SLICE LOGOUT]')
         state.isLoggedIn = false

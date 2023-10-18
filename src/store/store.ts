@@ -6,6 +6,7 @@ import logger from 'redux-logger'
 
 import { Env } from 'config/Env'
 import authReducer from 'features/auth/store/auth.slice'
+import cartReducer from 'features/cart/store/cart.slice'
 import charactersReducer from 'features/characters/store/characters.slice'
 import postsReducer from 'features/posts/store/posts.slice'
 import { rootSaga } from 'store/rootSaga'
@@ -25,6 +26,7 @@ const makeStore = () => {
       characters: charactersReducer,
       auth: authReducer,
       router: routerReducer,
+      cart: cartReducer,
     },
     devTools: Env.isDev(),
     middleware: getDefaultMiddleware =>

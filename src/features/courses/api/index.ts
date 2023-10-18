@@ -2,7 +2,11 @@
 import { Env } from 'config/Env'
 import makeApi from 'libs/core/configureAxios'
 
-import { GetCoursesBySearchRequest, GetCoursesBySearchResponse } from '../types'
+import {
+  GetCoursesBySearchRequest,
+  GetCoursesBySearchResponse,
+  GetCourseDetailResponse,
+} from '../types'
 
 const api = makeApi(`${Env.API_BASE_URL}`)
 
@@ -11,6 +15,9 @@ const COURSE_BASE_URL = `/course`
 export const getCoursesBySearch = (
   body: GetCoursesBySearchRequest,
 ): Promise<GetCoursesBySearchResponse> => api.post(`${COURSE_BASE_URL}/search`, body)
+
+export const getCoursesDetailById = (id: string): Promise<GetCourseDetailResponse> =>
+  api.get(`${COURSE_BASE_URL}/${id}`)
 
 // export const getLevels = (): Promise<Level[]> => api.get(LEVEL_BASE_URL)
 
