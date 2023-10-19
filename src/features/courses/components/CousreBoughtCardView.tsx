@@ -69,8 +69,13 @@ const CousreBoughtCardView = ({ course }: Props) => {
         </Box>
         <Box sx={{ flex: 1, padding: '16px', textAlign: 'right' }}>
           <Typography component="span" variant="h5" sx={{ fontWeight: 'bold' }}>
-            ₫{course.price}
+            ₫{course.discount === 0 ? course.price : course.discountPrice}
           </Typography>
+          {course.discount !== 0 && (
+            <Typography sx={{ color: 'gray', fontSize: 14, textDecorationLine: 'line-through' }}>
+              ₫{course.price}
+            </Typography>
+          )}
         </Box>
       </CardActionArea>
     </Card>

@@ -1,104 +1,54 @@
 import DoneIcon from '@mui/icons-material/Done'
 import { Box, Card, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material'
+import { useEffect, useState } from 'react'
 import Carousel from 'react-material-ui-carousel'
 import { useNavigate } from 'react-router-dom'
 
+import { getCategories } from 'features/category/api'
 import CategoryBeautyCardView from 'features/category/components/CategoryBeautyCardView'
+import { Category } from 'features/category/types'
 import CarouselCustom from 'libs/ui/components/CarouselCustom'
 import CustomButton from 'libs/ui/components/CustomButton'
+import { OrderType } from 'types'
+
+import { getCoursesBySearch } from '../api'
+import { categoryThumbnail } from '../data/categoryThumbnail'
+import { ExpectFromCourses } from '../data/ExpectFromCourses'
+import { reviewsData } from '../data/reviewsData'
+import { Course, GetCoursesBySearchRequest, SortFieldCourse } from '../types'
 
 import CourseBeautyCardView from './CourseBeautyCardView'
 
-const courses = [
-  {
-    title: 'Khóa học dạy vẽ Minion',
-    description: 'Nếu bạn đam mê hoạt hình Minion, thì đây là nơi phù hợp cho bạn nha',
-    totalChapter: 3,
-    price: '100.000',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1515041219749-89347f83291a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80',
-  },
-  {
-    title: 'Khóa học dạy vẽ Minion 2',
-    description: 'Nếu bạn đam mê hoạt hình Minion, thì đây là nơi phù hợp cho bạn nha',
-    totalChapter: 3,
-    price: '100.000',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1515041219749-89347f83291a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80',
-  },
-  {
-    title: 'Khóa học dạy vẽ Minion 3',
-    description: 'Nếu bạn đam mê hoạt hình Minion, thì đây là nơi phù hợp cho bạn nha',
-    totalChapter: 3,
-    price: '100.000',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1515041219749-89347f83291a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80',
-  },
-  {
-    title: 'Khóa học dạy vẽ Minion 4',
-    description: 'Nếu bạn đam mê hoạt hình Minion, thì đây là nơi phù hợp cho bạn nha',
-    totalChapter: 3,
-    price: '100.000',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1515041219749-89347f83291a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80',
-  },
-  {
-    title: 'Khóa học dạy vẽ Minion 5',
-    description: 'Nếu bạn đam mê hoạt hình Minion, thì đây là nơi phù hợp cho bạn nha',
-    totalChapter: 3,
-    price: '100.000',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1515041219749-89347f83291a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80',
-  },
-  {
-    title: 'Khóa học dạy vẽ Minion 6',
-    description: 'Nếu bạn đam mê hoạt hình Minion, thì đây là nơi phù hợp cho bạn nha',
-    totalChapter: 3,
-    price: '100.000',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1515041219749-89347f83291a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80',
-  },
-  {
-    title: 'Khóa học dạy vẽ Minion 7',
-    description: 'Nếu bạn đam mê hoạt hình Minion, thì đây là nơi phù hợp cho bạn nha',
-    totalChapter: 3,
-    price: '100.000',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1515041219749-89347f83291a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80',
-  },
-  {
-    title: 'Khóa học dạy vẽ Minion 8',
-    description: 'Nếu bạn đam mê hoạt hình Minion, thì đây là nơi phù hợp cho bạn nha',
-    totalChapter: 3,
-    price: '100.000',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1515041219749-89347f83291a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80',
-  },
-]
-
-const reviews = [
-  {
-    text: 'Dựa trên nền tảng khóa học vẽ, tôi đã tạo và quản lý nhiều khóa học vẽ nhà một cách thuận tiện. Tính linh hoạt và tiện lợi của nền tảng này đã giúp tôi chia sẻ kiến thức về vẽ nhà một cách hiệu quả. Tôi rất hài lòng với kết quả.',
-    author: 'Nguyễn Hoàng Anh',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80',
-  },
-  {
-    text: 'Nền tảng khóa học vẽ là một công cụ mạnh mẽ để tạo và quản lý các khóa học về nghệ thuật vẽ nhà. Tôi đã sử dụng nó để xây dựng các khóa học và nó đã giúp tôi đạt được mục tiêu học tập của mình. Rất cảm ơn!',
-    author: 'Nguyễn Hoàng Lộc',
-    thumbnailUrl:
-      'https://plus.unsplash.com/premium_photo-1687187499277-e1c59bd3032f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80',
-  },
-  {
-    text: 'Không gì có thể so sánh với nền tảng khóa học vẽ khi nói về việc tạo và quản lý các khóa học về vẽ nhà. Tôi đã học được rất nhiều thông qua nó và tôi xin chia sẻ lời khen ngợi đối với tính năng mạnh mẽ và dễ sử dụng của nó.',
-    author: 'Nguyễn Phước Thọ',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2076&q=80',
-  },
-]
-
 const HomePageContainer = () => {
   const navigate = useNavigate()
+  const [categories, setCategories] = useState<Category[]>([])
+  const [listCourses, setListCourses] = useState<Course[]>([])
+
+  const getNewestCourse = async () => {
+    const bodyRequest: GetCoursesBySearchRequest = {
+      categories: [],
+      levels: [],
+      // search: 'Course',
+      sortField: SortFieldCourse.PUBLISHED_DATE,
+      pageOptions: {
+        order: OrderType.DESC,
+        page: 1,
+        take: 10,
+      },
+    }
+    const dataResponse = await getCoursesBySearch(bodyRequest)
+    setListCourses([...dataResponse.data])
+  }
+
+  const getAllCategories = async () => {
+    const listCategories = await getCategories()
+    setCategories(listCategories)
+  }
+
+  useEffect(() => {
+    getAllCategories()
+    getNewestCourse()
+  }, [])
 
   return (
     <>
@@ -150,13 +100,12 @@ const HomePageContainer = () => {
           >
             Khóa học
             <Typography component="span" variant="inherit" sx={{ color: '#2ca4db' }}>
-              &nbsp;phổ biến
+              &nbsp;mới nhất
             </Typography>
           </Typography>
           <CarouselCustom>
-            {courses.map(course => (
-              /* eslint-disable */
-              <CourseBeautyCardView key={course.title} course={course as any} />
+            {listCourses.map(course => (
+              <CourseBeautyCardView key={course.id} course={course} />
             ))}
           </CarouselCustom>
         </Box>
@@ -172,13 +121,15 @@ const HomePageContainer = () => {
           </Typography>
           <Box>
             <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-              {Array.from(Array(9)).map((_, index) => (
+              {categories.map((category, index) => (
                 <Grid item xs={2} sm={4} md={4} key={index}>
                   <CategoryBeautyCardView
-                    category={{ active: true, id: '1', name: 'Khóa học mỹ thuật' }}
-                    key={'1'}
-                    numOfCourses={3}
-                    thumbnailUrl="https://images.unsplash.com/photo-1474511320723-9a56873867b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80"
+                    key={category.id}
+                    category={category}
+                    thumbnailUrl={
+                      categoryThumbnail[category.name] ||
+                      'https://images.unsplash.com/photo-1474511320723-9a56873867b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80'
+                    }
                   />
                 </Grid>
               ))}
@@ -186,6 +137,7 @@ const HomePageContainer = () => {
           </Box>
         </Box>
       </Container>
+
       <Container
         maxWidth={false}
         sx={{ backgroundColor: '#F5F7F8', paddingY: '100px', marginBottom: '100px' }}
@@ -208,8 +160,8 @@ const HomePageContainer = () => {
             </Typography>
             <Box>
               <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                {Array.from(Array(6)).map((_, index) => (
-                  <Grid item xs={2} sm={4} md={4} key={index}>
+                {ExpectFromCourses.map(expect => (
+                  <Grid item xs={2} sm={4} md={4} key={expect.id}>
                     <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
                       <DoneIcon
                         sx={{
@@ -220,11 +172,10 @@ const HomePageContainer = () => {
                         }}
                       />
                       <Typography variant="h5" sx={{ fontWeight: '600' }}>
-                        Đội ngủ chuyên nghiệp
+                        {expect.title}
                       </Typography>
                       <Typography variant="body2" sx={{ textAlign: 'center', width: '70%' }}>
-                        Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,
-                        sed quia consequuntur
+                        {expect.description}
                       </Typography>
                     </Box>
                   </Grid>
@@ -234,10 +185,12 @@ const HomePageContainer = () => {
           </Box>
         </Container>
       </Container>
+
       <Container maxWidth="lg">
         <Carousel>
-          {reviews.map(review => (
+          {reviewsData.map(review => (
             <Card
+              key={review.text}
               sx={{
                 display: 'flex',
                 width: '100%',

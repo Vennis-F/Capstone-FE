@@ -68,7 +68,7 @@ const CourseBeautyCardView = ({ course }: Props) => {
       <CardActions>
         <CustomButton
           sxCustom={{ textTransform: 'capitalize', fontSize: '12px !important' }}
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/detail-course', { state: { id: course.id } })}
         >
           <PlayArrow /> Bắt đầu học
         </CustomButton>

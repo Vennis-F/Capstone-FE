@@ -40,7 +40,7 @@ const VideoPlayer: React.FC = () => {
       <ReactPlayer
         controls={true}
         ref={playerRef}
-        url="https://capstone-be-7fef96e86ef9.herokuapp.com/video"
+        url="https://capstone-be-7fef96e86ef9.herokuapp.com/video?id=courses/course_1/videos/4ec1be64-ccdd-4932-a0a4-92cd8fb02263.mp4"
         playing={playing}
         onProgress={handleProgress}
         onEnded={() => setPlaying(false)}

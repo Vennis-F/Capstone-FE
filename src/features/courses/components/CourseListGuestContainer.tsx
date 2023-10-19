@@ -25,13 +25,20 @@ import { Course, GetCoursesBySearchRequest } from '../types'
 import CourseFilterAccordion from './CourseFilterAccordion'
 import CousreBoughtCardView from './CousreBoughtCardView'
 
-export const CourseListGuestContainer = () => {
+interface Props {
+  searchText?: string
+  categorySearchId?: string
+}
+
+export const CourseListGuestContainer = ({ searchText, categorySearchId }: Props) => {
   // const navigate = useNavigate()
   const [listCourses, setListCourses] = useState<Course[]>([])
   const [listLevels, setListLevels] = useState<Level[]>([])
   const [listCategories, setListCategories] = useState<Category[]>([])
   const [checkedLevelIds, setCheckedLevelIds] = useState<string[]>([])
-  const [checkedCategoryIds, setCheckedCategoryIds] = useState<string[]>([])
+  const [checkedCategoryIds, setCheckedCategoryIds] = useState<string[]>(
+    categorySearchId ? [categorySearchId] : [],
+  )
   const [sortBy, setSortBy] = useState<ISortCourseByData>(SortCourseByData[0])
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [page, setPage] = useState(1)
@@ -93,7 +100,7 @@ export const CourseListGuestContainer = () => {
     const bodyRequest: GetCoursesBySearchRequest = {
       categories: checkedCategoryIds,
       levels: checkedLevelIds,
-      search: 'Course',
+      search: searchText,
       sortField: sortBy.value.sortField,
       pageOptions: {
         order: sortBy.value.order,
@@ -113,15 +120,18 @@ export const CourseListGuestContainer = () => {
 
   useEffect(() => {
     getCourse()
-  }, [checkedLevelIds, checkedCategoryIds, sortBy, page])
+  }, [checkedLevelIds, checkedCategoryIds, sortBy, page, searchText, categorySearchId])
 
   console.log('[checked]', checkedLevelIds, checkedCategoryIds, sortBy, page)
 
   return (
     <Container maxWidth="lg">
-      <Typography variant="h4" sx={{ marginBottom: '20px' }}>
-        {courseCounts} kết quả cho từ khóa &quot;{'Search'}&ldquo;
-      </Typography>
+      {searchText && (
+        <Typography variant="h4" sx={{ marginBottom: '20px' }}>
+          {courseCounts} kết quả cho từ khóa &quot;{searchText}&ldquo;
+        </Typography>
+      )}
+
       <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
         <Button
           variant="outlined"

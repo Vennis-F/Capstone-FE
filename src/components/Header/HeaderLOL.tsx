@@ -7,9 +7,9 @@ import InputBase from '@mui/material/InputBase'
 import { styled, alpha } from '@mui/material/styles'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-// import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import useAuthService from 'features/auth/hook/useAuthService'
 import { useCartService } from 'features/cart/hooks'
@@ -30,16 +30,6 @@ const Search = styled('div')(({ theme }) => ({
     marginLeft: theme.spacing(3),
     width: 'auto',
   },
-}))
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
 }))
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
@@ -65,8 +55,9 @@ type HeaderLOLProps = {
 const HeaderLOL = (props: HeaderLOLProps) => {
   const { t } = useTranslation()
   const { cart, fetchCart } = useCartService()
+  const [searchText, setSearchText] = useState<string>('')
   const { isLoggedIn } = useAuthService()
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
   console.log('[cart]', cart, props)
 
   useEffect(() => {
@@ -74,22 +65,10 @@ const HeaderLOL = (props: HeaderLOLProps) => {
     if (accessToken) fetchCart()
   }, [fetchCart, isLoggedIn])
 
-  // const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-  // const open = Boolean(anchorEl)
-  // const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-  //   setAnchorEl(event.currentTarget)
-  // }
-  // const handleClose = () => {
-  //   setAnchorEl(null)
-  // }
-
-  // const { currentThemeMode, onChangeThemeClick, onChangeLanguage } = props
-
   return (
     <>
       <AppBar
         position="static"
-        // color="secondary"
         elevation={0}
         sx={{
           borderBottom: theme => `1px solid ${theme.palette.divider}`,
@@ -97,38 +76,49 @@ const HeaderLOL = (props: HeaderLOLProps) => {
         }}
       >
         <Toolbar sx={{ flexWrap: 'wrap' }}>
-          <Typography
-            variant="h6"
-            color="inherit"
-            noWrap
-            sx={{
-              // display: 'flex',
-              // alignItems: 'center',
-              // justifyContent: 'space-between',
-              flexGrow: 1,
-              color: '#B0DAFF',
-            }}
-          >
-            <PaletteIcon /> {'DRAWING PLATFORM'}
-          </Typography>
+          <Button variant="text" onClick={() => navigate('/')}>
+            <Typography
+              variant="h6"
+              color="inherit"
+              noWrap
+              sx={{
+                flexGrow: 1,
+                color: '#B0DAFF',
+              }}
+            >
+              <PaletteIcon /> {'DRAWING PLATFORM'}
+            </Typography>
+          </Button>
           <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
             <StyledInputBase
               placeholder="Tìm kiếm khóa học"
               inputProps={{ 'aria-label': 'search' }}
+              value={searchText}
+              onChange={e => {
+                setSearchText(e.target.value)
+              }}
             />
+            <Button
+              variant="text"
+              sx={{ padding: '0 !important', width: '24px !important', color: 'white' }}
+              onClick={() => {
+                navigate('/list-course', { state: { searchText } })
+              }}
+            >
+              <SearchIcon />
+            </Button>
           </Search>
           <nav>
-            <Badge color="secondary" badgeContent={cart ? cart.cartItems.length : 0} max={999}>
-              <ShoppingCartOutlinedIcon />
-            </Badge>
-            <Button>LOGOUT</Button>
-            <ButtonLinkHeader to="/cart" title={t('Cart')} />
-            <ButtonLinkHeader to="/list-course" title={t('ListCoursePage')} />
+            <Button sx={{ color: 'white', cursor: 'pointer' }} onClick={() => navigate('/cart')}>
+              <Badge color="secondary" badgeContent={cart ? cart.cartItems.length : 0} max={999}>
+                <ShoppingCartOutlinedIcon />
+              </Badge>
+            </Button>
+            {/* {getAccessToken() && <Button onClick={() => {}}>LOGOUT</Button>} */}
+            {/* <ButtonLinkHeader to="/cart" title={t('Cart')} /> */}
+            {/* <ButtonLinkHeader to="/list-course" title={t('ListCoursePage')} /> */}
             <ButtonLinkHeader to="/guest-login" title={t('Đăng nhập')} />
-            <ButtonLinkHeader to="/" title={t('Đăng ký')} />
+            {/* <ButtonLinkHeader to="/" title={t('Đăng ký')} /> */}
             <ButtonLinkHeader to="/order-list" title={t('Danh sách đơn hàng')} />
             <ButtonLinkHeader to="/my-learning" title={t('Danh sách khóa học của tôi')} />
 

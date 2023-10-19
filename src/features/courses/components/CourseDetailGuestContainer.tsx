@@ -140,7 +140,6 @@ David`,
     getCourseDetail(id)
   }, [id])
 
-  console.log('course', courseDetail)
   return courseDetail ? (
     <>
       <Container

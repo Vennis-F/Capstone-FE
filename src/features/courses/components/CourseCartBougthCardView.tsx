@@ -78,11 +78,7 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
 
   return (
     <Card sx={{ width: '100%', position: 'absolute', top: 0, right: 0 }}>
-      <CardMedia
-        sx={{ height: 200 }}
-        image="https://img-c.udemycdn.com/course/240x135/3959106_03de_6.jpg"
-        title="green iguana"
-      />
+      <CardMedia sx={{ height: 200 }} image={courseDetail.thumbnailUrl} title="green iguana" />
 
       <CardContent sx={{ padding: '20px', paddingBottom: '10px' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>

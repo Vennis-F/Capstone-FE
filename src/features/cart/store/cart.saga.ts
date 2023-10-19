@@ -2,6 +2,7 @@ import { SagaIterator } from 'redux-saga'
 import { call, put, takeEvery } from 'redux-saga/effects'
 
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
+import { toastSuccess } from 'libs/utils/handle-toast'
 
 import { addCartItem, deleteAllCartItems, deleteCartItem, getCart } from '../api'
 import { AddCartItemBody, Cart } from '../types'
@@ -22,6 +23,7 @@ function* onCreateCartItem({
 }): SagaIterator {
   try {
     yield call(addCartItem, payload)
+    toastSuccess({ message: 'Thêm vào giỏ hàng thành công' })
     yield put(cartActions.fetchCart())
   } catch (error) {
     showErrorResponseSaga({ error, defaultMessage: 'Không thể thêm vào giỏ hàng' })

@@ -32,7 +32,10 @@ const AppRoutes = () => (
           <Route path="/detail-course" element={<DetailCoursePage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/order-list" element={<CustomerOrderListPage />} />
-          <Route path="/my-learning" element={<PrivateRoute roles={[UserRole.CUSTOMER]} />}>
+          <Route
+            path="/my-learning"
+            element={<PrivateRoute roles={[UserRole.CUSTOMER, UserRole.LEARNER]} />}
+          >
             <Route path="/my-learning" element={<MyLearningPage />} />
           </Route>
         </Route>
