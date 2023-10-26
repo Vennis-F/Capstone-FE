@@ -5,7 +5,8 @@ import React from 'react'
 import { UseFormReset, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
-import { FormTextField } from 'libs/ui/components/FormTextField'
+import { MainColor } from 'libs/const/color'
+import { FormTextField } from 'libs/ui/form-components/FormTextField'
 
 import { GuestLoginFormInput } from '../types'
 
@@ -40,20 +41,27 @@ export const GuestLoginForm = (props: GuestLoginFormProps) => {
           name="emailOrUsername"
           label={'Email hoặc Tên đăng nhập'}
           control={control}
+          size="medium"
         />
       </Box>
       <Box sx={{ height: '80px' }}>
-        <FormTextField name="password" label={'Mật khẩu'} control={control} />
+        <FormTextField
+          name="password"
+          label={'Mật khẩu'}
+          control={control}
+          size="medium"
+          type="password"
+        />
       </Box>
       <Button
         onClick={handleSubmit(submitHandler)}
         variant={'contained'}
         size="large"
         sx={{
-          backgroundColor: '#19A7CE',
+          backgroundColor: MainColor.RED_500,
           fontWeight: '600',
           '&:hover': {
-            backgroundColor: '#146C94',
+            backgroundColor: MainColor.RED_600,
           },
         }}
         disabled={props.isLogging}

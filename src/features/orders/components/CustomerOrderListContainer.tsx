@@ -13,77 +13,24 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
-import * as React from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const orders = [
-  {
-    id: '1',
-    totalPriceAfterPromotion: '300000',
-    purchasedDate: 'Oct 6, 2023',
-    orderDetail: [
-      {
-        id: 'o1',
-        priceAfterPromotion: '19000',
-        course: { id: 'c1', title: 'JavaScript Algorithms and Data Structures Masterclass' },
-      },
-      {
-        id: 'o2',
-        priceAfterPromotion: '1000',
-        course: { id: 'c2', title: 'Working with Microservices in Go (Golang)' },
-      },
-      {
-        id: 'o3',
-        priceAfterPromotion: '4000',
-        course: { id: 'c3', title: 'Backend Master Class [Golang + Postgres + Kubernetes + gRPC]' },
-      },
-    ],
-  },
-  {
-    id: '2',
-    totalPriceAfterPromotion: '400000',
-    purchasedDate: 'Oct 10, 2023',
-    orderDetail: [
-      {
-        id: 'o4',
-        priceAfterPromotion: '40000',
-        course: { id: 'c4', title: 'The Complete Korean Course for Beginners | 7 courses in 1!' },
-      },
-    ],
-  },
-  {
-    id: '3',
-    totalPriceAfterPromotion: '500000',
-    purchasedDate: 'Oct 11, 2023',
-    orderDetail: [
-      {
-        id: 'o5',
-        priceAfterPromotion: '20000',
-        course: { id: 'c5', title: `SQL and PostgreSQL: The Complete Developer's Guide` },
-      },
-    ],
-  },
-]
+import TitleTypography from 'libs/ui/components/TitleTypography'
 
-type Order = {
-  id: string
-  totalPriceAfterPromotion: string
-  purchasedDate: string
-  orderDetail: {
-    id: string
-    priceAfterPromotion: string
-    course: { id: string; title: string }
-  }[]
-}
+import { findOrdersByUser } from '../api'
+import { Order } from '../types'
+
+import CustomerOrderListEmptyContainer from './CustomerOrderListEmptyContainer'
 
 const Row = (props: { order: Order }) => {
   const { order } = props
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = useState(false)
   const navigate = useNavigate()
 
   return (
     <>
-      {order.orderDetail.length > 1 ? (
+      {order.orderDetails.length > 1 ? (
         <>
           <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
             <TableCell>
@@ -97,15 +44,18 @@ const Row = (props: { order: Order }) => {
               >
                 <ShoppingCartOutlinedIcon />
                 <Typography sx={{ fontWeight: '600', marginLeft: '10px' }}>
-                  {order.orderDetail.length} Khóa học đã mua
+                  {order.orderDetails.length} Khóa học đã mua
                 </Typography>
               </Box>
             </TableCell>
             <TableCell align="right" sx={{ color: '#6A6F73' }}>
-              {order.purchasedDate}
+              {order.insertedDate}
             </TableCell>
             <TableCell align="right" sx={{ color: '#6A6F73' }}>
               ₫{order.totalPriceAfterPromotion}
+            </TableCell>
+            <TableCell align="right" sx={{ color: '#6A6F73' }}>
+              {order.orderStatus.statusName}
             </TableCell>
             <TableCell align="right">
               <Button
@@ -130,9 +80,9 @@ const Row = (props: { order: Order }) => {
               <Collapse in={open} timeout="auto" unmountOnExit>
                 <Box>
                   <Table size="small" aria-label="purchases">
-                    {order.orderDetail.map(orderDetail => (
+                    {order.orderDetails.map(orderDetail => (
                       <TableRow key={orderDetail.id} sx={{ '& > *': { borderBottom: 'unset' } }}>
-                        <TableCell sx={{ width: '10%' }} />
+                        <TableCell sx={{ width: '5%' }} />
                         <TableCell component="th" scope="row" sx={{ width: '30%' }}>
                           <Link
                             sx={{ color: '#146C94', cursor: 'pointer', textDecorationLine: 'none' }}
@@ -144,10 +94,11 @@ const Row = (props: { order: Order }) => {
                           </Link>
                         </TableCell>
                         <TableCell sx={{ width: '20%' }} />
-                        <TableCell sx={{ width: '20%', color: '#6A6F73' }} align="right">
+                        <TableCell sx={{ width: '15%', color: '#6A6F73' }} align="right">
                           ₫{orderDetail.priceAfterPromotion}
                         </TableCell>
-                        <TableCell sx={{ width: '20%' }} />
+                        <TableCell sx={{ width: '15%' }} />
+                        <TableCell sx={{ width: '15%' }} />
                       </TableRow>
                     ))}
                   </Table>
@@ -167,18 +118,21 @@ const Row = (props: { order: Order }) => {
               <Link
                 sx={{ color: '#146C94', cursor: 'pointer', textDecorationLine: 'none' }}
                 onClick={() =>
-                  navigate('/detail-course', { state: { id: order.orderDetail[0].id } })
+                  navigate('/detail-course', { state: { id: order.orderDetails[0].id } })
                 }
               >
-                {order.orderDetail[0].course.title}
+                {order.orderDetails[0].course.title}
               </Link>
             </Box>
           </TableCell>
           <TableCell align="right" sx={{ color: '#6A6F73' }}>
-            {order.purchasedDate}
+            {order.insertedDate}
           </TableCell>
           <TableCell align="right" sx={{ color: '#6A6F73' }}>
             ₫{order.totalPriceAfterPromotion}
+          </TableCell>
+          <TableCell align="right" sx={{ color: '#6A6F73' }}>
+            {order.orderStatus.statusName}
           </TableCell>
           <TableCell align="right">
             <Button
@@ -204,52 +158,59 @@ const Row = (props: { order: Order }) => {
 }
 
 const CustomerOrderListContainer = () => {
-  console.log(132)
+  const [listOrders, setListOrders] = useState<Order[]>([])
+
+  const getListOrders = async () => {
+    const orders = await findOrdersByUser()
+    setListOrders(orders)
+  }
+
+  useEffect(() => {
+    getListOrders()
+  }, [])
+
   return (
     <Container>
-      <Typography
-        variant="h4"
-        sx={{
-          fontWeight: '600',
-          marginTop: '20px',
-          marginBottom: '10px',
-        }}
-      >
-        Lịch sử đơn hàng
-      </Typography>
-      <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ width: '10%' }} />
-              <TableCell sx={{ width: '30%' }} />
-              {/* <TableCell sx={{ width: '30%', color: 'gray', fontSize: '16px', fontWeight: '600' }}>
-                Tên khóa học
-              </TableCell> */}
-              <TableCell
-                sx={{ width: '20%', color: 'gray', fontSize: '16px', fontWeight: '600' }}
-                align="right"
-              >
-                Ngày
-              </TableCell>
-              <TableCell
-                sx={{ width: '20%', color: 'gray', fontSize: '16px', fontWeight: '600' }}
-                align="right"
-              >
-                Tổng tiền
-              </TableCell>
-              <TableCell
-                sx={{ width: '20%', color: 'gray', fontSize: '16px', fontWeight: '600' }}
-              />
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {orders.map(order => (
-              <Row key={order.id} order={order} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <TitleTypography title="Lịch sử đơn hàng" />
+      {listOrders.length === 0 && <CustomerOrderListEmptyContainer />}
+      {listOrders.length > 0 && (
+        <TableContainer component={Paper}>
+          <Table aria-label="collapsible table">
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ width: '5%' }} />
+                <TableCell sx={{ width: '30%' }} />
+                <TableCell
+                  sx={{ width: '20%', color: 'gray', fontSize: '16px', fontWeight: '600' }}
+                  align="right"
+                >
+                  Ngày
+                </TableCell>
+                <TableCell
+                  sx={{ width: '15%', color: 'gray', fontSize: '16px', fontWeight: '600' }}
+                  align="right"
+                >
+                  Tổng tiền
+                </TableCell>
+                <TableCell
+                  sx={{ width: '15%', color: 'gray', fontSize: '16px', fontWeight: '600' }}
+                  align="right"
+                >
+                  Trạng thái
+                </TableCell>
+                <TableCell
+                  sx={{ width: '15%', color: 'gray', fontSize: '16px', fontWeight: '600' }}
+                />
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {listOrders.map(order => (
+                <Row key={order.id} order={order} />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
     </Container>
   )
 }

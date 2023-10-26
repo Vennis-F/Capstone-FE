@@ -18,3 +18,5 @@ export const addCartItem = (body: AddCartItemBody): Promise<void> =>
 export const deleteCartItem = (id: string): Promise<void> => api.delete(`${CART_BASE_URL}/${id}`)
 
 export const deleteAllCartItems = (): Promise<void> => api.delete(`${CART_BASE_URL}`)
+
+export const checkCartIsValid = (): Promise<string[]> => api.get(`${CART_BASE_URL}/valid`)

@@ -10,6 +10,8 @@ import {
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { formatCurrency } from 'libs/utils/handle-price'
+
 import { Course } from '../types'
 
 interface Props {
@@ -19,12 +21,12 @@ interface Props {
 const CousreBoughtCardView = ({ course }: Props) => {
   const navigate = useNavigate()
 
+  const handleNavigateCourseDetail = () => {
+    navigate(`/detail-course/${course.id}`)
+  }
+
   return (
-    <Card
-      onClick={() => navigate('/detail-course', { state: { id: course.id } })}
-      key={course.id}
-      sx={{ marginBottom: '20px' }}
-    >
+    <Card onClick={handleNavigateCourseDetail} key={course.id} sx={{ marginBottom: '20px' }}>
       <CardActionArea sx={{ display: 'flex', height: '150px' }}>
         <CardMedia
           component="img"
@@ -69,11 +71,14 @@ const CousreBoughtCardView = ({ course }: Props) => {
         </Box>
         <Box sx={{ flex: 1, padding: '16px', textAlign: 'right' }}>
           <Typography component="span" variant="h5" sx={{ fontWeight: 'bold' }}>
-            ₫{course.discount === 0 ? course.price : course.discountPrice}
+            ₫
+            {course.discount === 0
+              ? formatCurrency(course.price)
+              : formatCurrency(course.discountPrice)}
           </Typography>
           {course.discount !== 0 && (
             <Typography sx={{ color: 'gray', fontSize: 14, textDecorationLine: 'line-through' }}>
-              ₫{course.price}
+              ₫{formatCurrency(course.price)}
             </Typography>
           )}
         </Box>

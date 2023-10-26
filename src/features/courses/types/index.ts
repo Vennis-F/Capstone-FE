@@ -47,6 +47,8 @@ export type GetCoursesBySearchResponse = {
 
 export type GetCourseDetailResponse = {
   authorId: string
+  categoryId: string
+  category: string
 } & Course
 
 export enum SortFieldCourse {

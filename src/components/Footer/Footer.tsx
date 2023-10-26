@@ -4,16 +4,18 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn'
 import PaletteIcon from '@mui/icons-material/Palette'
 import TwitterIcon from '@mui/icons-material/Twitter'
 import { Box, Container, Typography, Link, Divider } from '@mui/material'
-import React from 'react'
+
+import { MainColor } from 'libs/const/color'
+
+// import { MainColor } from 'libs/const/color'
 
 const Copyright = () => (
   <Typography variant="body2" color="text.secondary">
     {'Copyright © '}
     <Link color="inherit" href="https://capstone-40kqzzr0x-vennis-f.vercel.app/">
       Drawing platform
-    </Link>{' '}
+    </Link>
     {new Date().getFullYear()}
-    {'.'}
   </Typography>
 )
 
@@ -25,12 +27,9 @@ const Footer = () => {
       sx={{
         py: 3,
         px: 2,
-        // mt: 'auto',
         marginTop: 'auto',
-        backgroundColor: '#19A7CE',
+        backgroundColor: MainColor.RED_450,
         width: '100%',
-        // position: 'fixed',
-        // bottom: 0,
       }}
     >
       <Container maxWidth="lg">
@@ -39,7 +38,7 @@ const Footer = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            color: '#B0DAFF',
+            color: 'white',
           }}
         >
           <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center' }}>
@@ -53,7 +52,7 @@ const Footer = () => {
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
-              color: '#B0DAFF',
+              color: 'white',
               width: '150px',
             }}
           >

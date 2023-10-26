@@ -6,7 +6,7 @@ import { NavLink as RouterLink } from 'react-router-dom'
 import { StyleSxProps } from 'types'
 
 type ButtonLinkHeaderProps = {
-  title: string
+  children: React.ReactNode
   to: string
 }
 
@@ -21,9 +21,9 @@ const style: StyleSxProps = {
   title: {
     width: '100%',
     fontSize: 14,
-    fontWeight: '500',
     paddingX: 2,
     paddingY: 1,
+    fontWeight: 'bold',
     // ':hover': {
     //   backgroundColor: '#303030',
     //   borderRadius: 2,
@@ -31,25 +31,19 @@ const style: StyleSxProps = {
   },
 } as const
 
-const ButtonLinkHeader = (props: ButtonLinkHeaderProps) => {
-  const { title, to } = props
-
-  return (
-    <>
-      <Link
-        component={RouterLink}
-        to={to}
-        variant="button"
-        color="white"
-        sx={style.link}
-        underline="none"
-      >
-        <Typography sx={style.title} variant="button">
-          {title}
-        </Typography>
-      </Link>
-    </>
-  )
-}
+const ButtonLinkHeader = ({ children, to }: ButtonLinkHeaderProps) => (
+  <Link
+    component={RouterLink}
+    to={to}
+    variant="button"
+    color="white"
+    sx={style.link}
+    underline="none"
+  >
+    <Typography sx={style.title} variant="button">
+      {children}
+    </Typography>
+  </Link>
+)
 
 export default ButtonLinkHeader

@@ -127,7 +127,7 @@ const CartItemCardView = ({ cartItem: { course, id, promotionCourse } }: Props) 
             <CardContent>
               <Typography
                 sx={{
-                  color: '#19A7CE',
+                  color: '#eab308',
                   fontWeight: '600',
                   display: 'flex',
                   alignItems: 'center',

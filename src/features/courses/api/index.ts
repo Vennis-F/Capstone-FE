@@ -19,9 +19,10 @@ export const getCoursesBySearch = (
 export const getCoursesDetailById = (id: string): Promise<GetCourseDetailResponse> =>
   api.get(`${COURSE_BASE_URL}/${id}`)
 
-// export const getLevels = (): Promise<Level[]> => api.get(LEVEL_BASE_URL)
+export const checkCourseIsOwnedByCourseId = (id: string): Promise<{ status: boolean }> =>
+  api.get(`${COURSE_BASE_URL}/order/check-owned/${id}`)
 
-// export const getLevelById = (id: string): Promise<Level> => api.get(`${LEVEL_BASE_URL}/${id}`)
+// export const getLevels = (): Promise<Level[]> => api.get(LEVEL_BASE_URL)
 
 // export const createPost = (post: Post): Promise<Post> => api.post(POSTS_BASE_URL, post);
 

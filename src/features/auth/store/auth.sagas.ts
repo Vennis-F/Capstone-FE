@@ -10,7 +10,7 @@ import {
 } from 'libs/utils/handle-token'
 import { ResponseError } from 'types'
 
-import { guestSignIn } from '../api'
+import { guestSignIn, guestSignOut } from '../api'
 import { GuestLoginFormInputPayload, Token, UserInfor } from '../types'
 
 import { authActions } from './auth.slice'
@@ -41,9 +41,14 @@ function* handleLogin(payload: GuestLoginFormInputPayload) {
 
 function* handleLogout() {
   console.log('[SAGA LOGOUT]')
-  yield delay(1000)
+  const accessToken = getAccessToken() as string
+
+  yield call(guestSignOut, accessToken)
   removeAccessToken()
-  // redirect to login page
+  yield delay(1000)
+  /*
+    Need to check access token is existed in components
+  */
 }
 
 function* watchLoginFlow() {

@@ -23,7 +23,9 @@ import {
 import Breadcrumbs from '@mui/material/Breadcrumbs'
 import Link from '@mui/material/Link'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
+import { MainColor } from 'libs/const/color'
 import ReadMoreText from 'libs/ui/components/ReadMoreText'
 import VideoPlayer from 'libs/ui/components/VideoPlayer'
 import { getStringDayMonthYear } from 'libs/utils/handle-date'
@@ -41,6 +43,7 @@ interface CouresDetailGuestContainerProps {
 export const CouresDetailGuestContainer = ({ id }: CouresDetailGuestContainerProps) => {
   const [courseDetail, setCourseDetail] = useState<GetCourseDetailResponse | null>(null)
   const [open, setOpen] = useState(false)
+  const navigate = useNavigate()
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -156,7 +159,7 @@ David`,
             <Breadcrumbs aria-label="breadcrumb" sx={{ color: 'white', marginBottom: '10px' }}>
               <Link
                 underline="hover"
-                sx={{ display: 'flex', alignItems: 'center', color: '#19A7CE' }}
+                sx={{ display: 'flex', alignItems: 'center', color: MainColor.YELLOW_500 }}
                 color="inherit"
                 href="/"
               >
@@ -165,15 +168,23 @@ David`,
               </Link>
               <Link
                 underline="hover"
-                sx={{ display: 'flex', alignItems: 'center', color: '#19A7CE' }}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  color: MainColor.YELLOW_500,
+                  cursor: 'pointer',
+                }}
                 color="inherit"
-                href="/material-ui/getting-started/installation/"
+                // href="/material-ui/getting-started/installation/"
+                onClick={() =>
+                  navigate('/list-course', { state: { categorySearchId: courseDetail.categoryId } })
+                }
               >
                 <WhatshotIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                Năng khiếu
+                {courseDetail.category}
               </Link>
               <Typography
-                sx={{ display: 'flex', alignItems: 'center', color: '#146C94' }}
+                sx={{ display: 'flex', alignItems: 'center', color: '#9c7d21' }}
                 color="text.primary"
               >
                 <GrainIcon sx={{ mr: 0.5 }} fontSize="inherit" />

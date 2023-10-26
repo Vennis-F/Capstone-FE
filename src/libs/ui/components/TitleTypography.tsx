@@ -7,7 +7,7 @@ type PageTypographyProps = {
 
 const TitleTypography = (props: PageTypographyProps) => (
   <>
-    <Typography component="h1" variant="h2" align="center" color="text.primary" gutterBottom>
+    <Typography variant="h4" sx={{ marginBottom: '20px', fontWeight: '600' }}>
       {props.title}
     </Typography>
   </>

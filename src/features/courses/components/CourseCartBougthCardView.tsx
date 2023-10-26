@@ -15,15 +15,18 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { useCartService } from 'features/cart/hooks'
 import { checkPromotionCourseApply } from 'features/promotion/api'
 import { PromotionCourse } from 'features/promotion/types'
 import CustomButton from 'libs/ui/components/CustomButton'
+import { calcPriceDiscount, formatCurrency } from 'libs/utils/handle-price'
 import { toastError, toastSuccess, toastWarn } from 'libs/utils/handle-toast'
 import { getAccessToken } from 'libs/utils/handle-token'
 
+import { checkCourseIsOwnedByCourseId } from '../api'
 import { GetCourseDetailResponse } from '../types'
 
 interface Props {
@@ -39,6 +42,8 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
     courseDetail.promotionCourseByStaffId,
   )
   const [promotionCourseApply, setPromotionCourseApply] = useState<PromotionCourse | null>(null)
+  const [isOwned, setIsOwned] = useState(false)
+  const navigate = useNavigate()
 
   const handleAddCartItem = () => {
     const token = getAccessToken()
@@ -53,7 +58,7 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
   }
 
   const handleClickApplyCoupon = async () => {
-    if (!coupon) return toastError({ message: 'Ơ ô trống kìa em' })
+    if (!coupon) return toastError({ message: 'Vui lòng nhập mã khuyến mãi' })
 
     setActiveInput(false)
     const { promotionCourse } = await checkPromotionCourseApply({
@@ -76,6 +81,19 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
     return true
   }
 
+  const handleCheckCourseIsOwned = async () => {
+    const response = await checkCourseIsOwnedByCourseId(courseDetail.id)
+    setIsOwned(response.status)
+  }
+
+  const handleNavigateChapterLecture = () => {
+    navigate('/course/chapter-lecture/id')
+  }
+
+  useEffect(() => {
+    if (getAccessToken()) handleCheckCourseIsOwned()
+  }, [handleCheckCourseIsOwned])
+
   return (
     <Card sx={{ width: '100%', position: 'absolute', top: 0, right: 0 }}>
       <CardMedia sx={{ height: 200 }} image={courseDetail.thumbnailUrl} title="green iguana" />
@@ -84,16 +102,16 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           {!courseDetail.promotionCourseByStaffId && !promotionCourseApply && (
             <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: 32, marginRight: 2 }}>
-              ₫{courseDetail.price}
+              ₫{formatCurrency(courseDetail.price)}
             </Typography>
           )}
           {courseDetail.promotionCourseByStaffId && (
             <>
               <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: 32, marginRight: 2 }}>
-                ₫{courseDetail.discountPrice}
+                ₫{formatCurrency(courseDetail.discountPrice)}
               </Typography>
               <Typography sx={{ color: 'gray', fontSize: 14, textDecorationLine: 'line-through' }}>
-                ₫{courseDetail.price}
+                ₫{formatCurrency(courseDetail.price)}
               </Typography>
             </>
           )}
@@ -101,17 +119,25 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
             <>
               <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: 32, marginRight: 2 }}>
                 ₫
-                {courseDetail.price -
-                  (promotionCourseApply.promotion.discountPercent / 100) * courseDetail.price}
+                {formatCurrency(
+                  calcPriceDiscount(
+                    courseDetail.price,
+                    promotionCourseApply.promotion.discountPercent,
+                  ),
+                )}
               </Typography>
               <Typography sx={{ color: 'gray', fontSize: 14, textDecorationLine: 'line-through' }}>
-                ₫{courseDetail.price}
+                ₫{formatCurrency(courseDetail.price)}
               </Typography>
             </>
           )}
         </Box>
 
-        <CustomButton onClick={handleAddCartItem}>Thêm vào giỏ hàng</CustomButton>
+        {isOwned ? (
+          <CustomButton onClick={handleNavigateChapterLecture}>Chuyển đến khóa học</CustomButton>
+        ) : (
+          <CustomButton onClick={handleAddCartItem}>Thêm vào giỏ hàng</CustomButton>
+        )}
 
         <Button
           variant="outlined"

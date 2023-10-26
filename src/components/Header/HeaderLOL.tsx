@@ -1,20 +1,25 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import PaletteIcon from '@mui/icons-material/Palette'
 import SearchIcon from '@mui/icons-material/Search'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
-import { Badge, Button } from '@mui/material'
+import { Avatar, Badge, Box, Button, List, ListItem, ListItemButton, Paper } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import InputBase from '@mui/material/InputBase'
 import { styled, alpha } from '@mui/material/styles'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import Image from 'material-ui-image'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import useAuthService from 'features/auth/hook/useAuthService'
 import { useCartService } from 'features/cart/hooks'
+import { getCoursesBySearch } from 'features/courses/api'
+import { Course, GetCoursesBySearchRequest, SortFieldCourse } from 'features/courses/types'
+import { MainColor } from 'libs/const/color'
 import ButtonLinkHeader from 'libs/ui/components/ButtonLinkHeader'
 import { getAccessToken } from 'libs/utils/handle-token'
+import { OrderType } from 'types'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -53,26 +58,65 @@ type HeaderLOLProps = {
 }
 
 const HeaderLOL = (props: HeaderLOLProps) => {
-  const { t } = useTranslation()
   const { cart, fetchCart } = useCartService()
   const [searchText, setSearchText] = useState<string>('')
-  const { isLoggedIn } = useAuthService()
+  const { isLoggedIn, guestLogout } = useAuthService()
   const navigate = useNavigate()
-  console.log('[cart]', cart, props)
+  const [forceUpdate, setForceUpdate] = useState(false)
+  const [coursesSearch, setCoursesSearch] = useState<Course[]>([])
+  const [isPaperVisible, setIsPaperVisible] = useState(false)
+
+  const handleForceUpdate = () => {
+    setForceUpdate(!forceUpdate)
+  }
+
+  const handleTextFieldFocus = () => {
+    setIsPaperVisible(true)
+  }
+
+  const handleTextFieldBlur = () => {
+    setTimeout(() => {
+      setIsPaperVisible(false)
+    }, 200)
+  }
+
+  const getCourse = async () => {
+    const bodyRequest: GetCoursesBySearchRequest = {
+      categories: [],
+      levels: [],
+      search: searchText,
+      sortField: SortFieldCourse.PUBLISHED_DATE,
+      pageOptions: {
+        order: OrderType.DESC,
+        page: 1,
+        take: 5,
+      },
+    }
+    const dataResponse = await getCoursesBySearch(bodyRequest)
+    setCoursesSearch([...dataResponse.data])
+  }
 
   useEffect(() => {
     const accessToken = getAccessToken()
     if (accessToken) fetchCart()
   }, [fetchCart, isLoggedIn])
 
+  useEffect(() => {
+    if (searchText === '') setCoursesSearch([])
+    else getCourse()
+  }, [searchText])
+
   return (
     <>
       <AppBar
-        position="static"
+        // position="static"
+        position="fixed"
+        style={{ zIndex: 1400 }}
         elevation={0}
         sx={{
           borderBottom: theme => `1px solid ${theme.palette.divider}`,
-          backgroundColor: '#146C94',
+          // backgroundColor: MainColor.RED_600,
+          backgroundColor: MainColor.RED_500,
         }}
       >
         <Toolbar sx={{ flexWrap: 'wrap' }}>
@@ -83,44 +127,100 @@ const HeaderLOL = (props: HeaderLOLProps) => {
               noWrap
               sx={{
                 flexGrow: 1,
-                color: '#B0DAFF',
+                color: 'white',
+                fontWeight: '600',
               }}
             >
-              <PaletteIcon /> {'DRAWING PLATFORM'}
+              <PaletteIcon /> {'Vẽ cùng trẻ em'}
             </Typography>
           </Button>
-          <Search>
-            <StyledInputBase
-              placeholder="Tìm kiếm khóa học"
-              inputProps={{ 'aria-label': 'search' }}
-              value={searchText}
-              onChange={e => {
-                setSearchText(e.target.value)
-              }}
-            />
-            <Button
-              variant="text"
-              sx={{ padding: '0 !important', width: '24px !important', color: 'white' }}
-              onClick={() => {
-                navigate('/list-course', { state: { searchText } })
-              }}
-            >
-              <SearchIcon />
-            </Button>
-          </Search>
+
+          <Box sx={{ position: 'relative' }}>
+            <Search>
+              <StyledInputBase
+                placeholder="Tìm kiếm khóa học"
+                inputProps={{ 'aria-label': 'search' }}
+                value={searchText}
+                onChange={e => {
+                  setSearchText(e.target.value)
+                }}
+                onFocus={handleTextFieldFocus}
+                onBlur={handleTextFieldBlur}
+              />
+              <Button
+                variant="text"
+                sx={{ padding: '0 !important', width: '24px !important', color: 'white' }}
+                onClick={() => {
+                  navigate('/list-course', { state: { searchText } })
+                }}
+              >
+                <SearchIcon />
+              </Button>
+            </Search>
+
+            {coursesSearch.length > 0 && isPaperVisible && (
+              <Paper
+                elevation={4}
+                sx={{
+                  width: '100%',
+                  position: 'absolute',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  marginTop: '8px',
+                }}
+              >
+                <List disablePadding>
+                  {coursesSearch.map(course => (
+                    <ListItem disablePadding key={course.id}>
+                      <ListItemButton onClick={() => navigate(`/detail-course/${course.id}`)}>
+                        <Image
+                          src={'https://img-c.udemycdn.com/course/100x100/5152322_9a81_3.jpg'}
+                          style={{ height: '40px', width: '40px', padding: 0 }}
+                          imageStyle={{ height: '40px', width: '40px' }}
+                        />
+                        <Box sx={{ marginLeft: '10px' }}>
+                          <Typography sx={{ fontWeight: 'bold' }}>{course.title}</Typography>
+                          <Typography
+                            sx={{ fontSize: '12px', fontWeight: 'bold', color: 'GrayText' }}
+                          >
+                            Khóa học &nbsp;
+                            <Typography sx={{ fontSize: '12px' }} component="span">
+                              {course.author}
+                            </Typography>
+                          </Typography>
+                        </Box>
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                </List>
+              </Paper>
+            )}
+          </Box>
+
           <nav>
             <Button sx={{ color: 'white', cursor: 'pointer' }} onClick={() => navigate('/cart')}>
               <Badge color="secondary" badgeContent={cart ? cart.cartItems.length : 0} max={999}>
                 <ShoppingCartOutlinedIcon />
               </Badge>
             </Button>
-            {/* {getAccessToken() && <Button onClick={() => {}}>LOGOUT</Button>} */}
+            {getAccessToken() && (
+              <Button
+                onClick={() => {
+                  guestLogout()
+                  navigate('/guest-login')
+                  handleForceUpdate()
+                }}
+              >
+                LOGOUT
+              </Button>
+            )}
             {/* <ButtonLinkHeader to="/cart" title={t('Cart')} /> */}
             {/* <ButtonLinkHeader to="/list-course" title={t('ListCoursePage')} /> */}
-            <ButtonLinkHeader to="/guest-login" title={t('Đăng nhập')} />
+            <ButtonLinkHeader to="/guest-login">Đăng nhập</ButtonLinkHeader>
+            <ButtonLinkHeader to="/guest-signup">Đăng ký</ButtonLinkHeader>
             {/* <ButtonLinkHeader to="/" title={t('Đăng ký')} /> */}
-            <ButtonLinkHeader to="/order-list" title={t('Danh sách đơn hàng')} />
-            <ButtonLinkHeader to="/my-learning" title={t('Danh sách khóa học của tôi')} />
+            <ButtonLinkHeader to="/order-list">Danh sách đơn hàng</ButtonLinkHeader>
+            <ButtonLinkHeader to="/my-learning">Danh sách khóa học của tôi</ButtonLinkHeader>
 
             {/* <ButtonDropdownHeader title="Tin tức" handlerClick={handleClick} />
             <Menu

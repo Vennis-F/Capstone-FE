@@ -1,21 +1,26 @@
 import { Button, SxProps } from '@mui/material'
 
+import { MainColor } from 'libs/const/color'
+
 type Props = {
   onClick: () => void
   children: React.ReactNode
   sxCustom?: SxProps
+  size?: string
 }
 
-const CustomButton = ({ onClick, children, sxCustom }: Props) => (
+const CustomButton = ({ onClick, children, sxCustom, size }: Props) => (
   <Button
     variant="contained"
     disableElevation
+    // eslint-disable-next-line
+    size={size as any}
     sx={{
-      backgroundColor: '#19A7CE',
+      backgroundColor: MainColor.RED_500,
       fontWeight: '600',
       width: '100%',
       '&:hover': {
-        backgroundColor: '#146C94',
+        backgroundColor: MainColor.RED_600,
       },
       ...sxCustom,
     }}

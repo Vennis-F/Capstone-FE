@@ -1,7 +1,3 @@
 import React from 'react'
 
-type Props = {}
-
-export const NotFound = (props: Props) => {
-  return <div>NotFound</div>
-}
+export const NotFound = () => <div>NotFound</div>

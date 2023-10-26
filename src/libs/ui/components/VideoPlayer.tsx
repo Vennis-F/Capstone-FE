@@ -36,31 +36,33 @@ const VideoPlayer: React.FC = () => {
   }, [played, isCompleted])
 
   return (
-    <div>
-      <ReactPlayer
-        controls={true}
-        ref={playerRef}
-        url="https://capstone-be-7fef96e86ef9.herokuapp.com/video?id=courses/course_1/videos/4ec1be64-ccdd-4932-a0a4-92cd8fb02263.mp4"
-        playing={playing}
-        onProgress={handleProgress}
-        onEnded={() => setPlaying(false)}
-        width={'100%'}
-      />
+    <ReactPlayer
+      controls={true}
+      ref={playerRef}
+      url="https://capstone-be-7fef96e86ef9.herokuapp.com/video?id=courses/course_1/videos/4ec1be64-ccdd-4932-a0a4-92cd8fb02263.mp4"
+      playing={playing}
+      onProgress={handleProgress}
+      onEnded={() => setPlaying(false)}
+      width={'100%'}
+      height={'100%'}
+      style={{
+        backgroundColor: '#2D2F31',
+      }}
+    />
+  )
+}
 
-      {/* <div>
+export default VideoPlayer
+
+/* <div>
         <button onClick={handlePlayPause}>{playing ? 'Tạm dừng' : 'Xem'}</button>
-      </div> */}
+      </div> */
 
-      {/* <div>
+/* <div>
         <input type="range" min={0} max={1} step="any" value={played} onChange={handleSeek} />
       </div>
 
       <div>
         <p>Thời gian hiện tại: {Math.floor(played * duration)}</p>
         <p>Tổng thời lượng: {Math.floor(duration)}</p>
-      </div> */}
-    </div>
-  )
-}
-
-export default VideoPlayer
+      </div> */

@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import * as Yup from 'yup'
 
 import { PostFormInput } from 'features/posts/types'
-import { FormTextField } from 'libs/ui/components/FormTextField'
+import { FormTextField } from 'libs/ui/form-components/FormTextField'
 
 export type PostFormProps = {
   defaultValues?: PostFormInput

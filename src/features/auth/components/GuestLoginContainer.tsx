@@ -4,6 +4,7 @@ import Container from '@mui/material/Container'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { MainColor } from 'libs/const/color'
 import { toastError } from 'libs/utils/handle-toast'
 import { getAccessToken } from 'libs/utils/handle-token'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
@@ -29,7 +30,7 @@ export const GuestLoginContainer = () => {
     <>
       <Container maxWidth="xs">
         <Box sx={{ textAlign: 'center', marginBottom: '40px' }}>
-          <LockOpenIcon sx={{ color: '#146C94' }} fontSize="large" />
+          <LockOpenIcon sx={{ color: MainColor.YELLOW_500 }} fontSize="large" />
           <Typography variant="h5" sx={{ fontWeight: '600' }}>
             Đăng nhập
           </Typography>
@@ -63,8 +64,8 @@ export const GuestLoginContainer = () => {
           Logout
         </Button> */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-          <Link sx={{ color: '#5eadf3', fontSize: '14px', cursor: 'pointer' }}>Quên mật khẩu?</Link>
-          <Link sx={{ color: '#5eadf3', fontSize: '14px', cursor: 'pointer' }}>
+          <Link sx={{ color: 'black', fontSize: '14px', cursor: 'pointer' }}>Quên mật khẩu?</Link>
+          <Link sx={{ color: 'black', fontSize: '14px', cursor: 'pointer' }}>
             Chưa có tài khoản? Đăng ký
           </Link>
         </Box>

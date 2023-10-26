@@ -10,6 +10,7 @@ export type AuthServiceOperators = {
   isLogging: boolean
   currentUser?: UserInfor
   guestLogin: (loginFormInput: GuestLoginFormInputPayload) => void
+  guestLogout: () => void
 }
 
 export const useAuthService = (): Readonly<AuthServiceOperators> => {
@@ -26,6 +27,9 @@ export const useAuthService = (): Readonly<AuthServiceOperators> => {
       },
       [dispatch],
     ),
+    guestLogout: useCallback(() => {
+      dispatch(authActions.logout())
+    }, [dispatch]),
   }
 }
 

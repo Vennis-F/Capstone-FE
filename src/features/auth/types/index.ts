@@ -19,3 +19,17 @@ export type UserInfor = {
 export type Token = {
   accessToken: string
 }
+
+export type CustomerSignupRequest = {
+  firstName: string
+  lastName: string
+  middleName: string
+  password: string
+  phoneNumber: string
+  email: string
+}
+
+export type CustomerConfirmRequest = {
+  email: string
+  otp: string
+}

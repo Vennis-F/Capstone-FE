@@ -11,41 +11,48 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material'
+import { useState } from 'react'
 /* eslint-disable */
 type Props = {
   onClickPreview: () => void
 }
 
+const listCourseData = [
+  {
+    id: 1,
+    title: 'DB transaction lock & How to handle deadlock in Golang',
+    isPreview: true,
+    totalContentLength: '30:29',
+  },
+  {
+    id: 2,
+    title: 'How to avoid deadlock in DB transaction? Queries order matters!',
+    isPreview: true,
+    totalContentLength: '03:00',
+  },
+  {
+    id: 3,
+    title: 'Deeply understand transaction isolation levels & read phenomena',
+    isPreview: true,
+    totalContentLength: '01:29',
+  },
+  {
+    id: 4,
+    title: 'Setup Github Actions for Golang + Postgres to run automated tests',
+    isPreview: false,
+    totalContentLength: '04:12',
+  },
+]
+
 const ListCoursePreview = ({ onClickPreview }: Props) => {
-  const listCourseData = [
-    {
-      id: 1,
-      title: 'DB transaction lock & How to handle deadlock in Golang',
-      isPreview: true,
-      totalContentLength: '30:29',
-    },
-    {
-      id: 2,
-      title: 'How to avoid deadlock in DB transaction? Queries order matters!',
-      isPreview: true,
-      totalContentLength: '03:00',
-    },
-    {
-      id: 3,
-      title: 'Deeply understand transaction isolation levels & read phenomena',
-      isPreview: true,
-      totalContentLength: '01:29',
-    },
-    {
-      id: 4,
-      title: 'Setup Github Actions for Golang + Postgres to run automated tests',
-      isPreview: false,
-      totalContentLength: '04:12',
-    },
-  ]
+  const [expanded, setExpanded] = useState<boolean>(true)
+
+  const handleChange = () => {
+    setExpanded(!expanded)
+  }
 
   return (
-    <Accordion disableGutters={true}>
+    <Accordion expanded={expanded} onChange={handleChange} disableGutters={true}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"

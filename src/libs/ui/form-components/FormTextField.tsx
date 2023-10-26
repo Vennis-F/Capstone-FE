@@ -7,22 +7,31 @@ export interface FormInputProps {
   name: string
   control: Control<any> // eslint-disable-line
   label: string
+  size?: 'small' | 'medium'
+  type?: React.HTMLInputTypeAttribute
 }
 
-export const FormTextField = ({ name, control, label }: FormInputProps) => (
+export const FormTextField = ({
+  size = 'small',
+  type = 'text',
+  name,
+  control,
+  label,
+}: FormInputProps) => (
   <Controller
     name={name}
     control={control}
     render={({ field: { onChange, value }, fieldState: { error } }) => (
       <TextField
         helperText={error ? error.message : null}
-        size="medium"
+        size={size}
         error={!!error}
         onChange={onChange}
         value={value}
         fullWidth
         label={label}
         variant="outlined"
+        type={type}
       />
     )}
   />

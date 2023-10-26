@@ -6,8 +6,8 @@ import { UseFormReset, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import * as Yup from 'yup'
 
-import FormSelectField from 'libs/ui/components/FormSelectField'
-import { FormTextField } from 'libs/ui/components/FormTextField'
+import FormSelectField from 'libs/ui/form-components/FormSelectField'
+import { FormTextField } from 'libs/ui/form-components/FormTextField'
 
 import { CharacterFormInput, CharacterRole, Lane } from '../types'
 

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { getCategories } from 'features/category/api'
 import CategoryBeautyCardView from 'features/category/components/CategoryBeautyCardView'
 import { Category } from 'features/category/types'
+import { MainColor } from 'libs/const/color'
 import CarouselCustom from 'libs/ui/components/CarouselCustom'
 import CustomButton from 'libs/ui/components/CustomButton'
 import { OrderType } from 'types'
@@ -64,13 +65,13 @@ const HomePageContainer = () => {
           >
             <Typography variant="h3" sx={{ fontWeight: '600', marginBottom: '15px' }}>
               Nền tảng cung cấp các khóa học vẽ cho
-              <Typography variant="inherit" component="span" sx={{ color: '#fff570' }}>
+              <Typography variant="inherit" component="span" sx={{ color: '#fde047' }}>
                 &nbsp;trẻ em
               </Typography>
             </Typography>
             <Typography variant="body2" sx={{ color: 'GrayText', marginBottom: '20px' }}>
               Đây sẽ là nơi tốt nhất cho bất kỳ ai bán khóa học trực tuyến với tất cả các tính năng
-              Thương mại điện tử cần thiết. Đây là Eduma - Chủ đề WordPress về giáo dục.
+              Thương mại điện tử cần thiết.
             </Typography>
             <Box sx={{ width: '50%' }}>
               <CustomButton onClick={() => navigate('/guest-login')}>
@@ -89,7 +90,7 @@ const HomePageContainer = () => {
                 // maxWidth: { xs: 350, md: 250 },
               }}
               alt="The house from the offer."
-              src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1972&q=80"
+              src="https://plus.unsplash.com/premium_photo-1678812165206-688656de3b73?auto=format&fit=crop&q=80&w=1974&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             />
           </Box>
         </Box>
@@ -99,8 +100,8 @@ const HomePageContainer = () => {
             sx={{ fontWeight: '600', fontSize: '35px', marginBottom: '20px' }}
           >
             Khóa học
-            <Typography component="span" variant="inherit" sx={{ color: '#2ca4db' }}>
-              &nbsp;mới nhất
+            <Typography component="span" variant="inherit" sx={{ color: MainColor.RED_600 }}>
+              &nbsp;nổi bật
             </Typography>
           </Typography>
           <CarouselCustom>
@@ -115,7 +116,7 @@ const HomePageContainer = () => {
             sx={{ fontWeight: '600', fontSize: '35px', marginBottom: '20px' }}
           >
             Thể loại
-            <Typography component="span" variant="inherit" sx={{ color: '#2ca4db' }}>
+            <Typography component="span" variant="inherit" sx={{ color: MainColor.RED_600 }}>
               &nbsp;nổi bật
             </Typography>
           </Typography>
@@ -154,7 +155,7 @@ const HomePageContainer = () => {
               }}
             >
               Bạn mong đợi điều gì từ các
-              <Typography component="span" variant="inherit" sx={{ color: '#2ca4db' }}>
+              <Typography component="span" variant="inherit" sx={{ color: MainColor.RED_600 }}>
                 &nbsp;khóa học vẽ?
               </Typography>
             </Typography>
@@ -165,7 +166,7 @@ const HomePageContainer = () => {
                     <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
                       <DoneIcon
                         sx={{
-                          color: '#8b5cf6',
+                          color: MainColor.RED_500,
                           fontSize: '40px !important',
                           fontWeight: '600',
                           marginBottom: '20px',
