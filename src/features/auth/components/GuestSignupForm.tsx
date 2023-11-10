@@ -35,10 +35,12 @@ export const GuestSignupForm = (props: Props) => {
     middleName: Yup.string().required('Không được để trống tên đệm'),
     password: Yup.string()
       .required('Không được để trống mật khẩu')
+      .min(8, 'Mật khẩu phải có độ dài nhỏ nhất là 8')
       .matches(
         /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
         'Mật khẩu phải bao gồm ít nhất 1 ký tự thường, ký tự in hoa và số hoặc ký tự đặc biệt',
-      ),
+      )
+      .max(32, 'Mật khẩu phải có độ dài tối đa là 32'),
     phoneNumber: Yup.string()
       .required('Không được để trống số điện thoại')
       .matches(/^[0-9]{10,11}$/, 'Số điện thoại không hợp lệ'),

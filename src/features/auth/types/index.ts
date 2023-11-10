@@ -27,6 +27,7 @@ export type CustomerSignupRequest = {
   password: string
   phoneNumber: string
   email: string
+  role: string
 }
 
 export type CustomerConfirmRequest = {

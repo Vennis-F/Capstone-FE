@@ -26,36 +26,34 @@ export const GuestSignupContainer = () => {
   }, [navigate])
 
   return (
-    <>
-      <Container maxWidth="xs">
-        <Box sx={{ textAlign: 'center', marginBottom: '40px' }}>
-          <LockOpenIcon sx={{ color: MainColor.YELLOW_500 }} fontSize="large" />
-          <Typography variant="h5" sx={{ fontWeight: '600' }}>
-            Đăng ký
-          </Typography>
-        </Box>
-        <GuestSignupForm
-          onSubmitClick={async data => {
-            try {
-              const response = await customerSignUp(data)
-              toastSuccess({ message: 'Đăng ký thành công' })
-              navigate(`/confirm-otp?email=${response.email}`)
-            } catch (error) {
-              showErrorResponseSaga({
-                error,
-                defaultMessage: 'Không đăng ký được, vui lòng kiểm tra lại thông tin',
-              })
-            }
-          }}
-          isLogging={isLogging}
-        />
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-          <Link sx={{ color: 'black', fontSize: '14px', cursor: 'pointer' }}>Quên mật khẩu?</Link>
-          <Link sx={{ color: 'black', fontSize: '14px', cursor: 'pointer' }}>
-            Chưa có tài khoản? Đăng ký
-          </Link>
-        </Box>
-      </Container>
-    </>
+    <Container maxWidth="xs">
+      <Box sx={{ textAlign: 'center', marginBottom: '40px' }}>
+        <LockOpenIcon sx={{ color: MainColor.YELLOW_500 }} fontSize="large" />
+        <Typography variant="h5" sx={{ fontWeight: '600' }}>
+          Đăng ký
+        </Typography>
+      </Box>
+      <GuestSignupForm
+        onSubmitClick={async data => {
+          try {
+            const response = await customerSignUp({ ...data, role: 'Customer' })
+            toastSuccess({ message: 'Đăng ký thành công' })
+            navigate(`/confirm-otp?email=${response.email}`)
+          } catch (error) {
+            showErrorResponseSaga({
+              error,
+              defaultMessage: 'Không đăng ký được, vui lòng kiểm tra lại thông tin',
+            })
+          }
+        }}
+        isLogging={isLogging}
+      />
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+        <Link sx={{ color: 'black', fontSize: '14px', cursor: 'pointer' }}>Quên mật khẩu?</Link>
+        <Link sx={{ color: 'black', fontSize: '14px', cursor: 'pointer' }}>
+          Chưa có tài khoản? Đăng ký
+        </Link>
+      </Box>
+    </Container>
   )
 }

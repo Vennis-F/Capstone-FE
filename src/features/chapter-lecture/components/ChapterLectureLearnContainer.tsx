@@ -10,13 +10,17 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import { styled } from '@mui/material/styles'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import VideoPlayer from 'libs/ui/components/VideoPlayer'
+import { formatSecondToMinute } from 'libs/utils/handle-time'
+
+import { getChapterLectureOfLearnerStudy, saveUserLectureCompleted } from '../api'
+import { ChapterLectureFilter } from '../types'
 
 import TabsChapterLectureLearn from './TabsChapterLectureLearn'
 
-const drawerWidth = 280
+const drawerWidth = 480
 
 const Main = styled('main', { shouldForwardProp: prop => prop !== 'open' })<{
   open?: boolean
@@ -39,8 +43,14 @@ const Main = styled('main', { shouldForwardProp: prop => prop !== 'open' })<{
   position: 'relative',
 }))
 
-const ChapterLectureLearnContainer = () => {
-  const [open, setOpen] = useState(false)
+interface Props {
+  courseId: string
+}
+
+const ChapterLectureLearnContainer = ({ courseId }: Props) => {
+  const [open, setOpen] = useState(true)
+  const [chapterLectures, setChapterLectures] = useState<ChapterLectureFilter[]>([])
+  const [currChapterLecture, setCurrChapterLecture] = useState<ChapterLectureFilter | null>(null)
 
   const handleDrawerOpen = () => {
     setOpen(true)
@@ -50,11 +60,35 @@ const ChapterLectureLearnContainer = () => {
     setOpen(false)
   }
 
+  const handleGetChapterLectureStudy = async () => {
+    const currChapterLectures = await getChapterLectureOfLearnerStudy(courseId)
+    setChapterLectures(currChapterLectures)
+  }
+
+  const handleSaveCompleteChapterLecture = async (chapterLectureId: string) => {
+    await saveUserLectureCompleted(chapterLectureId)
+    handleGetChapterLectureStudy()
+  }
+
+  useEffect(() => {
+    handleGetChapterLectureStudy()
+  }, [])
+
+  useEffect(() => {
+    if (chapterLectures !== null && !currChapterLecture) {
+      setCurrChapterLecture(chapterLectures[0])
+    }
+  }, [chapterLectures])
+
   return (
     <Box sx={{ display: 'flex', marginTop: '-50px' }}>
       <Main open={open}>
         <Box sx={{ height: '65vh' }}>
-          <VideoPlayer />
+          <VideoPlayer
+            videoURL={currChapterLecture?.video}
+            handleSaveCompleteChapterLecture={handleSaveCompleteChapterLecture}
+            chapterLectureId={currChapterLecture?.id}
+          />
         </Box>
         <TabsChapterLectureLearn />
         {!open && (
@@ -91,7 +125,7 @@ const ChapterLectureLearnContainer = () => {
         <Toolbar />
         <Box>
           <IconButton onClick={handleDrawerClose}>
-            <ChevronRightIcon />{' '}
+            <ChevronRightIcon />
             <Typography component={'span'} sx={{ color: 'black', fontWeight: '500' }}>
               Nội dung khóa học
             </Typography>
@@ -99,19 +133,33 @@ const ChapterLectureLearnContainer = () => {
         </Box>
         <Divider />
         <List>
-          {['1. Giới thiệu', '2. Vẽ cơ bản', '3. Vẽ con chim', '4. Vẽ đôi cánh'].map(text => (
+          {chapterLectures.map(chapterLecture => (
             <>
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <Checkbox disabled checked={true} sx={{ padding: 0, marginRight: '12px' }} />
+              <ListItem
+                key={chapterLecture.id}
+                disablePadding
+                sx={
+                  chapterLecture.id === currChapterLecture?.id
+                    ? { backgroundColor: '#D1D7DC' }
+                    : undefined
+                }
+              >
+                <ListItemButton onClick={() => setCurrChapterLecture(chapterLecture)}>
+                  <Checkbox
+                    disabled
+                    checked={chapterLecture.isCompleted}
+                    sx={{ padding: 0, marginRight: '12px' }}
+                  />
                   <ListItemText
-                    primary={text}
+                    primary={chapterLecture.title}
                     secondary={
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <PlayCircleFilledRoundedIcon
                           sx={{ fontSize: '16px', marginRight: '4px' }}
                         />
-                        <Typography variant="caption">{5} phút</Typography>
+                        <Typography variant="caption">
+                          {formatSecondToMinute(chapterLecture.totalContentLength)} phút
+                        </Typography>
                       </Box>
                     }
                   />

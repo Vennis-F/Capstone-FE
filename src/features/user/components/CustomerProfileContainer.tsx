@@ -1,17 +1,35 @@
-import { Avatar, Container, Grid, Paper, Typography, Stack, Tabs, Tab, Box } from '@mui/material'
-import React from 'react'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Avatar, Container, Grid, Paper, Typography, Stack, Box } from '@mui/material'
 
+import { MyLearningContainer } from 'features/learner/components/MyLearningContainer'
 import TitleTypography from 'libs/ui/components/TitleTypography'
+import { TypeCustomerProfilePageParams } from 'types/params.enum'
 
+import { CustomerAllCourseContainer } from './CustomerAllCourseContainer'
+import CustomerEditProfileContainer from './CustomerEditProfileContainer'
+import CustomerEditSecureContainer from './CustomerEditSecureContainer'
 import CustomerListItemChoice from './CustomerListItemChoice'
+import CustomerManagerLearnersContainer from './CustomerManagerLearnersContainer'
+import CustomerSettingContainer from './CustomerSettingContainer'
 
-// type Props = {}
+interface Props {
+  typePage: TypeCustomerProfilePageParams
+}
 
-const CustomerProfileContainer = () => {
-  const [value, setValue] = React.useState(0)
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue)
+const CustomerProfileContainer = ({ typePage }: Props) => {
+  const renderRightComponent = () => {
+    switch (typePage) {
+      case 'edit-profile':
+        return <CustomerEditProfileContainer />
+      case 'edit-secure':
+        return <CustomerEditSecureContainer />
+      case 'edit-learner':
+        return <CustomerManagerLearnersContainer />
+      case 'all-course':
+        return <CustomerAllCourseContainer />
+      default:
+        return <CustomerAllCourseContainer />
+    }
   }
 
   return (
@@ -40,14 +58,8 @@ const CustomerProfileContainer = () => {
             <CustomerListItemChoice />
           </Paper>
         </Grid>
-        <Grid item xs={12} sm={12} md={9} sx={{ backgroundColor: 'yellow' }}>
-          <Box sx={{ width: '100%' }}>
-            <Tabs value={value} onChange={handleChange} centered variant="fullWidth">
-              <Tab label="Item One" />
-              <Tab label="Item Two" />
-              <Tab label="Item Three" />
-            </Tabs>
-          </Box>
+        <Grid item xs={12} sm={12} md={9}>
+          <Box sx={{ width: '100%' }}>{renderRightComponent()}</Box>
         </Grid>
       </Grid>
     </Container>

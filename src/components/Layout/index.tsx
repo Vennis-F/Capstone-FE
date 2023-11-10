@@ -8,6 +8,7 @@ import { Outlet } from 'react-router-dom'
 // import Header from 'components/Header/Header'
 import Footer from 'components/Footer/Footer'
 import HeaderLOL from 'components/Header/HeaderLOL'
+import { decodeToken, getAccessToken } from 'libs/utils/handle-token'
 
 const Layout = () => {
   const [mode, setMode] = React.useState<'light' | 'dark'>('light')
@@ -41,7 +42,9 @@ const Layout = () => {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <Box
+          sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: '#F0F2F5' }}
+        >
           <HeaderLOL
             currentThemeMode={theme.palette.mode}
             onChangeThemeClick={colorMode.toggleColorMode}
@@ -50,7 +53,6 @@ const Layout = () => {
           <main>
             <Box
               sx={{
-                bgcolor: 'background.paper',
                 pt: '114px',
                 pb: '50px',
               }}
@@ -58,7 +60,7 @@ const Layout = () => {
               <Outlet />
             </Box>
           </main>
-          <Footer />
+          {getAccessToken() && decodeToken(getAccessToken() as string) && <Footer />}
         </Box>
       </ThemeProvider>
     </>

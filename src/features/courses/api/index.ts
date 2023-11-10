@@ -6,6 +6,7 @@ import {
   GetCoursesBySearchRequest,
   GetCoursesBySearchResponse,
   GetCourseDetailResponse,
+  CourseFilterResponse,
 } from '../types'
 
 const api = makeApi(`${Env.API_BASE_URL}`)
@@ -21,6 +22,9 @@ export const getCoursesDetailById = (id: string): Promise<GetCourseDetailRespons
 
 export const checkCourseIsOwnedByCourseId = (id: string): Promise<{ status: boolean }> =>
   api.get(`${COURSE_BASE_URL}/order/check-owned/${id}`)
+
+export const getCourseByCustomer = (): Promise<CourseFilterResponse[]> =>
+  api.get(`${COURSE_BASE_URL}/order/user`)
 
 // export const getLevels = (): Promise<Level[]> => api.get(LEVEL_BASE_URL)
 

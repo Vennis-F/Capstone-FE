@@ -6,17 +6,17 @@ import React from 'react'
 import { StyleSxProps } from 'types'
 
 type ButtonDropdownHeaderProps = {
-  title: string
   handlerClick: (event: React.MouseEvent<HTMLButtonElement>) => void
+  children: React.ReactNode
 }
 
 const style: StyleSxProps = {
   link: {
     color: 'white',
-    borderBottom: '3px solid #111111',
-    ':hover': {
-      borderBottomColor: '#047C8F',
-    },
+    // borderBottom: '3px solid #111111',
+    // ':hover': {
+    //   borderBottomColor: '#047C8F',
+    // },
   },
   title: {
     width: '100%',
@@ -33,7 +33,7 @@ const style: StyleSxProps = {
 } as const
 
 const ButtonDropdownHeader = (props: ButtonDropdownHeaderProps) => {
-  const { title, handlerClick } = props
+  const { children, handlerClick } = props
 
   return (
     <>
@@ -45,7 +45,7 @@ const ButtonDropdownHeader = (props: ButtonDropdownHeaderProps) => {
         onClick={handlerClick}
       >
         <Typography sx={style.title} variant="button">
-          {title}
+          {children}
           <ArrowDropDownIcon />
         </Typography>
       </Button>

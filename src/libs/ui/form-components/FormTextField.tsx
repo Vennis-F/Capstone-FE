@@ -9,6 +9,7 @@ export interface FormInputProps {
   label: string
   size?: 'small' | 'medium'
   type?: React.HTMLInputTypeAttribute
+  disable?: boolean
 }
 
 export const FormTextField = ({
@@ -17,6 +18,7 @@ export const FormTextField = ({
   name,
   control,
   label,
+  disable = false,
 }: FormInputProps) => (
   <Controller
     name={name}
@@ -32,6 +34,7 @@ export const FormTextField = ({
         label={label}
         variant="outlined"
         type={type}
+        disabled={disable}
       />
     )}
   />

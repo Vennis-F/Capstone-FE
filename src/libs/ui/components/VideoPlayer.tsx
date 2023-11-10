@@ -2,7 +2,17 @@ import React, { useState, useRef, useEffect } from 'react'
 import ReactPlayer from 'react-player'
 import { OnProgressProps } from 'react-player/base'
 
-const VideoPlayer: React.FC = () => {
+interface Props {
+  videoURL?: string
+  chapterLectureId?: string
+  handleSaveCompleteChapterLecture?: (chapterLectureId: string) => void
+}
+
+const VideoPlayer = ({
+  videoURL = 'https://capstone-be-7fef96e86ef9.herokuapp.com/video?id=courses/course_1/videos/4ec1be64-ccdd-4932-a0a4-92cd8fb02263.mp4',
+  handleSaveCompleteChapterLecture,
+  chapterLectureId,
+}: Props) => {
   const [playing, setPlaying] = useState<boolean>(false)
   const [isCompleted, setIsCompleted] = useState<boolean>(false)
   const [played, setPlayed] = useState<number>(0)
@@ -32,6 +42,9 @@ const VideoPlayer: React.FC = () => {
     if (played >= 0.8 && !isCompleted) {
       setIsCompleted(true)
       console.log('COMPLETED')
+      if (handleSaveCompleteChapterLecture && chapterLectureId) {
+        handleSaveCompleteChapterLecture(chapterLectureId)
+      }
     }
   }, [played, isCompleted])
 
@@ -39,7 +52,7 @@ const VideoPlayer: React.FC = () => {
     <ReactPlayer
       controls={true}
       ref={playerRef}
-      url="https://capstone-be-7fef96e86ef9.herokuapp.com/video?id=courses/course_1/videos/4ec1be64-ccdd-4932-a0a4-92cd8fb02263.mp4"
+      url={videoURL}
       playing={playing}
       onProgress={handleProgress}
       onEnded={() => setPlaying(false)}

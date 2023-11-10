@@ -39,14 +39,14 @@ const AppRoutes = () => (
           <Route path="/character-detail" element={<CharacterDetailPage />} />
           <Route path="/list-course" element={<ListCoursePage />} />
           <Route path="/detail-course/:courseId" element={<DetailCoursePage />} />
-          <Route path="/course/chapter-lecture/id" element={<ChapterLectureLearnPage />} />
+          {/* <Route path="/course/chapter-lecture/id" element={<ChapterLectureLearnPage />} /> */}
           <Route path="/course/:courseId/chapter-lecture" element={<ChapterLectureLearnPage />} />
-          <Route path="/user/profile" element={<CustomerProfilePage />} />
 
           <Route path="/cart" element={<CartPage />} />
           <Route path="/cart/checkout" element={<CartCheckoutPage />} />
           <Route path="/payment/check" element={<CheckPaymentPage />} />
-          <Route path="/order-list" element={<CustomerOrderListPage />} />
+          <Route path="/user/order-list" element={<CustomerOrderListPage />} />
+          <Route path="/user/:type" element={<CustomerProfilePage />} />
           <Route
             path="/my-learning"
             element={<PrivateRoute roles={[UserRole.CUSTOMER, UserRole.LEARNER]} />}

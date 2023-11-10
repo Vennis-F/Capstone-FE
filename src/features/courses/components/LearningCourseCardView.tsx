@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Typography,
   Card,
@@ -13,54 +14,128 @@ import {
   DialogTitle,
   DialogActions,
   Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
 } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
+import { getLearnerIsLearningCourseByCourseId, updateLearnerCourse } from 'features/learner/api'
+import { LearnerFilterResponse } from 'features/learner/types'
+import DialogBinaryQuestion from 'libs/ui/components/DialogBinaryQuestion'
 import ReadMoreText from 'libs/ui/components/ReadMoreText'
 
-interface LearningCourseCardViewlearningCourse {
-  learningCourse: LearningCourse
-}
+import { CourseFilterResponse } from '../types'
 
-interface LearningCourse {
-  id: string
-  title: string
-  author: string
-  price: number
-  rating: number
-  img: string
+interface LearningCourseCardViewlearningCourse {
+  learningCourse: CourseFilterResponse
+  learners: LearnerFilterResponse[]
 }
 
 export const LearningCourseCardView = ({
   learningCourse,
+  learners,
 }: LearningCourseCardViewlearningCourse) => {
   const [open, setOpen] = useState(false)
+  const [openChangeLearningLearner, setOpenChangeLearningLearner] = useState(false)
+  const [currLearningLearnerId, setCurrLearningLearnerId] = useState('')
+  const [selectLearnerId, setSelectLearnerId] = useState('')
 
-  const handleClickOpen = () => {
-    setOpen(true)
+  const handleChange = (event: SelectChangeEvent) => {
+    setOpenChangeLearningLearner(true)
+    setSelectLearnerId(event.target.value)
   }
 
-  const handleClose = () => {
-    setOpen(false)
+  const handleAcceptChange = async () => {
+    await updateLearnerCourse({
+      courseId: learningCourse.id,
+      currentLearnerId: currLearningLearnerId,
+      newLearnerId: selectLearnerId,
+    })
+    setCurrLearningLearnerId(selectLearnerId)
+    setOpenChangeLearningLearner(false)
   }
+
+  const getLearnerIsLearningCourse = async () => {
+    const { learnerId } = await getLearnerIsLearningCourseByCourseId(learningCourse.id)
+    setCurrLearningLearnerId(learnerId)
+    setSelectLearnerId(learnerId)
+  }
+
+  useEffect(() => {
+    getLearnerIsLearningCourse()
+  }, [])
+
+  console.log(learningCourse.title, currLearningLearnerId, selectLearnerId)
+
   return (
     <>
       <Card sx={{ maxWidth: 345 }}>
         <CardActionArea>
-          <CardMedia component="img" height="140" image={learningCourse.img} alt="Hình ảnh" />
+          <CardMedia
+            component="img"
+            height="140"
+            image={learningCourse.thumbnailUrl}
+            alt="Hình ảnh"
+          />
           <CardContent sx={{ height: '90px' }}>
             <ReadMoreText
-              maxCharacterCount={50}
+              maxCharacterCount={40}
               isTruncatedText={true}
               text={learningCourse.title}
               sxCustom={{ fontWeight: '600', fontSize: '15px' }}
             />
-            <Typography variant="body2" color="text.secondary">
+            {/* <Typography variant="body2" color="text.secondary">
               {learningCourse.author}
-            </Typography>
+            </Typography> */}
           </CardContent>
         </CardActionArea>
-        <CardActions>
+        <FormControl variant="standard" size="small" sx={{ m: 1, minWidth: '200px' }}>
+          <InputLabel>Khóa học dành cho bé</InputLabel>
+          <Select value={currLearningLearnerId} onChange={handleChange} autoWidth label="Age">
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {learners.map(learner => (
+              <MenuItem
+                key={learner.id}
+                value={learner.id}
+              >{`${learner.lastName} ${learner.middleName} ${learner.firstName}`}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Card>
+      <DialogBinaryQuestion
+        open={openChangeLearningLearner}
+        clickAcceptAction={handleAcceptChange}
+        clickCloseModal={() => setOpenChangeLearningLearner(false)}
+        titleText={`Cho bé học khóa này`}
+        contentText={`Bạn có chắc rằng cho bé học khóa này không?`}
+      />
+    </>
+  )
+}
+
+/* <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {'Bạn đáng giá về khóa học này như thế nào?'}
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)}>Disagree</Button>
+          <Button onClick={() => setOpen(false)} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog> */
+
+/* <CardActions>
           <Box sx={{ width: '100%' }}>
             <LinearProgress variant="determinate" value={50} color="secondary" />
             <Box
@@ -85,24 +160,4 @@ export const LearningCourseCardView = ({
               </Link>
             </Box>
           </Box>
-        </CardActions>
-      </Card>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {'Bạn đáng giá về khóa học này như thế nào?'}
-        </DialogTitle>
-        <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={handleClose} autoFocus>
-            Agree
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
-  )
-}
+        </CardActions> */

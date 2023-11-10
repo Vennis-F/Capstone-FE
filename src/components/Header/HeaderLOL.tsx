@@ -1,8 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import PaletteIcon from '@mui/icons-material/Palette'
+import PersonIcon from '@mui/icons-material/Person'
 import SearchIcon from '@mui/icons-material/Search'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
-import { Avatar, Badge, Box, Button, List, ListItem, ListItemButton, Paper } from '@mui/material'
+import {
+  Avatar,
+  Badge,
+  Box,
+  Button,
+  List,
+  ListItem,
+  ListItemButton,
+  Paper,
+  Menu,
+  MenuItem,
+  Divider,
+} from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import InputBase from '@mui/material/InputBase'
 import { styled, alpha } from '@mui/material/styles'
@@ -17,8 +30,9 @@ import { useCartService } from 'features/cart/hooks'
 import { getCoursesBySearch } from 'features/courses/api'
 import { Course, GetCoursesBySearchRequest, SortFieldCourse } from 'features/courses/types'
 import { MainColor } from 'libs/const/color'
+import ButtonDropdownHeader from 'libs/ui/components/ButtonDropdownHeader'
 import ButtonLinkHeader from 'libs/ui/components/ButtonLinkHeader'
-import { getAccessToken } from 'libs/utils/handle-token'
+import { decodeToken, getAccessToken } from 'libs/utils/handle-token'
 import { OrderType } from 'types'
 
 const Search = styled('div')(({ theme }) => ({
@@ -66,6 +80,15 @@ const HeaderLOL = (props: HeaderLOLProps) => {
   const [coursesSearch, setCoursesSearch] = useState<Course[]>([])
   const [isPaperVisible, setIsPaperVisible] = useState(false)
 
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
   const handleForceUpdate = () => {
     setForceUpdate(!forceUpdate)
   }
@@ -98,7 +121,7 @@ const HeaderLOL = (props: HeaderLOLProps) => {
 
   useEffect(() => {
     const accessToken = getAccessToken()
-    if (accessToken) fetchCart()
+    if (accessToken && decodeToken(accessToken).role === 'Customer') fetchCart()
   }, [fetchCart, isLoggedIn])
 
   useEffect(() => {
@@ -219,44 +242,66 @@ const HeaderLOL = (props: HeaderLOLProps) => {
             <ButtonLinkHeader to="/guest-login">Đăng nhập</ButtonLinkHeader>
             <ButtonLinkHeader to="/guest-signup">Đăng ký</ButtonLinkHeader>
             {/* <ButtonLinkHeader to="/" title={t('Đăng ký')} /> */}
-            <ButtonLinkHeader to="/order-list">Danh sách đơn hàng</ButtonLinkHeader>
             <ButtonLinkHeader to="/my-learning">Danh sách khóa học của tôi</ButtonLinkHeader>
 
-            {/* <ButtonDropdownHeader title="Tin tức" handlerClick={handleClick} />
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                'aria-labelledby': 'basic-button',
-              }}
-              sx={{
-                '.MuiMenu-paper': {
-                  borderTop: '3px solid #047C8F',
-                  backgroundColor: '#292929',
-                  color: '#A0A0A0',
-                  paddingX: 2,
-                },
-              }}
-              anchorOrigin={{
-                vertical: 60,
-                horizontal: 'center',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
-            >
-              <MenuItem
-                sx={{ ':hover': { backgroundColor: '#464545', borderRadius: 2, color: 'white' } }}
-                onClick={handleClose}
-              >
-                Tất cả
-              </MenuItem>
-              <MenuItem onClick={handleClose}>Cập nhật trò chơi</MenuItem>
-              <MenuItem onClick={handleClose}>Esport</MenuItem>
-            </Menu> */}
+            {getAccessToken() && (
+              <>
+                <ButtonDropdownHeader handlerClick={handleClick}>
+                  <PersonIcon sx={{ marginBottom: '0', fontSize: '30px !important' }} />
+                </ButtonDropdownHeader>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                  }}
+                  sx={{
+                    '.MuiMenu-paper': {
+                      borderTop: '3px solid #047C8F',
+                      // backgroundColor: '#292929',
+                      // color: '#A0A0A0',
+                      paddingX: 2,
+                    },
+                  }}
+                  anchorOrigin={{
+                    vertical: 60,
+                    horizontal: 'center',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                  }}
+                >
+                  <MenuItem
+                    sx={{ ':hover': { color: '#047C8F' } }}
+                    onClick={() => navigate('/cart')}
+                  >
+                    Giỏ hàng của tôi
+                  </MenuItem>
+                  <MenuItem
+                    sx={{ ':hover': { color: '#047C8F' } }}
+                    onClick={() => navigate('/user/edit-profile')}
+                  >
+                    Cài đặt tài khoản
+                  </MenuItem>
+                  <MenuItem sx={{ ':hover': { color: '#047C8F' } }} onClick={handleClose}>
+                    Phương thức thanh toán
+                  </MenuItem>
+                  <MenuItem
+                    sx={{ ':hover': { color: '#047C8F' } }}
+                    onClick={() => navigate('/user/order-list')}
+                  >
+                    Lịch sử mua hàng
+                  </MenuItem>
+                  <Divider />
+                  <MenuItem sx={{ ':hover': { color: '#047C8F' } }} onClick={handleClose}>
+                    Đăng xuất
+                  </MenuItem>
+                </Menu>
+              </>
+            )}
             {/* <ButtonGroup variant="text" color="inherit">
               <Button onClick={() => onChangeLanguage('en')}>🇺🇸</Button>
               <Button onClick={() => onChangeLanguage('pl')}>🇵🇱</Button>

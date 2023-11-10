@@ -22,6 +22,25 @@ export type Course = {
   level: string
 }
 
+export type CourseFilterResponse = {
+  id: string
+  title: string
+  description: string
+  price: number
+  shortDescription: string
+  prepareMaterial: string
+  status: string
+  totalChapter: number
+  publishedDate: string
+  totalBought: number
+  thumbnailUrl: string
+  active: boolean
+}
+
+export type CourseLearnerFilterResponse = {
+  completedPercent: number
+} & CourseFilterResponse
+
 // Components
 export enum SortCourseBy {
   PUBLISHED_DATE_ASC = 'PUBLISHED_DATE_ASC',

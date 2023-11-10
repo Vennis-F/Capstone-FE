@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { MyLearningContainer } from 'features/courses/components/MyLearningContainer'
+import { MyLearningContainer } from 'features/learner/components/MyLearningContainer'
 
 const MyLearningPage = () => {
   console.log(123)
