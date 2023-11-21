@@ -221,6 +221,7 @@ const HeaderLOL = (props: HeaderLOLProps) => {
             {/* <ButtonLinkHeader to="/" title={t('Đăng ký')} /> */}
             <ButtonLinkHeader to="/order-list">Danh sách đơn hàng</ButtonLinkHeader>
             <ButtonLinkHeader to="/my-learning">Danh sách khóa học của tôi</ButtonLinkHeader>
+            <ButtonLinkHeader to="/my-learning1">Instructor</ButtonLinkHeader>
 
             {/* <ButtonDropdownHeader title="Tin tức" handlerClick={handleClick} />
             <Menu

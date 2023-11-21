@@ -12,6 +12,7 @@ import CheckPaymentPage from 'pages/CheckPaymentPage'
 import ConfirmOTPPage from 'pages/ConfirmOTPPage'
 import CustomerOrderListPage from 'pages/CustomerOrderListPage'
 import CustomerProfilePage from 'pages/CustomerProfilePage'
+import DashboardPage from 'pages/Dashboard'
 import DetailCoursePage from 'pages/DetailCoursePage'
 import GuestLoginPage from 'pages/GuestLoginPage'
 import GuestSingupPage from 'pages/GuestSingupPage'
@@ -30,6 +31,7 @@ const AppRoutes = () => (
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/my-learning1" element={<DashboardPage />} />
           <Route path="/guest-login" element={<GuestLoginPage />} />
           <Route path="/guest-signup" element={<GuestSingupPage />} />
           <Route path="/confirm-otp" element={<ConfirmOTPPage />} />
