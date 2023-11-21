@@ -20,7 +20,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId }) => (
                   <div className="col-12">
                     <iframe
                       width="100%"
-                      height="700"
+                      height="800"
                       src={`https://lookerstudio.google.com/embed/reporting/e3de8617-db03-45e8-a67c-b39094bb3049/page/4VDGB?params=%7B"ds27.instructor_id":"${userId}"%7D`}
                       frameBorder="0"
                       // style="border:0"
