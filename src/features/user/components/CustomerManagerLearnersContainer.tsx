@@ -82,18 +82,20 @@ const CustomerManagerLearnersContainer = () => {
             <Divider />
           </>
         ))}
-        <ListItem
-          secondaryAction={
-            <IconButton edge="end">
-              <ChevronRightIcon />
-            </IconButton>
-          }
-        >
-          <ListItemAvatar onClick={handleClickOpen}>
-            <AddCircleRoundedIcon sx={style.iconAdd} />
-          </ListItemAvatar>
-          <ListItemText primary="Thêm hồ sơ khác" />
-        </ListItem>
+        {learners.length < 3 && (
+          <ListItem
+            secondaryAction={
+              <IconButton edge="end">
+                <ChevronRightIcon />
+              </IconButton>
+            }
+          >
+            <ListItemAvatar onClick={handleClickOpen}>
+              <AddCircleRoundedIcon sx={style.iconAdd} />
+            </ListItemAvatar>
+            <ListItemText primary="Thêm hồ sơ khác" />
+          </ListItem>
+        )}
       </List>
       <CustomerAddLearnerDialogForm
         openDialog={openAddLearnerDialog}

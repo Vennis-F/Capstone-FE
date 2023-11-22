@@ -1,6 +1,8 @@
 import { Tooltip } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { SxProps } from '@mui/system'
+import DOMPurify from 'dompurify'
+import Parser from 'html-react-parser'
 import React, { useState } from 'react'
 
 type ReadMoreTextProps = {
@@ -22,7 +24,9 @@ const ReadMoreText = ({
     setIsTruncated(!isTruncated)
   }
 
-  const truncatedText = isTruncated ? text.slice(0, maxCharacterCount) : text
+  const truncatedText = isTruncated
+    ? Parser(DOMPurify.sanitize(text.slice(0, maxCharacterCount)))
+    : Parser(DOMPurify.sanitize(text))
 
   return isTruncatedText ? (
     <Tooltip title={text} placement="top">

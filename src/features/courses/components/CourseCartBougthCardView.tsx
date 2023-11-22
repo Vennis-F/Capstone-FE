@@ -34,6 +34,7 @@ interface Props {
 }
 
 const CourseCartBougthCardView = ({ courseDetail }: Props) => {
+  const navigate = useNavigate()
   const [coupon, setCoupon] = useState('')
   const [showInputCoupon, setShowInputCoupon] = useState(false)
   const [activeInput, setActiveInput] = useState(true)
@@ -43,7 +44,6 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
   )
   const [promotionCourseApply, setPromotionCourseApply] = useState<PromotionCourse | null>(null)
   const [isOwned, setIsOwned] = useState(false)
-  const navigate = useNavigate()
 
   const handleAddCartItem = () => {
     const token = getAccessToken()

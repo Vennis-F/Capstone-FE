@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import Box from '@mui/material/Box'
 import { createTheme } from '@mui/material/styles'
@@ -12,21 +13,6 @@ import { decodeToken, getAccessToken } from 'libs/utils/handle-token'
 
 const Layout = () => {
   const [mode, setMode] = React.useState<'light' | 'dark'>('light')
-  const { i18n } = useTranslation()
-
-  // TODO: move state to redux
-  const onChangeLanguage = (lang: string) => {
-    i18n.changeLanguage(lang) // eslint-disable-line @typescript-eslint/no-floating-promises
-  }
-
-  const colorMode = React.useMemo(
-    () => ({
-      toggleColorMode: () => {
-        setMode(prevMode => (prevMode === 'light' ? 'dark' : 'light'))
-      },
-    }),
-    [],
-  )
 
   const theme = React.useMemo(
     () =>
@@ -45,11 +31,7 @@ const Layout = () => {
         <Box
           sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: '#F0F2F5' }}
         >
-          <HeaderLOL
-            currentThemeMode={theme.palette.mode}
-            onChangeThemeClick={colorMode.toggleColorMode}
-            onChangeLanguage={onChangeLanguage}
-          />
+          <HeaderLOL />
           <main>
             <Box
               sx={{
@@ -60,7 +42,8 @@ const Layout = () => {
               <Outlet />
             </Box>
           </main>
-          {getAccessToken() && decodeToken(getAccessToken() as string) && <Footer />}
+          {/* {getAccessToken() && decodeToken(getAccessToken() as string) && <Footer />} */}
+          <Footer />
         </Box>
       </ThemeProvider>
     </>

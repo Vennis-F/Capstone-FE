@@ -1,9 +1,19 @@
+import { Category } from 'features/category/types'
+import { Level } from 'features/level/types'
 import { PageMetaResponse, PageOptions } from 'types'
+
+export enum CourseStatus {
+  CREATED = 'Created',
+  PENDING = 'Pending',
+  APPROVED = 'Approved',
+  REJECTED = 'Rejected',
+  BANNED = 'Banned',
+}
 
 export type Course = {
   id: string
   title: string
-  description: string
+  description: string | null
   price: number
   discount: number
   discountPrice: number
@@ -11,15 +21,32 @@ export type Course = {
   ratedStar: number
   author: string
   totalLength: number
-  shortDescription: string
-  prepareMaterial: string
-  status: string
+  shortDescription: string | null
+  prepareMaterial: string | null
+  status: CourseStatus
   totalChapter: number
   publishedDate: string
   totalBought: number
   thumbnailUrl: string
   active: boolean
   level: string
+}
+
+export type CourseFullInfor = {
+  id: string
+  title: string
+  description: string | null
+  price: number | null
+  shortDescription: string | null
+  prepareMaterial: string | null
+  status: CourseStatus
+  totalChapter: number | null
+  publishedDate: string
+  totalBought: number | null
+  thumbnailUrl: string | null
+  active: boolean
+  category: Category
+  level: Level
 }
 
 export type CourseFilterResponse = {

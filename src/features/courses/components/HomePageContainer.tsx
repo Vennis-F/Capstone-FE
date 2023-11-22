@@ -42,7 +42,7 @@ const HomePageContainer = () => {
   }
 
   const getAllCategories = async () => {
-    const listCategories = await getCategories()
+    const listCategories = await getCategories('true')
     setCategories(listCategories)
   }
 

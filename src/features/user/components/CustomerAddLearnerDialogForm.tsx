@@ -83,7 +83,7 @@ export const CustomerAddLearnerDialogForm = (props: Props) => {
         square={false}
         variant="outlined"
         sx={{ margin: '20px 60px', padding: '40px' }}
-        elevation={20}
+        // elevation={20}
       >
         <Stack direction="row" spacing={2}>
           <Box

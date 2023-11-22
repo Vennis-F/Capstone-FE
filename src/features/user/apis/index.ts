@@ -20,3 +20,6 @@ export const changePasswordUser = (
 ): Promise<UserFilterResponse> => api.post(`${USER_BASE_URL}/profile/change-password`, body)
 
 export const getProfileUser = (): Promise<UserFilterResponse> => api.get(`${USER_BASE_URL}/profile`)
+
+export const uploadAvatarUser = (body: any): Promise<void> =>
+  api.post(`${USER_BASE_URL}/profile/avatar`, body)

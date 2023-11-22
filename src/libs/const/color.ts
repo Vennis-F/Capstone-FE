@@ -5,4 +5,5 @@ export enum MainColor {
   RED_600 = '#dc2626',
   YELLOW_500 = '#eab308',
   GRAY_300 = '#d1d5db',
+  BLACK = '#2D2F31',
 }

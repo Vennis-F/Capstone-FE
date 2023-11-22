@@ -1,3 +1,5 @@
+// import { URLSearchParams } from 'url'
+
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded'
@@ -11,6 +13,7 @@ import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import { styled } from '@mui/material/styles'
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 import VideoPlayer from 'libs/ui/components/VideoPlayer'
 import { formatSecondToMinute } from 'libs/utils/handle-time'
@@ -49,6 +52,7 @@ interface Props {
 
 const ChapterLectureLearnContainer = ({ courseId }: Props) => {
   const [open, setOpen] = useState(true)
+  const [searchParams, setSearchParams] = useSearchParams()
   const [chapterLectures, setChapterLectures] = useState<ChapterLectureFilter[]>([])
   const [currChapterLecture, setCurrChapterLecture] = useState<ChapterLectureFilter | null>(null)
 
@@ -71,6 +75,7 @@ const ChapterLectureLearnContainer = ({ courseId }: Props) => {
   }
 
   useEffect(() => {
+    console.log(searchParams)
     handleGetChapterLectureStudy()
   }, [])
 
@@ -78,19 +83,27 @@ const ChapterLectureLearnContainer = ({ courseId }: Props) => {
     if (chapterLectures !== null && !currChapterLecture) {
       setCurrChapterLecture(chapterLectures[0])
     }
-  }, [chapterLectures])
+  }, [chapterLectures, currChapterLecture])
+
+  useEffect(() => {
+    if (currChapterLecture) {
+      setSearchParams({ chapterLectureId: currChapterLecture.id })
+    }
+  }, [currChapterLecture, setSearchParams])
 
   return (
     <Box sx={{ display: 'flex', marginTop: '-50px' }}>
       <Main open={open}>
         <Box sx={{ height: '65vh' }}>
           <VideoPlayer
-            videoURL={currChapterLecture?.video}
+            videoURL={currChapterLecture?.video as string}
             handleSaveCompleteChapterLecture={handleSaveCompleteChapterLecture}
             chapterLectureId={currChapterLecture?.id}
           />
         </Box>
+
         <TabsChapterLectureLearn />
+
         {!open && (
           <Button
             sx={{
@@ -110,6 +123,7 @@ const ChapterLectureLearnContainer = ({ courseId }: Props) => {
           </Button>
         )}
       </Main>
+
       <Drawer
         sx={{
           width: drawerWidth,
@@ -151,7 +165,7 @@ const ChapterLectureLearnContainer = ({ courseId }: Props) => {
                     sx={{ padding: 0, marginRight: '12px' }}
                   />
                   <ListItemText
-                    primary={chapterLecture.title}
+                    primary={`Bài ${chapterLecture.index}: ${chapterLecture.title}`}
                     secondary={
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <PlayCircleFilledRoundedIcon

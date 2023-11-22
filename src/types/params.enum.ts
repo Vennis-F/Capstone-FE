@@ -6,3 +6,11 @@ export enum TypeCustomerProfilePageParams {
   EditLearner = 'edit-learner',
   AllCourse = 'all-course',
 }
+
+export enum TypeInstructorEditCourseParams {
+  CURRICULUMN = 'curriculumn',
+  BASICS = 'basics',
+  PRICING = 'pricing',
+  THUMBNAIL = 'thumbnail',
+  PROMOTION = 'promotion',
+}

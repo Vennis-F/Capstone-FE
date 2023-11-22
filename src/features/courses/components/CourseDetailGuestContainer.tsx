@@ -10,8 +10,6 @@ import {
   Container,
   Typography,
   Rating,
-  List,
-  ListItem,
   Card,
   CardHeader,
   CardContent,
@@ -22,6 +20,8 @@ import {
 } from '@mui/material'
 import Breadcrumbs from '@mui/material/Breadcrumbs'
 import Link from '@mui/material/Link'
+import DOMPurify from 'dompurify'
+import Parser from 'html-react-parser'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -250,20 +250,7 @@ David`,
             <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
               Yêu cầu
             </Typography>
-            <List
-              sx={{
-                listStyleType: 'disc',
-                pl: 2,
-              }}
-            >
-              <ListItem
-                sx={{
-                  display: 'list-item',
-                }}
-              >
-                <Typography variant="body2">{courseDetail.prepareMaterial}</Typography>
-              </ListItem>
-            </List>
+            {Parser(DOMPurify.sanitize(courseDetail.prepareMaterial as string))}
           </Box>
         </Container>
         <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
@@ -271,7 +258,9 @@ David`,
             <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
               Miêu tả
             </Typography>
-            <ReadMoreText maxCharacterCount={400} text={courseDetail.description} />
+            {courseDetail.description && (
+              <ReadMoreText maxCharacterCount={400} text={courseDetail.description} />
+            )}
           </Box>
         </Container>
         <Container maxWidth="lg" sx={{ marginTop: '20px' }}>

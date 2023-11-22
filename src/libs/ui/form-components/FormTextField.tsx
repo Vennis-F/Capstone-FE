@@ -6,7 +6,7 @@ import { Control } from 'react-hook-form/dist/types'
 export interface FormInputProps {
   name: string
   control: Control<any> // eslint-disable-line
-  label: string
+  label?: string
   size?: 'small' | 'medium'
   type?: React.HTMLInputTypeAttribute
   disable?: boolean

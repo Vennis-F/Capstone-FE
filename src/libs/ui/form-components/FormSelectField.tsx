@@ -3,33 +3,47 @@ import React from 'react'
 import { Controller } from 'react-hook-form'
 import { Control } from 'react-hook-form/dist/types'
 
-import { FormInputOptions } from 'types'
+// import { FormInputOptions } from 'types'
 
-export interface FormInputProps {
+interface SelectOption {
+  id: string
+  name: string
+  // If 'name' is a key in T, uncomment the line below
+  // name: string;
+}
+
+export interface FormInputProps<T> {
   name: string
   control: Control<any> // eslint-disable-line
   label: string
-  formInputOptions: FormInputOptions
+  formInputOptions: T[]
+  disable?: boolean
 }
 
-export const FormSelectField = ({ name, control, label, formInputOptions }: FormInputProps) => (
+export const FormSelectField = <T extends SelectOption>({
+  name,
+  control,
+  label,
+  formInputOptions,
+  disable,
+}: FormInputProps<T>) => (
   <Controller
     name={name}
     control={control}
-    defaultValue={formInputOptions[0][0]}
     render={({ field: { onChange, value }, fieldState: { error } }) => (
       <TextField
         fullWidth
         select
         error={!!error}
-        label={`Select ${label}`}
-        onChange={onChange}
+        label={`Chọn ${label}`}
+        onChange={e => onChange(e.target.value)}
         value={value}
         helperText={error ? error.message : null}
+        disabled={disable}
       >
-        {formInputOptions.map(role => (
-          <MenuItem key={role[0]} value={role[1]}>
-            {role[1]}
+        {formInputOptions.map(option => (
+          <MenuItem key={option.id} value={option.id}>
+            {option.name}
           </MenuItem>
         ))}
       </TextField>

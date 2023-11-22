@@ -6,8 +6,9 @@ import { useNavigate } from 'react-router-dom'
 
 import { MainColor } from 'libs/const/color'
 import { toastError } from 'libs/utils/handle-toast'
-import { getAccessToken } from 'libs/utils/handle-token'
+import { decodeToken, getAccessToken } from 'libs/utils/handle-token'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { UserRole } from 'types'
 
 import { authActions, selectIsLogging } from '../store'
 
@@ -20,9 +21,32 @@ export const GuestLoginContainer = () => {
   const isLogging = useAppSelector(selectIsLogging)
   const navigate = useNavigate()
 
+  const handleNavigateAfterLogin = (role: UserRole) => {
+    switch (role) {
+      case UserRole.CUSTOMER:
+        navigate('/')
+        break
+      case UserRole.LEARNER:
+        navigate('/my-learning')
+        break
+      case UserRole.INSTRUCTOR:
+        navigate('/instructor/homepage')
+        break
+      case UserRole.STAFF:
+        navigate('/staff/manage/posts')
+        break
+      case UserRole.ADMIN:
+        navigate('/admin/manage/categories')
+        break
+      default:
+        break
+    }
+  }
+
   useEffect(() => {
     if (getAccessToken()) {
-      navigate('/')
+      const decode = decodeToken(getAccessToken() as string)
+      handleNavigateAfterLogin(decode.role as UserRole)
     }
   }, [navigate])
 
@@ -44,8 +68,8 @@ export const GuestLoginContainer = () => {
                 callbackFail: (message: string) => {
                   toastError({ message })
                 },
-                callbackSuccess: () => {
-                  navigate('/my-learning')
+                callbackSuccess: (role: UserRole) => {
+                  handleNavigateAfterLogin(role)
                 },
               }),
             )

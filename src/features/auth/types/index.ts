@@ -1,3 +1,5 @@
+import { UserRole } from 'types'
+
 export type GuestLoginFormInput = {
   emailOrUsername: string
   password: string
@@ -13,7 +15,7 @@ export type UserInfor = {
   id: string
   email?: string
   username?: string
-  role: string
+  role: UserRole
 }
 
 export type Token = {

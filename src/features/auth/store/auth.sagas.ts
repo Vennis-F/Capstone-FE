@@ -29,7 +29,7 @@ function* handleLogin(payload: GuestLoginFormInputPayload) {
       role: decoded.role,
     }
     yield put(authActions.loginSuccess(userInfor))
-    payload.callbackSuccess()
+    payload.callbackSuccess(decoded.role)
     // redirect to homepage
   } catch (error) {
     const errorResponse = error as ResponseError

@@ -91,8 +91,8 @@ export const CourseListGuestContainer = ({ searchText, categorySearchId }: Props
   }
 
   const setUpPage = async () => {
-    const levels = await getLevels()
-    const categories = await getCategories()
+    const levels = await getLevels('true')
+    const categories = await getCategories('true')
     setListLevels([...levels])
     setListCategories([...categories])
   }

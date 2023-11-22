@@ -37,12 +37,14 @@ const CourseBeautyCardView = ({ course }: Props) => {
           >
             {course.title}
           </Typography>
-          <ReadMoreText
-            text={course.description}
-            isTruncatedText={true}
-            maxCharacterCount={50}
-            sxCustom={{ color: 'GrayText', fontSize: '14px', marginBottom: '8px' }}
-          />
+          {course.description && (
+            <ReadMoreText
+              text={course.description}
+              isTruncatedText={true}
+              maxCharacterCount={50}
+              sxCustom={{ color: 'GrayText', fontSize: '14px', marginBottom: '8px' }}
+            />
+          )}
           <Typography
             variant="body2"
             component="div"

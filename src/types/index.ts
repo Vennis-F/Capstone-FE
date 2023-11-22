@@ -7,6 +7,7 @@ export enum UserRole {
   ADMIN = 'Admin',
   STAFF = 'Staff',
   LEARNER = 'Learner',
+  INSTRUCTOR = 'Instructor',
 }
 export type ResponseError = {
   response: { data: { message: string } }
@@ -20,6 +21,7 @@ export type PageOptions = {
   page: number
   order: OrderType
 }
+export type PageResponse<T> = { data: T[]; meta: PageMetaResponse }
 export type PageMetaResponse = {
   page: number
   take: number
@@ -27,4 +29,9 @@ export type PageMetaResponse = {
   pageCount: number
   hasPreviousPage: boolean
   hasNextPage: boolean
+}
+
+export type SortCriteria<T> = {
+  field: T
+  order: OrderType
 }

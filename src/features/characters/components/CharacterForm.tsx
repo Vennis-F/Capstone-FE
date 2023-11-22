@@ -6,10 +6,10 @@ import { UseFormReset, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import * as Yup from 'yup'
 
-import FormSelectField from 'libs/ui/form-components/FormSelectField'
+// import FormSelectField from 'libs/ui/form-components/FormSelectField'
 import { FormTextField } from 'libs/ui/form-components/FormTextField'
 
-import { CharacterFormInput, CharacterRole, Lane } from '../types'
+import { CharacterFormInput } from '../types'
 
 export type CharacterFormProps = {
   defaultValues?: CharacterFormInput
@@ -45,7 +45,7 @@ export const CharacterForm = (props: CharacterFormProps) => {
       <FormTextField name="name" label={t('home.form.name')} control={control} />
       <FormTextField name="description" label={t('home.form.description')} control={control} />
       <FormTextField name="imgUrl" label={t('home.form.imgUrl')} control={control} />
-      <FormSelectField
+      {/* <FormSelectField
         name="role"
         label={'role'}
         control={control}
@@ -56,7 +56,7 @@ export const CharacterForm = (props: CharacterFormProps) => {
         label={'lane'}
         control={control}
         formInputOptions={Object.entries(Lane)}
-      />
+      /> */}
       <Button onClick={handleSubmit(submitHandler)} variant={'contained'}>
         {'Thêm'}
       </Button>

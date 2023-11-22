@@ -1,36 +1,57 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Avatar, Container, Grid, Paper, Typography, Stack, Box } from '@mui/material'
+import { useEffect, useState } from 'react'
 
-import { MyLearningContainer } from 'features/learner/components/MyLearningContainer'
+import { getImage } from 'features/image/components/apis'
 import TitleTypography from 'libs/ui/components/TitleTypography'
 import { TypeCustomerProfilePageParams } from 'types/params.enum'
+
+import { getProfileUser } from '../apis'
+import { UserFilterResponse } from '../types'
 
 import { CustomerAllCourseContainer } from './CustomerAllCourseContainer'
 import CustomerEditProfileContainer from './CustomerEditProfileContainer'
 import CustomerEditSecureContainer from './CustomerEditSecureContainer'
 import CustomerListItemChoice from './CustomerListItemChoice'
 import CustomerManagerLearnersContainer from './CustomerManagerLearnersContainer'
-import CustomerSettingContainer from './CustomerSettingContainer'
+import UserUploadAvatar from './UserUploadAvatar'
 
 interface Props {
   typePage: TypeCustomerProfilePageParams
 }
 
 const CustomerProfileContainer = ({ typePage }: Props) => {
+  const [userProfile, setUserProfile] = useState<UserFilterResponse>()
+  const [forceRender, setForceRender] = useState(false)
+
+  const handleForceRender = () => setForceRender(!forceRender)
+
   const renderRightComponent = () => {
     switch (typePage) {
-      case 'edit-profile':
+      case TypeCustomerProfilePageParams.EditProfile:
         return <CustomerEditProfileContainer />
-      case 'edit-secure':
+      case TypeCustomerProfilePageParams.EditSecure:
         return <CustomerEditSecureContainer />
-      case 'edit-learner':
+      case TypeCustomerProfilePageParams.EditLearner:
         return <CustomerManagerLearnersContainer />
-      case 'all-course':
+      case TypeCustomerProfilePageParams.EditPhoto:
+        return <UserUploadAvatar avatar={userProfile?.avatar} otherAction={handleForceRender} />
+      case TypeCustomerProfilePageParams.AllCourse:
         return <CustomerAllCourseContainer />
       default:
         return <CustomerAllCourseContainer />
     }
   }
+
+  const handleGetUser = async () => {
+    const useProfile = await getProfileUser()
+    setUserProfile(useProfile)
+  }
+
+  useEffect(() => {
+    handleGetUser()
+  }, [forceRender])
+  console.log(userProfile)
 
   return (
     <Container>
@@ -46,10 +67,10 @@ const CustomerProfileContainer = ({ typePage }: Props) => {
               sx={{ padding: '16px' }}
             >
               <Avatar
-                src="https://images.unsplash.com/photo-1491013516836-7db643ee125a?auto=format&fit=crop&q=80&w=1925&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 alt="Remy Sharp"
                 variant="square"
                 sx={{ width: 80, height: 80 }}
+                src={userProfile?.avatar ? getImage(userProfile?.avatar) : undefined}
               />
               <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '16px' }}>
                 Nguyễn Hoàng Anh

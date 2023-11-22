@@ -32,6 +32,7 @@ import { Course, GetCoursesBySearchRequest, SortFieldCourse } from 'features/cou
 import { MainColor } from 'libs/const/color'
 import ButtonDropdownHeader from 'libs/ui/components/ButtonDropdownHeader'
 import ButtonLinkHeader from 'libs/ui/components/ButtonLinkHeader'
+import { toastSuccess } from 'libs/utils/handle-toast'
 import { decodeToken, getAccessToken } from 'libs/utils/handle-token'
 import { OrderType } from 'types'
 
@@ -65,13 +66,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }))
 
-type HeaderLOLProps = {
-  currentThemeMode: 'light' | 'dark'
-  onChangeThemeClick: () => void
-  onChangeLanguage: (lang: string) => void
-}
-
-const HeaderLOL = (props: HeaderLOLProps) => {
+const HeaderLOL = () => {
   const { cart, fetchCart } = useCartService()
   const [searchText, setSearchText] = useState<string>('')
   const { isLoggedIn, guestLogout } = useAuthService()
@@ -85,6 +80,7 @@ const HeaderLOL = (props: HeaderLOLProps) => {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
+
   const handleClose = () => {
     setAnchorEl(null)
   }
@@ -117,6 +113,16 @@ const HeaderLOL = (props: HeaderLOLProps) => {
     }
     const dataResponse = await getCoursesBySearch(bodyRequest)
     setCoursesSearch([...dataResponse.data])
+  }
+
+  const handleLogout = () => {
+    guestLogout()
+    handleClose()
+    setTimeout(() => {
+      toastSuccess({ message: 'Đăng xuất thành công' })
+      navigate('/guest-login')
+    }, 2000)
+    handleForceUpdate()
   }
 
   useEffect(() => {
@@ -221,29 +227,18 @@ const HeaderLOL = (props: HeaderLOLProps) => {
           </Box>
 
           <nav>
-            <Button sx={{ color: 'white', cursor: 'pointer' }} onClick={() => navigate('/cart')}>
-              <Badge color="secondary" badgeContent={cart ? cart.cartItems.length : 0} max={999}>
-                <ShoppingCartOutlinedIcon />
-              </Badge>
-            </Button>
             {getAccessToken() && (
-              <Button
-                onClick={() => {
-                  guestLogout()
-                  navigate('/guest-login')
-                  handleForceUpdate()
-                }}
-              >
-                LOGOUT
+              <Button sx={{ color: 'white', cursor: 'pointer' }} onClick={() => navigate('/cart')}>
+                <Badge color="secondary" badgeContent={cart ? cart.cartItems.length : 0} max={999}>
+                  <ShoppingCartOutlinedIcon />
+                </Badge>
               </Button>
             )}
-            {/* <ButtonLinkHeader to="/cart" title={t('Cart')} /> */}
-            {/* <ButtonLinkHeader to="/list-course" title={t('ListCoursePage')} /> */}
-            <ButtonLinkHeader to="/guest-login">Đăng nhập</ButtonLinkHeader>
-            <ButtonLinkHeader to="/guest-signup">Đăng ký</ButtonLinkHeader>
-            {/* <ButtonLinkHeader to="/" title={t('Đăng ký')} /> */}
-            <ButtonLinkHeader to="/my-learning">Danh sách khóa học của tôi</ButtonLinkHeader>
-
+            {!getAccessToken() && <ButtonLinkHeader to="/guest-login">Đăng nhập</ButtonLinkHeader>}
+            {!getAccessToken() && <ButtonLinkHeader to="/guest-signup">Đăng ký</ButtonLinkHeader>}
+            {getAccessToken() && (
+              <ButtonLinkHeader to="/my-learning">Danh sách khóa học của tôi</ButtonLinkHeader>
+            )}
             {getAccessToken() && (
               <>
                 <ButtonDropdownHeader handlerClick={handleClick}>
@@ -276,27 +271,36 @@ const HeaderLOL = (props: HeaderLOLProps) => {
                 >
                   <MenuItem
                     sx={{ ':hover': { color: '#047C8F' } }}
-                    onClick={() => navigate('/cart')}
+                    onClick={() => {
+                      navigate('/user/edit-profile')
+                      handleClose()
+                    }}
                   >
-                    Giỏ hàng của tôi
+                    Cài đặt tài khoản
                   </MenuItem>
                   <MenuItem
                     sx={{ ':hover': { color: '#047C8F' } }}
-                    onClick={() => navigate('/user/edit-profile')}
+                    onClick={() => {
+                      navigate('/cart')
+                      handleClose()
+                    }}
                   >
-                    Cài đặt tài khoản
+                    Giỏ hàng của tôi
                   </MenuItem>
                   <MenuItem sx={{ ':hover': { color: '#047C8F' } }} onClick={handleClose}>
                     Phương thức thanh toán
                   </MenuItem>
                   <MenuItem
                     sx={{ ':hover': { color: '#047C8F' } }}
-                    onClick={() => navigate('/user/order-list')}
+                    onClick={() => {
+                      navigate('/user/order-list')
+                      handleClose()
+                    }}
                   >
                     Lịch sử mua hàng
                   </MenuItem>
                   <Divider />
-                  <MenuItem sx={{ ':hover': { color: '#047C8F' } }} onClick={handleClose}>
+                  <MenuItem sx={{ ':hover': { color: '#047C8F' } }} onClick={handleLogout}>
                     Đăng xuất
                   </MenuItem>
                 </Menu>

@@ -28,6 +28,8 @@ export const getCourseForLearnerSearchByUser = (
 ): Promise<{ data: CourseLearnerFilterResponse[]; meta: PageMetaResponse }> =>
   api.post(`${LEARNER_BASE_URL}/course/user?search=${search}`)
 
+// ----------------------------------------------------------------
+
 export const createLearnerCourse = (body: CreateLearnerCourseBodyRequest): Promise<void> =>
   api.post(`${LEARNER_COURSE_BASE_URL}/create`, body)
 

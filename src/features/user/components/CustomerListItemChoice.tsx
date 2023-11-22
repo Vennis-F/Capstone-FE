@@ -73,7 +73,10 @@ const CustomerListItemChoice = () => {
       </ListItem>
       <Divider />
       <ListItem disablePadding>
-        <ListItemButton sx={style.buttonHover}>
+        <ListItemButton
+          sx={style.buttonHover}
+          onClick={() => navigate(`/user/${TypeCustomerProfilePageParams.EditPhoto}`)}
+        >
           <ListItemIcon>
             <PersonOutlineOutlinedIcon sx={{ color: MainColor.YELLOW_500 }} />
           </ListItemIcon>

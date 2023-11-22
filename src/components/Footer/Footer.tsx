@@ -30,6 +30,11 @@ const Footer = () => {
         marginTop: 'auto',
         backgroundColor: MainColor.RED_450,
         width: '100%',
+
+        /* Sticky footer */
+        // position: 'fixed',
+        // bottom: 0,
+        // left: 0,
       }}
     >
       <Container maxWidth="lg">
