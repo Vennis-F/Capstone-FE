@@ -9,6 +9,7 @@ import { NameOrderStatus } from 'features/orders/types'
 import { createTrasaction } from 'features/transaction/api'
 import { CreateTransactionBody, TransactionStatus } from 'features/transaction/types'
 import CustomButton from 'libs/ui/components/CustomButton'
+import { formatCurrency } from 'libs/utils/handle-price'
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastError, toastWarn } from 'libs/utils/handle-toast'
 
@@ -112,7 +113,7 @@ const CheckPaymentContainer = () => {
           <Typography
             sx={{ width: '60%', textAlign: 'right', fontWeight: '600', fontSize: '20px' }}
           >
-            {Number(vnpAmount) / 100}
+            {formatCurrency(Number(vnpAmount) / 100)} VND
           </Typography>
         </Box>
         <EqualTitle titleLeft="Mã giao dịch" titleRight={vnpTransactionNo} />

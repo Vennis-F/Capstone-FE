@@ -37,7 +37,7 @@ const VideoPlayer = ({
   //   setPlayed(currPlayed)
   // }
 
-  console.log(playing, played, duration)
+  console.log(videoURL, playing, played, duration)
   useEffect(() => {
     if (played >= 0.8 && !isCompleted) {
       setIsCompleted(true)
@@ -50,6 +50,7 @@ const VideoPlayer = ({
 
   return (
     <ReactPlayer
+      className="first-step"
       controls={true}
       ref={playerRef}
       url={videoURL}

@@ -13,3 +13,9 @@ export const setAccessToken = (token: string) => localStorage.setItem(TOKEN, tok
 export const removeAccessToken = () => localStorage.removeItem(TOKEN)
 
 export const getUserRole = () => decodeToken(getAccessToken() as string).role
+
+export const getUserRoleOrNull = () => {
+  const accessToken = getAccessToken()
+  if (!accessToken) return null
+  return decodeToken(accessToken).role
+}

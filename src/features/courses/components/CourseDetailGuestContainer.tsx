@@ -1,23 +1,10 @@
 import { Avatar, Grid } from '@material-ui/core'
-// import CircleSharpIcon from '@mui/icons-material/CircleSharp'
 import EventIcon from '@mui/icons-material/Event'
 import GrainIcon from '@mui/icons-material/Grain'
 import HomeIcon from '@mui/icons-material/Home'
 import StarIcon from '@mui/icons-material/Star'
 import WhatshotIcon from '@mui/icons-material/Whatshot'
-import {
-  Box,
-  Container,
-  Typography,
-  Rating,
-  Card,
-  CardHeader,
-  CardContent,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  // CardActions,
-} from '@mui/material'
+import { Box, Container, Typography, Rating, Card, CardHeader, CardContent } from '@mui/material'
 import Breadcrumbs from '@mui/material/Breadcrumbs'
 import Link from '@mui/material/Link'
 import DOMPurify from 'dompurify'
@@ -25,9 +12,10 @@ import Parser from 'html-react-parser'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { getChapterLecturesByCourseId } from 'features/chapter-lecture/api'
+import { ChapterLecture } from 'features/chapter-lecture/types'
 import { MainColor } from 'libs/const/color'
 import ReadMoreText from 'libs/ui/components/ReadMoreText'
-import VideoPlayer from 'libs/ui/components/VideoPlayer'
 import { getStringDayMonthYear } from 'libs/utils/handle-date'
 
 import { getCoursesDetailById } from '../api'
@@ -42,16 +30,8 @@ interface CouresDetailGuestContainerProps {
 
 export const CouresDetailGuestContainer = ({ id }: CouresDetailGuestContainerProps) => {
   const [courseDetail, setCourseDetail] = useState<GetCourseDetailResponse | null>(null)
-  const [open, setOpen] = useState(false)
+  const [chapterLectures, setChapterLectures] = useState<ChapterLecture[]>([])
   const navigate = useNavigate()
-
-  const handleClickOpen = () => {
-    setOpen(true)
-  }
-
-  const handleClose = () => {
-    setOpen(false)
-  }
 
   const currentCourse = {
     id,
@@ -130,10 +110,12 @@ David`,
     ],
   }
 
-  const getCourseDetail = async (idCourse: string) => {
+  const getCourseDetail = async (courseId: string) => {
     try {
-      const response = await getCoursesDetailById(idCourse)
+      const response = await getCoursesDetailById(courseId)
+      const chapterLecturesRes = await getChapterLecturesByCourseId(courseId, true)
       setCourseDetail(response)
+      setChapterLectures(chapterLecturesRes)
     } catch (error) {
       throw new Error(`Cannot get detail for course by the id ${id}`)
     }
@@ -175,7 +157,6 @@ David`,
                   cursor: 'pointer',
                 }}
                 color="inherit"
-                // href="/material-ui/getting-started/installation/"
                 onClick={() =>
                   navigate('/list-course', { state: { categorySearchId: courseDetail.categoryId } })
                 }
@@ -239,10 +220,10 @@ David`,
       <Container maxWidth={false}>
         <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
           <Box sx={{ width: '67%' }}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+            <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: '10px' }}>
               Nội dung khóa học
             </Typography>
-            <ListCoursePreview onClickPreview={handleClickOpen} />
+            <ListCoursePreview chapterLectures={chapterLectures} />
           </Box>
         </Container>
         <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
@@ -265,21 +246,11 @@ David`,
         </Container>
         <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
           <Box sx={{ width: '67%' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
               <StarIcon sx={{ color: '#FAAF00', marginRight: '10px' }} />
               <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
                 {courseDetail.ratedStar} đánh giá khóa học
               </Typography>
-              {/* <CircleSharpIcon
-                sx={{
-                  fontSize: '10px !important',
-                  margin: '0 10px',
-                  color: 'gray',
-                }}
-              />
-              <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-                {`1k`} lượt đánh giá
-              </Typography> */}
             </Box>
             <Grid container spacing={2}>
               {currentCourse.comments.map(comment => (
@@ -308,34 +279,6 @@ David`,
               ))}
             </Grid>
           </Box>
-        </Container>
-        <Container maxWidth="lg">
-          <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            fullWidth={true}
-            maxWidth="sm"
-          >
-            <Box
-              sx={{
-                backgroundColor: '#2D2F31',
-              }}
-            >
-              <DialogTitle id="alert-dialog-title" sx={{ color: 'white' }}>
-                <Typography sx={{ fontSize: '14px', fontWeight: '600', color: '#d1d5db' }}>
-                  Xem trước khóa học
-                </Typography>
-                <Typography variant="h6" sx={{ fontWeight: '600' }}>
-                  Bài giảng 1: Các em hãy nghe cô hãy học làm bánh nha
-                </Typography>
-              </DialogTitle>
-              <DialogContent>
-                <VideoPlayer />
-              </DialogContent>
-            </Box>
-          </Dialog>
         </Container>
       </Container>
     </>

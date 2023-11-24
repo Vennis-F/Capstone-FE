@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/indent */
 import PaletteIcon from '@mui/icons-material/Palette'
 import PersonIcon from '@mui/icons-material/Person'
 import SearchIcon from '@mui/icons-material/Search'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
 import {
-  Avatar,
   Badge,
   Box,
   Button,
@@ -15,11 +14,12 @@ import {
   Menu,
   MenuItem,
   Divider,
+  Container,
+  Grid,
 } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import InputBase from '@mui/material/InputBase'
 import { styled, alpha } from '@mui/material/styles'
-import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Image from 'material-ui-image'
 import React, { useEffect, useState } from 'react'
@@ -33,8 +33,8 @@ import { MainColor } from 'libs/const/color'
 import ButtonDropdownHeader from 'libs/ui/components/ButtonDropdownHeader'
 import ButtonLinkHeader from 'libs/ui/components/ButtonLinkHeader'
 import { toastSuccess } from 'libs/utils/handle-toast'
-import { decodeToken, getAccessToken } from 'libs/utils/handle-token'
-import { OrderType } from 'types'
+import { decodeToken, getAccessToken, getUserRoleOrNull } from 'libs/utils/handle-token'
+import { OrderType, UserRole } from 'types'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -135,186 +135,204 @@ const HeaderLOL = () => {
     else getCourse()
   }, [searchText])
 
+  const currUserRole = getUserRoleOrNull()
+
   return (
     <>
       <AppBar
-        // position="static"
         position="fixed"
         style={{ zIndex: 1400 }}
         elevation={0}
         sx={{
           borderBottom: theme => `1px solid ${theme.palette.divider}`,
-          // backgroundColor: MainColor.RED_600,
           backgroundColor: MainColor.RED_500,
+          paddingY: '3px',
         }}
       >
-        <Toolbar sx={{ flexWrap: 'wrap' }}>
-          <Button variant="text" onClick={() => navigate('/')}>
-            <Typography
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{
-                flexGrow: 1,
-                color: 'white',
-                fontWeight: '600',
-              }}
-            >
-              <PaletteIcon /> {'Vẽ cùng trẻ em'}
-            </Typography>
-          </Button>
-
-          <Box sx={{ position: 'relative' }}>
-            <Search>
-              <StyledInputBase
-                placeholder="Tìm kiếm khóa học"
-                inputProps={{ 'aria-label': 'search' }}
-                value={searchText}
-                onChange={e => {
-                  setSearchText(e.target.value)
-                }}
-                onFocus={handleTextFieldFocus}
-                onBlur={handleTextFieldBlur}
-              />
+        <Container maxWidth="lg">
+          <Grid container alignItems="center">
+            <Grid item xs={3}>
               <Button
                 variant="text"
-                sx={{ padding: '0 !important', width: '24px !important', color: 'white' }}
                 onClick={() => {
-                  navigate('/list-course', { state: { searchText } })
+                  if (currUserRole && currUserRole === UserRole.LEARNER) navigate('/my-learning')
+                  else navigate('/')
                 }}
               >
-                <SearchIcon />
-              </Button>
-            </Search>
-
-            {coursesSearch.length > 0 && isPaperVisible && (
-              <Paper
-                elevation={4}
-                sx={{
-                  width: '100%',
-                  position: 'absolute',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  marginTop: '8px',
-                }}
-              >
-                <List disablePadding>
-                  {coursesSearch.map(course => (
-                    <ListItem disablePadding key={course.id}>
-                      <ListItemButton onClick={() => navigate(`/detail-course/${course.id}`)}>
-                        <Image
-                          src={'https://img-c.udemycdn.com/course/100x100/5152322_9a81_3.jpg'}
-                          style={{ height: '40px', width: '40px', padding: 0 }}
-                          imageStyle={{ height: '40px', width: '40px' }}
-                        />
-                        <Box sx={{ marginLeft: '10px' }}>
-                          <Typography sx={{ fontWeight: 'bold' }}>{course.title}</Typography>
-                          <Typography
-                            sx={{ fontSize: '12px', fontWeight: 'bold', color: 'GrayText' }}
-                          >
-                            Khóa học &nbsp;
-                            <Typography sx={{ fontSize: '12px' }} component="span">
-                              {course.author}
-                            </Typography>
-                          </Typography>
-                        </Box>
-                      </ListItemButton>
-                    </ListItem>
-                  ))}
-                </List>
-              </Paper>
-            )}
-          </Box>
-
-          <nav>
-            {getAccessToken() && (
-              <Button sx={{ color: 'white', cursor: 'pointer' }} onClick={() => navigate('/cart')}>
-                <Badge color="secondary" badgeContent={cart ? cart.cartItems.length : 0} max={999}>
-                  <ShoppingCartOutlinedIcon />
-                </Badge>
-              </Button>
-            )}
-            {!getAccessToken() && <ButtonLinkHeader to="/guest-login">Đăng nhập</ButtonLinkHeader>}
-            {!getAccessToken() && <ButtonLinkHeader to="/guest-signup">Đăng ký</ButtonLinkHeader>}
-            {getAccessToken() && (
-              <ButtonLinkHeader to="/my-learning">Danh sách khóa học của tôi</ButtonLinkHeader>
-            )}
-            {getAccessToken() && (
-              <>
-                <ButtonDropdownHeader handlerClick={handleClick}>
-                  <PersonIcon sx={{ marginBottom: '0', fontSize: '30px !important' }} />
-                </ButtonDropdownHeader>
-                <Menu
-                  id="basic-menu"
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                  MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                  }}
+                <Typography
+                  variant="h6"
+                  color="inherit"
+                  noWrap
                   sx={{
-                    '.MuiMenu-paper': {
-                      borderTop: '3px solid #047C8F',
-                      // backgroundColor: '#292929',
-                      // color: '#A0A0A0',
-                      paddingX: 2,
-                    },
-                  }}
-                  anchorOrigin={{
-                    vertical: 60,
-                    horizontal: 'center',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
+                    flexGrow: 1,
+                    color: 'white',
+                    fontWeight: '600',
                   }}
                 >
-                  <MenuItem
-                    sx={{ ':hover': { color: '#047C8F' } }}
+                  <PaletteIcon /> {'Vẽ cùng trẻ em'}
+                </Typography>
+              </Button>
+            </Grid>
+            <Grid item xs={4} width="100%" position="relative">
+              {currUserRole && currUserRole !== UserRole.LEARNER && (
+                <Search>
+                  <StyledInputBase
+                    placeholder="Tìm kiếm khóa học"
+                    inputProps={{ 'aria-label': 'search' }}
+                    value={searchText}
+                    onChange={e => {
+                      setSearchText(e.target.value)
+                    }}
+                    onFocus={handleTextFieldFocus}
+                    onBlur={handleTextFieldBlur}
+                    autoComplete="false"
+                  />
+                  <Button
+                    variant="text"
+                    sx={{ padding: '0 !important', width: '24px !important', color: 'white' }}
                     onClick={() => {
-                      navigate('/user/edit-profile')
-                      handleClose()
+                      navigate('/list-course', { state: { searchText } })
                     }}
                   >
-                    Cài đặt tài khoản
-                  </MenuItem>
-                  <MenuItem
-                    sx={{ ':hover': { color: '#047C8F' } }}
-                    onClick={() => {
-                      navigate('/cart')
-                      handleClose()
+                    <SearchIcon sx={{ marginLeft: 'auto' }} />
+                  </Button>
+                </Search>
+              )}
+
+              {coursesSearch.length > 0 && isPaperVisible && (
+                <Paper
+                  elevation={4}
+                  sx={{
+                    width: '100%',
+                    position: 'absolute',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    marginTop: '8px',
+                  }}
+                >
+                  <List disablePadding>
+                    {coursesSearch.map(course => (
+                      <ListItem disablePadding key={course.id}>
+                        <ListItemButton onClick={() => navigate(`/detail-course/${course.id}`)}>
+                          <Image
+                            src={'https://img-c.udemycdn.com/course/100x100/5152322_9a81_3.jpg'}
+                            style={{ height: '40px', width: '40px', padding: 0 }}
+                            imageStyle={{ height: '40px', width: '40px' }}
+                          />
+                          <Box sx={{ marginLeft: '10px' }}>
+                            <Typography sx={{ fontWeight: 'bold' }}>{course.title}</Typography>
+                            <Typography
+                              sx={{ fontSize: '12px', fontWeight: 'bold', color: 'GrayText' }}
+                            >
+                              Khóa học &nbsp;
+                              <Typography sx={{ fontSize: '12px' }} component="span">
+                                {course.author}
+                              </Typography>
+                            </Typography>
+                          </Box>
+                        </ListItemButton>
+                      </ListItem>
+                    ))}
+                  </List>
+                </Paper>
+              )}
+            </Grid>
+            <Grid item xs={5} display="flex" alignItems="center" justifyContent="flex-end">
+              {currUserRole && currUserRole === UserRole.CUSTOMER && (
+                <Button
+                  sx={{ color: 'white', cursor: 'pointer' }}
+                  onClick={() => navigate('/cart')}
+                >
+                  <Badge
+                    color="secondary"
+                    badgeContent={cart ? cart.cartItems.length : 0}
+                    max={999}
+                  >
+                    <ShoppingCartOutlinedIcon />
+                  </Badge>
+                </Button>
+              )}
+              {!currUserRole && <ButtonLinkHeader to="/guest-login">Đăng nhập</ButtonLinkHeader>}
+              {!currUserRole && <ButtonLinkHeader to="/guest-signup">Đăng ký</ButtonLinkHeader>}
+              {currUserRole && currUserRole === UserRole.CUSTOMER && (
+                <ButtonLinkHeader to="/my-learning">Danh sách khóa học của tôi</ButtonLinkHeader>
+              )}
+              {currUserRole && (
+                <>
+                  <ButtonDropdownHeader handlerClick={handleClick}>
+                    <PersonIcon sx={{ marginBottom: '0', fontSize: '30px !important' }} />
+                  </ButtonDropdownHeader>
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                      'aria-labelledby': 'basic-button',
+                    }}
+                    sx={{
+                      '.MuiMenu-paper': {
+                        borderTop: '3px solid #047C8F',
+                        // backgroundColor: '#292929',
+                        // color: '#A0A0A0',
+                        paddingX: 2,
+                      },
+                    }}
+                    anchorOrigin={{
+                      vertical: 60,
+                      horizontal: 'center',
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'center',
                     }}
                   >
-                    Giỏ hàng của tôi
-                  </MenuItem>
-                  <MenuItem sx={{ ':hover': { color: '#047C8F' } }} onClick={handleClose}>
-                    Phương thức thanh toán
-                  </MenuItem>
-                  <MenuItem
-                    sx={{ ':hover': { color: '#047C8F' } }}
-                    onClick={() => {
-                      navigate('/user/order-list')
-                      handleClose()
-                    }}
-                  >
-                    Lịch sử mua hàng
-                  </MenuItem>
-                  <Divider />
-                  <MenuItem sx={{ ':hover': { color: '#047C8F' } }} onClick={handleLogout}>
-                    Đăng xuất
-                  </MenuItem>
-                </Menu>
-              </>
-            )}
-            {/* <ButtonGroup variant="text" color="inherit">
-              <Button onClick={() => onChangeLanguage('en')}>🇺🇸</Button>
-              <Button onClick={() => onChangeLanguage('pl')}>🇵🇱</Button>
-            </ButtonGroup> */}
-            {/* <IconButton sx={{ ml: 1 }} onClick={onChangeThemeClick} color="inherit">
-              {currentThemeMode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-            </IconButton> */}
-          </nav>
-        </Toolbar>
+                    <MenuItem
+                      sx={{ ':hover': { color: '#047C8F' } }}
+                      onClick={() => {
+                        navigate('/user/edit-profile')
+                        handleClose()
+                      }}
+                    >
+                      Cài đặt tài khoản
+                    </MenuItem>
+                    {currUserRole && currUserRole === UserRole.CUSTOMER && (
+                      <MenuItem
+                        sx={{ ':hover': { color: '#047C8F' } }}
+                        onClick={() => {
+                          navigate('/cart')
+                          handleClose()
+                        }}
+                      >
+                        Giỏ hàng của tôi
+                      </MenuItem>
+                    )}
+                    {currUserRole && currUserRole === UserRole.CUSTOMER && (
+                      <MenuItem sx={{ ':hover': { color: '#047C8F' } }} onClick={handleClose}>
+                        Phương thức thanh toán
+                      </MenuItem>
+                    )}
+                    {currUserRole && currUserRole === UserRole.CUSTOMER && (
+                      <MenuItem
+                        sx={{ ':hover': { color: '#047C8F' } }}
+                        onClick={() => {
+                          navigate('/user/order-list')
+                          handleClose()
+                        }}
+                      >
+                        Lịch sử mua hàng
+                      </MenuItem>
+                    )}
+                    {currUserRole && currUserRole === UserRole.CUSTOMER && <Divider />}
+                    <MenuItem sx={{ ':hover': { color: '#047C8F' } }} onClick={handleLogout}>
+                      Đăng xuất
+                    </MenuItem>
+                  </Menu>
+                </>
+              )}
+            </Grid>
+          </Grid>
+        </Container>
       </AppBar>
     </>
   )

@@ -82,7 +82,7 @@ export const CartContainer = () => {
               {cart ? cart?.cartItems.length : 0} Khóa học trong giỏ hàng
             </Typography>
             <Box sx={{ flex: 2, textAlign: 'right' }}>
-              {cart?.cartItems.length !== 0 && (
+              {cart?.cartItems.length > 1 && (
                 <Button sx={{ color: 'red' }} onClick={handleOpenModalDeleteAll}>
                   Xóa toàn bộ
                   <DeleteIcon />

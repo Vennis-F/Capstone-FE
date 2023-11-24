@@ -17,6 +17,7 @@ import CharacterDetailPage from 'pages/CharacterDetailPage'
 import CharactersPage from 'pages/CharactersPage'
 import CheckPaymentPage from 'pages/CheckPaymentPage'
 import ConfirmOTPPage from 'pages/ConfirmOTPPage'
+import CustomerOrderDetailPage from 'pages/CustomerOrderDetailPage'
 import CustomerOrderListPage from 'pages/CustomerOrderListPage'
 import CustomerProfilePage from 'pages/CustomerProfilePage'
 import DetailCoursePage from 'pages/DetailCoursePage'
@@ -59,6 +60,7 @@ const AppRoutes = () => (
           <Route path="/cart/checkout" element={<CartCheckoutPage />} />
           <Route path="/payment/check" element={<CheckPaymentPage />} />
           <Route path="/user/order-list" element={<CustomerOrderListPage />} />
+          <Route path="/user/order/oder-detail/:id" element={<CustomerOrderDetailPage />} />
           <Route path="/user/:type" element={<CustomerProfilePage />} />
           <Route
             path="/my-learning"

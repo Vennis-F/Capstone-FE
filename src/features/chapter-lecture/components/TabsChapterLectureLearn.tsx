@@ -27,8 +27,8 @@ const TabsChapterLectureLearn = () => {
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange}>
           <Tab label="Tổng quan" id="overview" />
-          <Tab label="Câu hỏi" id="comment" />
-          <Tab label="Đánh giá" id="review" />
+          <Tab label="Câu hỏi" id="comment" className="third-step" />
+          <Tab label="Đánh giá" id="review" className="fourth-step" />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>

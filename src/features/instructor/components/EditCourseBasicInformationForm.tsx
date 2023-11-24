@@ -130,39 +130,48 @@ const EditCourseBasicInformationForm = (props: Props) => {
       </Box>
       <Box sx={{ height: '60px' }}></Box>
       {getUserRole() === UserRole.INSTRUCTOR && (
-        <>
-          <Button
-            onClick={() => reset()}
-            variant={'contained'}
-            size="large"
-            sx={{
-              marginTop: '100px',
-              backgroundColor: MainColor.RED_500,
-              fontWeight: '600',
-              '&:hover': {
-                backgroundColor: MainColor.RED_600,
-              },
-            }}
-          >
-            {'Reset'}
-          </Button>
-          <Button
-            onClick={handleSubmit(submitHandler)}
-            variant={'contained'}
-            size="large"
-            sx={{
-              backgroundColor: MainColor.RED_500,
-              fontWeight: '600',
-              '&:hover': {
-                backgroundColor: MainColor.RED_600,
-              },
-            }}
-            // disabled={props.isLogging}
-          >
-            {/* {!props.isLogging ? 'Đăng nhập' : <CircularProgress size="26px" />} */}
-            {'Cập nhật'}
-          </Button>
-        </>
+        <Grid container>
+          <Grid item>
+            <Button
+              onClick={() => reset()}
+              variant={'outlined'}
+              size="large"
+              sx={{
+                // marginTop: '100px',
+                borderColor: MainColor.RED_500,
+                color: MainColor.RED_500,
+                fontWeight: '600',
+                width: '140px',
+                '&:hover': {
+                  borderColor: MainColor.RED_500,
+                  backgroundColor: '#d1d0d0',
+                },
+              }}
+            >
+              {'Đặt lại'}
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              onClick={handleSubmit(submitHandler)}
+              variant={'contained'}
+              size="large"
+              sx={{
+                backgroundColor: MainColor.RED_500,
+                fontWeight: '600',
+                width: '140px',
+                marginLeft: '10px',
+                '&:hover': {
+                  backgroundColor: MainColor.RED_600,
+                },
+              }}
+              // disabled={props.isLogging}
+            >
+              {/* {!props.isLogging ? 'Đăng nhập' : <CircularProgress size="26px" />} */}
+              {'Cập nhật'}
+            </Button>
+          </Grid>
+        </Grid>
       )}
     </Stack>
   )

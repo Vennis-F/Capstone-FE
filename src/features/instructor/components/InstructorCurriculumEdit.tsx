@@ -58,6 +58,8 @@ const InstructorCurriculumEdit = ({ courseId }: Props) => {
     handleGetChapterLecturesByCourseId()
   }, [handleGetChapterLecturesByCourseId])
 
+  // console.log()
+
   return (
     <Paper elevation={5}>
       <Box padding="30px">

@@ -2,13 +2,13 @@ import { SagaIterator } from '@redux-saga/core'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { take, fork, call, delay, put } from 'redux-saga/effects'
 
+import { ResponseError } from 'libs/utils/handle-saga-error'
 import {
   decodeToken,
   getAccessToken,
   removeAccessToken,
   setAccessToken,
 } from 'libs/utils/handle-token'
-import { ResponseError } from 'types'
 
 import { guestSignIn, guestSignOut } from '../api'
 import { GuestLoginFormInputPayload, Token, UserInfor } from '../types'

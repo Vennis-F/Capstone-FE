@@ -1,5 +1,7 @@
 import { Course } from 'features/courses/types'
 import { PromotionCourse } from 'features/promotion/types'
+import { Transaction } from 'features/transaction/types'
+import { UserFilterResponse } from 'features/user/types'
 
 export enum NameOrderStatus {
   Pending = 'Pending',
@@ -8,11 +10,19 @@ export enum NameOrderStatus {
   Fail = 'Fail',
 }
 
-export type OrderStatus = {
-  active: boolean
-  id: string
-  insertedDate: string
-  statusName: NameOrderStatus
+export const convertOrderStatus = (orderStatus: NameOrderStatus) => {
+  switch (orderStatus) {
+    case NameOrderStatus.Success:
+      return { color: '#008000', vietnamse: 'Thành công' }
+    case NameOrderStatus.Cancel:
+      return { color: '#FF0000', vietnamse: 'Hủy bỏ' }
+    case NameOrderStatus.Pending:
+      return { color: '#FFD700', vietnamse: 'Đang chờ' }
+    case NameOrderStatus.Fail:
+      return { color: '#FF0000', vietnamse: 'Thất bại' }
+    default:
+      return { color: '#808080', vietnamse: 'Unkown' }
+  }
 }
 
 export type Order = {
@@ -24,7 +34,9 @@ export type Order = {
   orderDetails: OrderDetail[]
   insertedDate: string
   updatedDate: string
-  orderStatus: OrderStatus
+  orderStatus: NameOrderStatus
+  user: UserFilterResponse
+  transaction: Transaction
 }
 
 export type OrderDetail = {

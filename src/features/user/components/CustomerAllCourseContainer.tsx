@@ -1,4 +1,4 @@
-import { Container, Typography, Box, Grid } from '@mui/material'
+import { Typography, Box, Grid, Paper } from '@mui/material'
 import { useEffect, useState } from 'react'
 
 import { getCourseByCustomer } from 'features/courses/api'
@@ -27,8 +27,8 @@ export const CustomerAllCourseContainer = () => {
   }, [])
 
   return (
-    <Container maxWidth="lg" sx={{ paddingTop: '50px' }}>
-      <Typography variant="h4" sx={{ marginBottom: '20px', fontWeight: '600' }}>
+    <Paper elevation={10} sx={{ padding: '40px', marginX: '50px' }}>
+      <Typography variant="h5" fontWeight="bold" marginBottom="20px">
         Khóa học của tôi
       </Typography>
       <Box sx={{ flexGrow: 1 }}>
@@ -40,6 +40,6 @@ export const CustomerAllCourseContainer = () => {
           ))}
         </Grid>
       </Box>
-    </Container>
+    </Paper>
   )
 }

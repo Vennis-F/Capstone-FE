@@ -10,6 +10,7 @@ import { Category } from 'features/category/types'
 import { MainColor } from 'libs/const/color'
 import CarouselCustom from 'libs/ui/components/CarouselCustom'
 import CustomButton from 'libs/ui/components/CustomButton'
+import { getAccessToken } from 'libs/utils/handle-token'
 import { OrderType } from 'types'
 
 import { getCoursesBySearch } from '../api'
@@ -63,7 +64,10 @@ const HomePageContainer = () => {
               justifyContent: 'center',
             }}
           >
-            <Typography variant="h3" sx={{ fontWeight: '600', marginBottom: '15px' }}>
+            <Typography
+              variant="h3"
+              sx={{ fontWeight: '600', marginBottom: '15px', fontFamily: '' }}
+            >
               Nền tảng cung cấp các khóa học vẽ cho
               <Typography variant="inherit" component="span" sx={{ color: '#fde047' }}>
                 &nbsp;trẻ em
@@ -74,9 +78,17 @@ const HomePageContainer = () => {
               Thương mại điện tử cần thiết.
             </Typography>
             <Box sx={{ width: '50%' }}>
-              <CustomButton onClick={() => navigate('/guest-login')}>
-                Tạo tài khoản miễn phí
-              </CustomButton>
+              {!getAccessToken() ? (
+                <CustomButton onClick={() => navigate('/guest-signup')}>
+                  Tạo tài khoản miễn phí
+                </CustomButton>
+              ) : (
+                <CustomButton
+                  onClick={() => navigate('/list-course', { state: { searchText: '' } })}
+                >
+                  Khám phá thế giới vẽ
+                </CustomButton>
+              )}
             </Box>
           </Box>
           <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
@@ -101,7 +113,7 @@ const HomePageContainer = () => {
           >
             Khóa học
             <Typography component="span" variant="inherit" sx={{ color: MainColor.RED_600 }}>
-              &nbsp;nổi bật
+              &nbsp;mới nhất
             </Typography>
           </Typography>
           <CarouselCustom>
@@ -117,7 +129,7 @@ const HomePageContainer = () => {
           >
             Thể loại
             <Typography component="span" variant="inherit" sx={{ color: MainColor.RED_600 }}>
-              &nbsp;nổi bật
+              &nbsp;mới nhất
             </Typography>
           </Typography>
           <Box>

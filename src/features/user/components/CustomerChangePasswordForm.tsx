@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
-import { Box, Button } from '@mui/material'
+import { Box, Button, CircularProgress } from '@mui/material'
 import Stack from '@mui/material/Stack'
 import React from 'react'
 import { UseFormReset, useForm } from 'react-hook-form'
@@ -15,6 +15,7 @@ export type Props = {
     data: ChangePasswordUserFormInput,
     reset: UseFormReset<ChangePasswordUserFormInput>,
   ) => void
+  isLoading: boolean
 }
 
 export const CustomerChangePasswordForm = (props: Props) => {
@@ -69,10 +70,17 @@ export const CustomerChangePasswordForm = (props: Props) => {
           label={'Mật khẩu hiện tại'}
           control={control}
           size="small"
+          type="password"
         />
       </Box>
       <Box sx={{ height: '60px' }}>
-        <FormTextField name="newPassword" label={'Mật khẩu mới'} control={control} size="small" />
+        <FormTextField
+          name="newPassword"
+          label={'Mật khẩu mới'}
+          control={control}
+          size="small"
+          type="password"
+        />
       </Box>
       <Box sx={{ height: '60px' }}>
         <FormTextField
@@ -80,6 +88,7 @@ export const CustomerChangePasswordForm = (props: Props) => {
           label={'Xác nhận mật khẩu mới'}
           control={control}
           size="small"
+          type="password"
         />
       </Box>
       <Button
@@ -93,10 +102,9 @@ export const CustomerChangePasswordForm = (props: Props) => {
             backgroundColor: MainColor.RED_600,
           },
         }}
-        // disabled={props.isLogging}
+        disabled={props.isLoading}
       >
-        {/* {!props.isLogging ? 'Đăng nhập' : <CircularProgress size="26px" />} */}
-        {'Đổi mật khẩu'}
+        {!props.isLoading ? 'Đổi mật khẩu' : <CircularProgress size="26px" />}
       </Button>
     </Stack>
   )

@@ -87,7 +87,7 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
   }
 
   const handleNavigateChapterLecture = () => {
-    navigate('/course/chapter-lecture/id')
+    navigate(`/course/${courseDetail.id}/chapter-lecture`)
   }
 
   useEffect(() => {
@@ -205,7 +205,7 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
             color="text.secondary"
             sx={{ textAlign: 'center', marginLeft: '18px' }}
           >
-            Truy cập trên thiết bị di động và máy tính
+            Truy cập trên cả di động và máy tính
           </Typography>
         </Box>
 

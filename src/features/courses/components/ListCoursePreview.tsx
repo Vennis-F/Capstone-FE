@@ -10,101 +10,132 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Container,
+  Dialog,
+  Box,
+  DialogTitle,
+  DialogContent,
 } from '@mui/material'
 import { useState } from 'react'
-/* eslint-disable */
+
+import { ChapterLecture } from 'features/chapter-lecture/types'
+import VideoPlayer from 'libs/ui/components/VideoPlayer'
+import { secondsToMinutesString } from 'libs/utils/handle-time'
+
 type Props = {
-  onClickPreview: () => void
+  chapterLectures: ChapterLecture[]
 }
 
-const listCourseData = [
-  {
-    id: 1,
-    title: 'DB transaction lock & How to handle deadlock in Golang',
-    isPreview: true,
-    totalContentLength: '30:29',
-  },
-  {
-    id: 2,
-    title: 'How to avoid deadlock in DB transaction? Queries order matters!',
-    isPreview: true,
-    totalContentLength: '03:00',
-  },
-  {
-    id: 3,
-    title: 'Deeply understand transaction isolation levels & read phenomena',
-    isPreview: true,
-    totalContentLength: '01:29',
-  },
-  {
-    id: 4,
-    title: 'Setup Github Actions for Golang + Postgres to run automated tests',
-    isPreview: false,
-    totalContentLength: '04:12',
-  },
-]
-
-const ListCoursePreview = ({ onClickPreview }: Props) => {
-  const [expanded, setExpanded] = useState<boolean>(true)
+const ListCoursePreview = ({ chapterLectures }: Props) => {
+  const [expanded, setExpanded] = useState(true)
+  const [currChapterLecturePreview, setCurrChapterLecturePreview] = useState<ChapterLecture | null>(
+    null,
+  )
+  const [open, setOpen] = useState(false)
 
   const handleChange = () => {
     setExpanded(!expanded)
   }
 
+  const handleClosePreview = () => {
+    setOpen(false)
+    setCurrChapterLecturePreview(null)
+  }
+
+  const handleOpenPreview = (chapterLecture: ChapterLecture) => {
+    setOpen(true)
+    setCurrChapterLecturePreview(chapterLecture)
+  }
+
   return (
-    <Accordion expanded={expanded} onChange={handleChange} disableGutters={true}>
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-      >
-        <Typography variant="h5" sx={{ fontSize: '20px', fontWeight: 'bold' }}>
-          Danh sách bài giảng
-        </Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-          {listCourseData.map(chapterLecture => (
-            <ListItem
-              key={chapterLecture.id}
-              disablePadding
-              secondaryAction={
-                <ListItemText>
-                  {chapterLecture.isPreview && (
-                    <Typography
-                      component={'span'}
+    <>
+      <Accordion expanded={expanded} onChange={handleChange} disableGutters={true}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography variant="h5" sx={{ fontSize: '20px', fontWeight: 'bold' }}>
+            Danh sách bài giảng
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+            {chapterLectures.map(chapterLecture => (
+              <ListItem
+                key={chapterLecture.id}
+                disablePadding
+                secondaryAction={
+                  <ListItemText>
+                    {chapterLecture.isPreviewed && (
+                      <Typography
+                        component={'span'}
+                        sx={{ textDecorationLine: 'underline', color: '#146C94' }}
+                      >
+                        Xem trước
+                      </Typography>
+                    )}
+                    {` ${secondsToMinutesString(chapterLecture.totalContentLength)}`}
+                  </ListItemText>
+                }
+              >
+                {chapterLecture.isPreviewed ? (
+                  <ListItemButton
+                    role={undefined}
+                    dense
+                    onClick={() => handleOpenPreview(chapterLecture)}
+                  >
+                    <ListItemIcon>
+                      <OndemandVideoIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={`Bài giảng ${chapterLecture.index}: ${chapterLecture.title}`}
                       sx={{ textDecorationLine: 'underline', color: '#146C94' }}
-                    >
-                      Xem trước
-                    </Typography>
-                  )}
-                  {` ${chapterLecture.totalContentLength}`}
-                </ListItemText>
-              }
+                    />
+                  </ListItemButton>
+                ) : (
+                  <ListItemButton role={undefined} dense>
+                    <ListItemIcon>
+                      <OndemandVideoIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={`Bài giảng ${chapterLecture.index}: ${chapterLecture.title}`}
+                    />
+                  </ListItemButton>
+                )}
+              </ListItem>
+            ))}
+          </List>
+        </AccordionDetails>
+      </Accordion>
+      {currChapterLecturePreview && (
+        <Container maxWidth="lg">
+          <Dialog open={open} onClose={handleClosePreview} fullWidth={true} maxWidth="sm">
+            <Box
+              sx={{
+                backgroundColor: '#2D2F31',
+              }}
             >
-              {chapterLecture.isPreview ? (
-                <ListItemButton role={undefined} dense onClick={onClickPreview}>
-                  <ListItemIcon>
-                    <OndemandVideoIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={chapterLecture.title}
-                    sx={{ textDecorationLine: 'underline', color: '#146C94' }}
-                  />
-                </ListItemButton>
-              ) : (
-                <ListItemButton role={undefined} dense>
-                  <ListItemIcon>
-                    <OndemandVideoIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={chapterLecture.title} />
-                </ListItemButton>
-              )}
-            </ListItem>
-          ))}
-        </List>
-      </AccordionDetails>
-    </Accordion>
+              <DialogTitle id="alert-dialog-title" sx={{ color: 'white' }}>
+                <Typography sx={{ fontSize: '14px', fontWeight: '600', color: '#d1d5db' }}>
+                  Xem trước khóa học
+                </Typography>
+                <Typography variant="h6" sx={{ fontWeight: '600' }}>
+                  {`Bài giảng ${currChapterLecturePreview.index}: ${currChapterLecturePreview.title}`}
+                </Typography>
+              </DialogTitle>
+              <DialogContent>
+                <VideoPlayer
+                  videoURL={`${process.env.REACT_APP_API_BASE_CLOUD_URL}/video?id=${
+                    currChapterLecturePreview?.video as string
+                  }`}
+                />
+              </DialogContent>
+            </Box>
+          </Dialog>
+        </Container>
+      )}
+    </>
   )
 }
 

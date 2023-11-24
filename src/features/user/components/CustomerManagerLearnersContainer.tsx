@@ -60,8 +60,10 @@ const CustomerManagerLearnersContainer = () => {
   }, [])
 
   return (
-    <Paper sx={style.container}>
-      <Typography sx={style.title}>Con của tôi</Typography>
+    <Paper elevation={10} sx={{ padding: '40px', marginX: '50px' }}>
+      <Typography variant="h5" fontWeight="bold" marginBottom="20px">
+        Con của tôi
+      </Typography>
       <List>
         {learners.map(learner => (
           <>
@@ -102,18 +104,17 @@ const CustomerManagerLearnersContainer = () => {
         handleOpenDialog={handleClickOpen}
         handleCloseDialog={handleClose}
         onSubmitClick={async data => {
+          setIsLoading(true)
           try {
-            setIsLoading(true)
             await createLearner(data)
-            setIsLoading(false)
             toastSuccess({ message: 'Tạo tài khoản cho bé thành công' })
             handleClose()
             handleGetLearners()
           } catch (error) {
             showErrorResponseSaga({ error, defaultMessage: 'Tạo tài khoản không thành công' })
-            setIsLoading(false)
             console.log(error)
           }
+          setIsLoading(false)
         }}
         isLoading={isLoading}
       />

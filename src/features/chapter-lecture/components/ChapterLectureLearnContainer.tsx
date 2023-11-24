@@ -1,9 +1,10 @@
 // import { URLSearchParams } from 'url'
-
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import LocalFloristIcon from '@mui/icons-material/LocalFlorist'
 import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded'
-import { Box, Button, Checkbox, Toolbar, Typography } from '@mui/material'
+import SpaOutlinedIcon from '@mui/icons-material/SpaOutlined'
+import { Box, Button, Toolbar, Typography } from '@mui/material'
 import Divider from '@mui/material/Divider'
 import Drawer from '@mui/material/Drawer'
 import IconButton from '@mui/material/IconButton'
@@ -12,9 +13,11 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import { styled } from '@mui/material/styles'
+import { useTour } from '@reactour/tour'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
+// import { MainColor } from 'libs/const/color'
 import VideoPlayer from 'libs/ui/components/VideoPlayer'
 import { formatSecondToMinute } from 'libs/utils/handle-time'
 
@@ -52,6 +55,7 @@ interface Props {
 
 const ChapterLectureLearnContainer = ({ courseId }: Props) => {
   const [open, setOpen] = useState(true)
+  const { setIsOpen } = useTour()
   const [searchParams, setSearchParams] = useSearchParams()
   const [chapterLectures, setChapterLectures] = useState<ChapterLectureFilter[]>([])
   const [currChapterLecture, setCurrChapterLecture] = useState<ChapterLectureFilter | null>(null)
@@ -65,8 +69,8 @@ const ChapterLectureLearnContainer = ({ courseId }: Props) => {
   }
 
   const handleGetChapterLectureStudy = async () => {
-    const currChapterLectures = await getChapterLectureOfLearnerStudy(courseId)
-    setChapterLectures(currChapterLectures)
+    const currChapterLecturesRes = await getChapterLectureOfLearnerStudy(courseId)
+    setChapterLectures(currChapterLecturesRes.sort((a, b) => a.index - b.index))
   }
 
   const handleSaveCompleteChapterLecture = async (chapterLectureId: string) => {
@@ -96,11 +100,17 @@ const ChapterLectureLearnContainer = ({ courseId }: Props) => {
       <Main open={open}>
         <Box sx={{ height: '65vh' }}>
           <VideoPlayer
-            videoURL={currChapterLecture?.video as string}
+            // videoURL={`${process.env.REACT_APP_API_BASE_CLOUD_URL}/video?id=${
+            videoURL={`http://localhost:3000/video?id=${
+              currChapterLecture && currChapterLecture.video
+                ? currChapterLecture.video
+                : 'chapter-lectures/videos/dded2a31-a980-4727-88a8-aa328cedc3e9.mp4'
+            }`}
             handleSaveCompleteChapterLecture={handleSaveCompleteChapterLecture}
             chapterLectureId={currChapterLecture?.id}
           />
         </Box>
+        <button onClick={() => setIsOpen(true)}>Open Tour</button>
 
         <TabsChapterLectureLearn />
 
@@ -150,6 +160,7 @@ const ChapterLectureLearnContainer = ({ courseId }: Props) => {
           {chapterLectures.map(chapterLecture => (
             <>
               <ListItem
+                className="second-step"
                 key={chapterLecture.id}
                 disablePadding
                 sx={
@@ -159,12 +170,20 @@ const ChapterLectureLearnContainer = ({ courseId }: Props) => {
                 }
               >
                 <ListItemButton onClick={() => setCurrChapterLecture(chapterLecture)}>
-                  <Checkbox
+                  {chapterLecture.isCompleted ? (
+                    <LocalFloristIcon fontSize="large" sx={{ color: '#4ade80' }} />
+                  ) : (
+                    <SpaOutlinedIcon fontSize="large" sx={{ color: '#78716c' }} />
+                  )}
+                  {/* <LocalFloristOutlined fontSize="large" />
+                  <SpaOutlinedIcon fontSize="medium" sx={{ color: '#78716c' }} /> */}
+                  {/* <Checkbox
                     disabled
                     checked={chapterLecture.isCompleted}
                     sx={{ padding: 0, marginRight: '12px' }}
-                  />
+                  /> */}
                   <ListItemText
+                    sx={{ marginLeft: '8px' }}
                     primary={`Bài ${chapterLecture.index}: ${chapterLecture.title}`}
                     secondary={
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>

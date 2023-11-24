@@ -20,6 +20,11 @@ const Layout = () => {
         palette: {
           mode,
         },
+        typography: {
+          fontFamily: 'Comic Sans MS',
+          // fontFamily: 'Comic Neue',
+          // Các cài đặt typography khác ở đây nếu bạn muốn thay đổi
+        },
       }),
     [mode],
   )

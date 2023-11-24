@@ -12,6 +12,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo'
 import PaidIcon from '@mui/icons-material/Paid'
 import ReportIcon from '@mui/icons-material/Report'
+import VideoSettingsIcon from '@mui/icons-material/VideoSettings'
 import {
   AppBar,
   Box,
@@ -42,6 +43,10 @@ interface Route {
   icon: JSX.Element
   title: string
 }
+
+const routesInstructor = [
+  { path: '/instructor/homepage', icon: <VideoSettingsIcon />, title: 'Khóa học' },
+]
 
 const routesStaff = [
   { path: '/staff/manage/posts', icon: <ImportContactsIcon />, title: 'Bài đăng' },
@@ -89,6 +94,7 @@ const StaffLayout = () => {
     setCurrentRole(role)
     if (role === UserRole.ADMIN) setCurrentRoutes(routesAdmin)
     if (role === UserRole.STAFF) setCurrentRoutes(routesStaff)
+    if (role === UserRole.INSTRUCTOR) setCurrentRoutes(routesInstructor)
   }, [])
 
   return (

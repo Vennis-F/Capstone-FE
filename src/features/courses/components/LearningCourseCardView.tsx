@@ -1,19 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
-  Typography,
   Card,
   CardActionArea,
-  CardActions,
   CardMedia,
   CardContent,
-  LinearProgress,
-  Box,
-  Rating,
-  Link,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  Button,
   FormControl,
   InputLabel,
   Select,
@@ -26,6 +15,8 @@ import { getLearnerIsLearningCourseByCourseId, updateLearnerCourse } from 'featu
 import { LearnerFilterResponse } from 'features/learner/types'
 import DialogBinaryQuestion from 'libs/ui/components/DialogBinaryQuestion'
 import ReadMoreText from 'libs/ui/components/ReadMoreText'
+import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
+import { toastSuccess } from 'libs/utils/handle-toast'
 
 import { CourseFilterResponse } from '../types'
 
@@ -38,7 +29,7 @@ export const LearningCourseCardView = ({
   learningCourse,
   learners,
 }: LearningCourseCardViewlearningCourse) => {
-  const [open, setOpen] = useState(false)
+  const [isLearnerLearning, setIsLearnerLearning] = useState(false)
   const [openChangeLearningLearner, setOpenChangeLearningLearner] = useState(false)
   const [currLearningLearnerId, setCurrLearningLearnerId] = useState('')
   const [selectLearnerId, setSelectLearnerId] = useState('')
@@ -49,26 +40,43 @@ export const LearningCourseCardView = ({
   }
 
   const handleAcceptChange = async () => {
-    await updateLearnerCourse({
-      courseId: learningCourse.id,
-      currentLearnerId: currLearningLearnerId,
-      newLearnerId: selectLearnerId,
-    })
-    setCurrLearningLearnerId(selectLearnerId)
+    try {
+      await updateLearnerCourse({
+        courseId: learningCourse.id,
+        currentLearnerId: currLearningLearnerId,
+        newLearnerId: selectLearnerId,
+      })
+      setCurrLearningLearnerId(selectLearnerId)
+      toastSuccess({ message: 'Thay đổi thành công' })
+    } catch (error) {
+      console.log(error)
+      const learnerCurr = learners.find(
+        item => item.id === currLearningLearnerId,
+      ) as LearnerFilterResponse
+      showErrorResponseSaga({
+        error,
+        defaultMessage: 'Không thế thay đổi được',
+        errorStatusMessages: [
+          {
+            message: `Bé ${learnerCurr.lastName} ${learnerCurr.middleName} ${learnerCurr.firstName} đang học nên không chỉ định được`,
+            status: 406,
+          },
+        ],
+      })
+    }
     setOpenChangeLearningLearner(false)
   }
 
   const getLearnerIsLearningCourse = async () => {
-    const { learnerId } = await getLearnerIsLearningCourseByCourseId(learningCourse.id)
+    const { learnerId, isLearning } = await getLearnerIsLearningCourseByCourseId(learningCourse.id)
     setCurrLearningLearnerId(learnerId)
     setSelectLearnerId(learnerId)
+    setIsLearnerLearning(isLearning)
   }
 
   useEffect(() => {
     getLearnerIsLearningCourse()
   }, [])
-
-  console.log(learningCourse.title, currLearningLearnerId, selectLearnerId)
 
   return (
     <>
@@ -87,14 +95,17 @@ export const LearningCourseCardView = ({
               text={learningCourse.title}
               sxCustom={{ fontWeight: '600', fontSize: '15px' }}
             />
-            {/* <Typography variant="body2" color="text.secondary">
-              {learningCourse.author}
-            </Typography> */}
           </CardContent>
         </CardActionArea>
         <FormControl variant="standard" size="small" sx={{ m: 1, minWidth: '200px' }}>
           <InputLabel>Khóa học dành cho bé</InputLabel>
-          <Select value={currLearningLearnerId} onChange={handleChange} autoWidth label="Age">
+          <Select
+            value={currLearningLearnerId}
+            onChange={handleChange}
+            autoWidth
+            label="Age"
+            disabled={isLearnerLearning}
+          >
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
@@ -117,47 +128,3 @@ export const LearningCourseCardView = ({
     </>
   )
 }
-
-/* <Dialog
-        open={open}
-        onClose={() => setOpen(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {'Bạn đáng giá về khóa học này như thế nào?'}
-        </DialogTitle>
-        <DialogActions>
-          <Button onClick={() => setOpen(false)}>Disagree</Button>
-          <Button onClick={() => setOpen(false)} autoFocus>
-            Agree
-          </Button>
-        </DialogActions>
-      </Dialog> */
-
-/* <CardActions>
-          <Box sx={{ width: '100%' }}>
-            <LinearProgress variant="determinate" value={50} color="secondary" />
-            <Box
-              sx={{
-                display: 'flex',
-                width: '100%',
-                alignItems: 'flex-start',
-                justifyContent: 'space-between',
-              }}
-            >
-              <Typography sx={{ fontSize: '12px', marginTop: '4px' }}>{13}% Hoàn thành</Typography>
-              <Link
-                sx={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}
-                onClick={handleClickOpen}
-              >
-                <Box sx={{ textAlign: 'right' }}>
-                  <Rating value={learningCourse.rating} readOnly sx={{ fontSize: '12px' }} />
-                  <Typography sx={{ fontSize: '12px' }}>
-                    {learningCourse.rating !== 0 ? 'Đánh giá của bạn' : 'Hãy đánh giá'}
-                  </Typography>
-                </Box>
-              </Link>
-            </Box>
-          </Box>
-        </CardActions> */

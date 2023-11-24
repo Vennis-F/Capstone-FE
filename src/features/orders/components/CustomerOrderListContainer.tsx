@@ -17,9 +17,11 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import TitleTypography from 'libs/ui/components/TitleTypography'
+import { getStringDayMonthYear } from 'libs/utils/handle-date'
+import { formatCurrency } from 'libs/utils/handle-price'
 
 import { findOrdersByUser } from '../api'
-import { Order } from '../types'
+import { Order, convertOrderStatus } from '../types'
 
 import CustomerOrderListEmptyContainer from './CustomerOrderListEmptyContainer'
 
@@ -27,6 +29,13 @@ const Row = (props: { order: Order }) => {
   const { order } = props
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
+
+  const converOrderStatus = convertOrderStatus(order.orderStatus)
+  const convertPrice = formatCurrency(order.totalPriceAfterPromotion)
+
+  const handleNavigateOrderDetailPage = (id: string) => {
+    navigate(`/user/order/oder-detail/${id}`)
+  }
 
   return (
     <>
@@ -49,18 +58,21 @@ const Row = (props: { order: Order }) => {
               </Box>
             </TableCell>
             <TableCell align="right" sx={{ color: '#6A6F73' }}>
-              {order.insertedDate}
+              {getStringDayMonthYear(order.updatedDate)}
+            </TableCell>
+            <TableCell align="right" sx={{ color: '#373a3d', fontSize: '20px' }}>
+              ₫{convertPrice}
             </TableCell>
             <TableCell align="right" sx={{ color: '#6A6F73' }}>
-              ₫{order.totalPriceAfterPromotion}
-            </TableCell>
-            <TableCell align="right" sx={{ color: '#6A6F73' }}>
-              {order.orderStatus.statusName}
+              <Typography fontWeight="bold" fontSize="18px" color={converOrderStatus.color}>
+                {converOrderStatus.vietnamse}
+              </Typography>
             </TableCell>
             <TableCell align="right">
               <Button
                 variant="contained"
                 disableElevation
+                onClick={() => handleNavigateOrderDetailPage(order.id)}
                 sx={{
                   backgroundColor: '#19A7CE',
                   fontWeight: '500',
@@ -94,8 +106,8 @@ const Row = (props: { order: Order }) => {
                           </Link>
                         </TableCell>
                         <TableCell sx={{ width: '20%' }} />
-                        <TableCell sx={{ width: '15%', color: '#6A6F73' }} align="right">
-                          ₫{orderDetail.priceAfterPromotion}
+                        <TableCell sx={{ width: '15%', color: '#373a3d' }} align="right">
+                          ₫{convertPrice}
                         </TableCell>
                         <TableCell sx={{ width: '15%' }} />
                         <TableCell sx={{ width: '15%' }} />
@@ -126,18 +138,21 @@ const Row = (props: { order: Order }) => {
             </Box>
           </TableCell>
           <TableCell align="right" sx={{ color: '#6A6F73' }}>
-            {order.insertedDate}
+            {getStringDayMonthYear(order.updatedDate)}
+          </TableCell>
+          <TableCell align="right" sx={{ color: '#373a3d', fontSize: '20px' }}>
+            ₫{convertPrice}
           </TableCell>
           <TableCell align="right" sx={{ color: '#6A6F73' }}>
-            ₫{order.totalPriceAfterPromotion}
-          </TableCell>
-          <TableCell align="right" sx={{ color: '#6A6F73' }}>
-            {order.orderStatus.statusName}
+            <Typography fontWeight="bold" fontSize="18px" color={converOrderStatus.color}>
+              {converOrderStatus.vietnamse}
+            </Typography>
           </TableCell>
           <TableCell align="right">
             <Button
               variant="contained"
               disableElevation
+              onClick={() => handleNavigateOrderDetailPage(order.id)}
               sx={{
                 backgroundColor: '#19A7CE',
                 fontWeight: '500',

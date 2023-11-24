@@ -57,7 +57,7 @@ const CustomerProfileContainer = ({ typePage }: Props) => {
     <Container>
       <TitleTypography title="Hồ sơ"></TitleTypography>
       <Grid container>
-        <Grid item xs={12} sm={12} md={3} sx={{ backgroundColor: 'pink' }}>
+        <Grid item xs={12} sm={12} md={3}>
           <Paper elevation={5}>
             <Stack
               direction="row"
@@ -72,9 +72,11 @@ const CustomerProfileContainer = ({ typePage }: Props) => {
                 sx={{ width: 80, height: 80 }}
                 src={userProfile?.avatar ? getImage(userProfile?.avatar) : undefined}
               />
-              <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '16px' }}>
-                Nguyễn Hoàng Anh
-              </Typography>
+              {userProfile && (
+                <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '16px' }}>
+                  {`${userProfile.lastName} ${userProfile.middleName} ${userProfile.firstName}`}
+                </Typography>
+              )}
             </Stack>
             <CustomerListItemChoice />
           </Paper>

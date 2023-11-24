@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { AxiosRequestConfig } from 'axios'
+
 import { Env } from 'config/Env'
 import makeApi from 'libs/core/configureAxios'
 
@@ -22,6 +24,10 @@ export const getChapterLecturesByCourseId = (
 ): Promise<ChapterLecture[]> =>
   api.get(`${CHAPTER_LECTURE_BASE_URL}/courses/${courseId}?active=${active}`)
 
+export const getChapterLecturesByChapterLectureId = (
+  chapterLectureId: string,
+): Promise<ChapterLecture> => api.get(`${CHAPTER_LECTURE_BASE_URL}/${chapterLectureId}`)
+
 export const getChapterLectureOfLearnerStudy = (
   courseId: string,
 ): Promise<ChapterLectureFilter[]> =>
@@ -44,5 +50,13 @@ export const updateChapterLecture = (
   body: UpdateChapterLectureBodyRequest,
 ): Promise<ChapterLecture[]> => api.patch(`${CHAPTER_LECTURE_BASE_URL}`, body)
 
-export const uploadChapterLectureVideo = (chapterLectureId: string, body: any): Promise<void> =>
-  api.post(`${CHAPTER_LECTURE_BASE_URL}/video/upload?chapterLectureId=${chapterLectureId}`, body)
+export const uploadChapterLectureVideo = (
+  chapterLectureId: string,
+  body: any,
+  config: AxiosRequestConfig,
+): Promise<void> =>
+  api.post(
+    `${CHAPTER_LECTURE_BASE_URL}/video/upload?chapterLectureId=${chapterLectureId}`,
+    body,
+    config,
+  )

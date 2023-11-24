@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import CircleSharpIcon from '@mui/icons-material/CircleSharp'
 import DiscountIcon from '@mui/icons-material/Discount'
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart'
@@ -11,13 +12,14 @@ import {
   Rating,
   Button,
   CardActions,
-  //   Button,
 } from '@mui/material'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import DialogBinaryQuestion from 'libs/ui/components/DialogBinaryQuestion'
 import ReadMoreText from 'libs/ui/components/ReadMoreText'
+import { formatCurrency } from 'libs/utils/handle-price'
+import { formatSecondToMinute } from 'libs/utils/handle-time'
 
 import { useCartService } from '../hooks'
 import { CartItem } from '../types'
@@ -98,7 +100,7 @@ const CartItemCardView = ({ cartItem: { course, id, promotionCourse } }: Props) 
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography component="span" sx={{ fontSize: '13px', color: 'GrayText' }}>
-                  {course.totalLength} Tổng số giờ học
+                  {formatSecondToMinute(course.totalLength)} Tổng số giờ học
                 </Typography>
                 <CircleSharpIcon
                   sx={{
@@ -135,13 +137,16 @@ const CartItemCardView = ({ cartItem: { course, id, promotionCourse } }: Props) 
               >
                 ₫
                 {!promotionCourse
-                  ? course.price
-                  : course.price - (promotionCourse.promotion.discountPercent / 100) * course.price}
+                  ? formatCurrency(course.price)
+                  : formatCurrency(
+                      course.price -
+                        (promotionCourse.promotion.discountPercent / 100) * course.price,
+                    )}
                 <DiscountIcon sx={{ fontSize: '16px', marginLeft: '5px' }} />
               </Typography>
               {promotionCourse && (
                 <Typography sx={{ color: 'black', textDecorationLine: 'line-through' }}>
-                  ₫{course.price}
+                  ₫{formatCurrency(course.price)}
                 </Typography>
               )}
             </CardContent>

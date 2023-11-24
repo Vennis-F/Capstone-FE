@@ -106,14 +106,14 @@ const CustomerListItemChoice = () => {
           <ListItemText primary="Quản lý tài khoản trẻ em" />
         </ListItemButton>
       </ListItem>
-      <ListItem disablePadding>
+      {/* <ListItem disablePadding>
         <ListItemButton sx={style.buttonHover}>
           <ListItemIcon>
             <PaymentIcon sx={{ color: MainColor.YELLOW_500 }} />
           </ListItemIcon>
           <ListItemText primary="Phương thức thanh toán" />
         </ListItemButton>
-      </ListItem>
+      </ListItem> */}
       <Divider />
       {/* <ListItem disablePadding>
         <ListItemButton onClick={handleClick} sx={style.buttonHover}>

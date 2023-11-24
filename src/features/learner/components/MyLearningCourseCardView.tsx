@@ -12,19 +12,31 @@ import {
   Rating,
   Paper,
 } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { CourseLearnerFilterResponse } from 'features/courses/types'
+import { CourseFilterResponse, CourseLearnerFilterResponse } from 'features/courses/types'
 import ReadMoreText from 'libs/ui/components/ReadMoreText'
 
 interface Props {
-  learningCourse: CourseLearnerFilterResponse
+  learningCourse: CourseLearnerFilterResponse | CourseFilterResponse
 }
 
 export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
+  const [completePercent, setCompletePercent] = useState<null | number>(null)
+
+  function processCourse(courseLearning: Props['learningCourse']) {
+    if ('completedPercent' in courseLearning) {
+      const course = learningCourse as CourseLearnerFilterResponse
+      setCompletePercent(course.completedPercent)
+    }
+  }
+
+  useEffect(() => {
+    if (learningCourse) processCourse(learningCourse)
+  }, [learningCourse])
 
   return (
     <>
@@ -37,7 +49,6 @@ export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
               image={learningCourse.thumbnailUrl}
               alt="Hình ảnh"
             />
-            {/* <CardContent sx={{ height: '90px' }}> */}
             <CardContent sx={{ height: '50px' }}>
               <ReadMoreText
                 maxCharacterCount={40}
@@ -47,25 +58,22 @@ export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
               />
             </CardContent>
           </CardActionArea>
-          <CardActions>
-            <Box sx={{ width: '100%' }}>
-              <LinearProgress
-                variant="determinate"
-                value={learningCourse.completedPercent}
-                color="secondary"
-              />
-              <Box
-                sx={{
-                  display: 'flex',
-                  width: '100%',
-                  alignItems: 'flex-start',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Typography sx={{ fontSize: '12px', marginTop: '4px' }}>
-                  {learningCourse.completedPercent}% Hoàn thành
-                </Typography>
-                {/* <Link
+          {completePercent !== null && (
+            <CardActions>
+              <Box sx={{ width: '100%' }}>
+                <LinearProgress variant="determinate" value={completePercent} color="secondary" />
+                <Box
+                  sx={{
+                    display: 'flex',
+                    width: '100%',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <Typography sx={{ fontSize: '12px', marginTop: '4px' }}>
+                    {completePercent}% Hoàn thành
+                  </Typography>
+                  {/* <Link
                 sx={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}
                 // onClick={handleClickOpen}
               >
@@ -76,9 +84,10 @@ export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
                   </Typography>
                 </Box>
               </Link> */}
+                </Box>
               </Box>
-            </Box>
-          </CardActions>
+            </CardActions>
+          )}
         </Card>
       </Paper>
     </>

@@ -9,9 +9,6 @@ export enum UserRole {
   LEARNER = 'Learner',
   INSTRUCTOR = 'Instructor',
 }
-export type ResponseError = {
-  response: { data: { message: string } }
-}
 export enum OrderType {
   ASC = 'ASC',
   DESC = 'DESC',

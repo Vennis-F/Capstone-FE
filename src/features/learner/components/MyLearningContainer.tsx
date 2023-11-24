@@ -2,22 +2,30 @@
 import { Container, Typography, Box, Grid } from '@mui/material'
 import { useEffect, useState } from 'react'
 
-import { CourseLearnerFilterResponse } from 'features/courses/types'
+import { getCourseByCustomer } from 'features/courses/api'
+import { CourseFilterResponse, CourseLearnerFilterResponse } from 'features/courses/types'
+import { toastError } from 'libs/utils/handle-toast'
+import { getAccessToken, getUserRole } from 'libs/utils/handle-token'
+import { UserRole } from 'types'
 
 import { getCourseForLearnerSearchByUser } from '../api'
 
 import { MyLearningCourseCardView } from './MyLearningCourseCardView'
 
 export const MyLearningContainer = () => {
-  const [courses, setCourses] = useState<CourseLearnerFilterResponse[]>([])
+  const [courses, setCourses] = useState<CourseLearnerFilterResponse[] | CourseFilterResponse[]>([])
 
-  const getCoursesOfLearner = async () => {
-    const listCourses = await getCourseForLearnerSearchByUser('')
-    setCourses(listCourses.data)
+  const getCourses = async () => {
+    const userRole = getUserRole()
+    if (!userRole) toastError({ message: 'Hãy đăng nhập và tôi sẽ cho trả về khóa học của bạn ạ' })
+
+    if (userRole === UserRole.CUSTOMER) setCourses(await getCourseByCustomer())
+    else if (userRole === UserRole.LEARNER)
+      setCourses((await getCourseForLearnerSearchByUser('')).data)
   }
 
   useEffect(() => {
-    getCoursesOfLearner()
+    getCourses()
   }, [])
   console.log('[list]', courses)
 

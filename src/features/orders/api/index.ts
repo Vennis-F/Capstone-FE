@@ -14,3 +14,6 @@ export const updateOrder = (body: UpdateOrderBodyRequest): Promise<Order> =>
   api.patch(`${ORDER_BASE_URL}/update`, body)
 
 export const findOrdersByUser = (): Promise<Order[]> => api.get(`${ORDER_BASE_URL}/user`)
+
+export const findOrderByOrderId = (orderId: string): Promise<Order> =>
+  api.get(`${ORDER_BASE_URL}/user/${orderId}`)

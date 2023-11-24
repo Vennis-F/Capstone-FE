@@ -15,11 +15,9 @@ const InstructorCourseCardView = ({ course }: Props) => {
     <Card sx={{ display: 'flex', marginBottom: '20px' }}>
       <CardMedia
         component="img"
-        sx={{ width: 151 }}
+        style={{ width: '200px', height: '100px', objectFit: 'contain' }}
         image="https://s.udemycdn.com/course/200_H/placeholder.jpg"
         alt="Ảnh đại diện"
-        width="150px"
-        height="150px"
       />
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
         <CardContent sx={{ flex: '1 0 auto' }}>

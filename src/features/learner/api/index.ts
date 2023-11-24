@@ -38,5 +38,10 @@ export const updateLearnerCourse = (body: UpdateLearnerCourseBodyRequest): Promi
 
 export const getLearnerIsLearningCourseByCourseId = (
   courseId: string,
-): Promise<{ learnerId: string }> =>
-  api.get(`${LEARNER_COURSE_BASE_URL}/course/learning/${courseId}`)
+): Promise<{ learnerId: string; isLearning: boolean }> =>
+  api.get(`${LEARNER_COURSE_BASE_URL}/course/learning/learner/${courseId}`)
+
+export const checkCustomerIsLearningCourseByCourseId = (
+  courseId: string,
+): Promise<{ status: boolean }> =>
+  api.get(`${LEARNER_COURSE_BASE_URL}/course/learning/customer/${courseId}`)

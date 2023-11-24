@@ -37,7 +37,8 @@ const InstructorEditChapterLecture = ({ chapterLecture }: Props) => {
     <Grid container spacing="0" margin={0}>
       <Grid item xs={2} padding="0px">
         <VideoPlayer
-          videoURL={`${process.env.REACT_APP_API_BASE_CLOUD_URL}/video?id=${chapterLecture.video}`}
+          // videoURL={`${process.env.REACT_APP_API_BASE_CLOUD_URL}/video?id=${chapterLecture.video}`}
+          videoURL={`http://localhost:3000/video?id=${chapterLecture.video}`}
         />
       </Grid>
       <Grid item xs={7} padding="0px" marginLeft="10px">
@@ -58,7 +59,6 @@ const InstructorEditChapterLecture = ({ chapterLecture }: Props) => {
           }}
           onClick={() => {
             setEditVideo(true)
-            console.log(123, editVideo)
           }}
         >
           <EditIcon fontSize="small" sx={{ marginRight: '5px' }} /> Thay đổi
@@ -68,7 +68,9 @@ const InstructorEditChapterLecture = ({ chapterLecture }: Props) => {
   ) : (
     <>
       <InstructorUploadChapterLectureVideo chapterLecture={chapterLecture} />
-      <Button>Trở về</Button>
+      {editVideo && chapterLecture.video && (
+        <Button onClick={() => setEditVideo(false)}>Trở về</Button>
+      )}
     </>
   )
 

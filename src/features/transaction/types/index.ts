@@ -21,3 +21,13 @@ export enum TransactionStatus {
   Success = 'Success',
   Fail = 'Fail',
 }
+
+export type Transaction = {
+  id: string
+  paymentAmount: number
+  bankCode: string
+  bankTranNo: string
+  cardType: string
+  insertedDate: Date
+  status: string
+}
