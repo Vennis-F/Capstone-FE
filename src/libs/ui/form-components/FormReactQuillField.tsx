@@ -19,6 +19,21 @@ const modules = {
   },
 }
 
+const modulesVideoImage = {
+  toolbar: [
+    [{ header: '1' }, { header: '2' }, { font: [] }],
+    [{ size: [] }],
+    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+    [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+    ['link', 'image', 'video'],
+    ['clean'],
+  ],
+  clipboard: {
+    // toggle to add extra line breaks when pasting HTML:
+    matchVisual: false,
+  },
+}
+
 const formats = [
   'header',
   'font',
@@ -34,30 +49,54 @@ const formats = [
   'link',
 ]
 
+const formatsVideoImage = [
+  'header',
+  'font',
+  'size',
+  'bold',
+  'italic',
+  'underline',
+  'strike',
+  'blockquote',
+  'list',
+  'bullet',
+  'indent',
+  'link',
+  'image',
+  'video',
+]
+
 export interface FormInputProps {
   name: string
   control: Control<any> // eslint-disable-line
   label: string
   placeholder?: string
   disable?: boolean
+  isFull?: boolean
 }
 
-export const FormReactQuillField = (props: FormInputProps) => (
+export const FormReactQuillField = ({
+  name,
+  control,
+  placeholder,
+  disable,
+  isFull = false,
+}: FormInputProps) => (
   <Controller
-    name={props.name}
-    control={props.control}
+    name={name}
+    control={control}
     // render={({ field: { onChange, value }, fieldState: { error } }) => (
     render={({ field: { onChange, value } }) => (
       <ReactQuill
         onChange={onChange}
         value={value}
         theme="snow"
-        modules={modules}
-        formats={formats}
-        placeholder={props.placeholder}
+        modules={isFull ? modulesVideoImage : modules}
+        formats={isFull ? formatsVideoImage : formats}
+        placeholder={placeholder}
         // className={{back}}
         style={{ height: '80px' }}
-        readOnly={props.disable}
+        readOnly={disable}
       />
     )}
   />

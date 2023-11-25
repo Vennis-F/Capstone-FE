@@ -32,3 +32,6 @@ export const getCourseByCustomer = (): Promise<CourseFilterResponse[]> =>
 
 export const getCoursesByStaff = (): Promise<CourseFullInfor[]> =>
   api.get(`${COURSE_BASE_URL}/staff/list`)
+
+export const checkCourseCreateValid = (courseId: string): Promise<{ msgErrors: string[] }> =>
+  api.get(`${COURSE_BASE_URL}/instructor/create/valid/${courseId}`)

@@ -2,10 +2,10 @@
 import { Env } from 'config/Env'
 import { Course } from 'features/courses/types'
 import makeApi from 'libs/core/configureAxios'
-import { PageOptions } from 'types'
 
 import {
   CreateCourseByInstructorBodyRequest,
+  GetCoursesByInstructorBodyRequest,
   GetCoursesByInstructorResponse,
   UpdateCourseByInstructorBodyRequest,
   UpdatePriceCourseByInstructorBodyRequest,
@@ -16,7 +16,7 @@ const api = makeApi(`${Env.API_BASE_URL}`)
 const INSTRUCTOR_BASE_URL = `/instructor`
 
 export const getCoursesByInstructorId = (
-  body: PageOptions,
+  body: GetCoursesByInstructorBodyRequest,
 ): Promise<GetCoursesByInstructorResponse> => api.post(`${INSTRUCTOR_BASE_URL}/course/own`, body)
 
 export const createCourseByInstructor = (

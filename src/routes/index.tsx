@@ -10,6 +10,8 @@ import AdminManagePayMentorPage from 'pages/admin/AdminManagePayMentorPage'
 import AdminManagePromotionPage from 'pages/admin/AdminManagePromotionPage'
 import AdminManageRefundLearnerPage from 'pages/admin/AdminManageRefundLearnerPage'
 import AdminManageUserPage from 'pages/admin/AdminManageUserPage'
+import BlogDetailPage from 'pages/BlogDetailPage'
+import BlogPage from 'pages/BlogListPage'
 import CartCheckoutPage from 'pages/CartCheckoutPage'
 import CartPage from 'pages/CartPage'
 import ChapterLectureLearnPage from 'pages/ChapterLectureLearnPage'
@@ -50,6 +52,8 @@ const AppRoutes = () => (
           <Route path="/confirm-otp" element={<ConfirmOTPPage />} />
           <Route path="/posts" element={<AboutPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/detail/:id" element={<BlogDetailPage />} />
           <Route path="/characters" element={<CharactersPage />} />
           <Route path="/character-detail" element={<CharacterDetailPage />} />
           <Route path="/list-course" element={<ListCoursePage />} />

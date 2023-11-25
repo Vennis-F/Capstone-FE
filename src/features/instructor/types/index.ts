@@ -1,4 +1,5 @@
-import { PageMetaResponse } from 'types'
+import { CourseStatus, SortFieldCourse } from 'features/courses/types'
+import { PageMetaResponse, PageOptions } from 'types'
 
 // export type CreateQuestionTopicBodyRequest = {
 //   title: string
@@ -12,7 +13,7 @@ export type CourseFilterByInstructorResponse = {
   price: number
   shortDescription: string
   prepareMaterial: string
-  status: string
+  status: CourseStatus
   totalChapter: number
   publishedDate: string
   totalBought: number
@@ -48,4 +49,11 @@ export type UpdateCourseByInstructorBodyRequest = {
 export type UpdatePriceCourseByInstructorBodyRequest = {
   courseId: string
   price: number
+}
+
+export type GetCoursesByInstructorBodyRequest = {
+  courseStatus?: CourseStatus
+  search?: string
+  sortField?: SortFieldCourse
+  pageOptions: PageOptions
 }

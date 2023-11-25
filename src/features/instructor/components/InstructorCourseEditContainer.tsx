@@ -2,7 +2,10 @@ import { Container, Grid } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 
 import { getCourseById } from 'features/courses/api'
-import { CourseFullInfor } from 'features/courses/types'
+import { CourseFullInfor, CourseStatus } from 'features/courses/types'
+import BackdropCustom from 'libs/ui/custom-components/BackdropCustom'
+import { getUserRole } from 'libs/utils/handle-token'
+import { UserRole } from 'types'
 import { TypeInstructorEditCourseParams } from 'types/params.enum'
 
 import InstructorBasicsEdit from './InstructorBasicsEdit'
@@ -29,30 +32,52 @@ const InstructorCourseEditContainer = ({ courseId, type }: Props) => {
   }, [courseId])
 
   const renderRightSideComponent = () => {
+    if (!course) return null
+
+    const isEditable =
+      getUserRole() === UserRole.INSTRUCTOR &&
+      course.status !== CourseStatus.PENDING &&
+      course.status !== CourseStatus.BANNED
+
     switch (type) {
       case TypeInstructorEditCourseParams.CURRICULUMN:
-        return <InstructorCurriculumEdit courseId={courseId} />
+        return <InstructorCurriculumEdit course={course} isEditable={isEditable} />
       case TypeInstructorEditCourseParams.BASICS:
-        return <InstructorBasicsEdit courseId={courseId} />
+        return <InstructorBasicsEdit currentCourse={course} isEditable={isEditable} />
       case TypeInstructorEditCourseParams.THUMBNAIL:
-        return <InstructorEditCourseThumbnail courseId={courseId} url={course?.thumbnailUrl} />
+        return (
+          <InstructorEditCourseThumbnail
+            courseId={courseId}
+            url={course?.thumbnailUrl}
+            isEditable={isEditable}
+          />
+        )
       case TypeInstructorEditCourseParams.PRICING:
-        return <InstructorPricingEdit courseId={courseId} price={course?.price} />
+        return (
+          <InstructorPricingEdit
+            courseId={courseId}
+            price={course?.price}
+            isEditable={isEditable}
+          />
+        )
       default:
-        return <InstructorCurriculumEdit courseId={courseId} />
+        return <InstructorCurriculumEdit course={course} isEditable={isEditable} />
     }
   }
 
   return (
     <Container maxWidth="lg">
-      <Grid container spacing={2}>
-        <Grid item xs={3}>
-          <InstructorCourseEditLeftSide currentType={type} />
+      <BackdropCustom open={course === null} />
+      {course && (
+        <Grid container spacing={2}>
+          <Grid item xs={3}>
+            <InstructorCourseEditLeftSide currentType={type} course={course} />
+          </Grid>
+          <Grid item xs={9}>
+            {renderRightSideComponent()}
+          </Grid>
         </Grid>
-        <Grid item xs={9}>
-          {renderRightSideComponent()}
-        </Grid>
-      </Grid>
+      )}
     </Container>
   )
 }

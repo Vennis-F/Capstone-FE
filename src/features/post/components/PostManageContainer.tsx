@@ -27,7 +27,7 @@ const PostManageContainer = () => {
   const fetchPosts = async () => {
     try {
       const fetchedPosts = await searchPosts({
-        pageOptions: { take: 1000, page: 1, order: OrderType.DESC },
+        pageOptions: { take: 100000000000000000, page: 1, order: OrderType.DESC },
         sortCriterias: [],
       })
       setPosts(fetchedPosts.data)
@@ -39,6 +39,8 @@ const PostManageContainer = () => {
   useEffect(() => {
     fetchPosts()
   }, [])
+
+  console.log(currentPost)
 
   return (
     <Container maxWidth="lg">
@@ -130,7 +132,10 @@ const PostManageContainer = () => {
         openDialog={isOpenFormCreate}
         isLoading={isLoadingCreate}
         handleOpenDialog={() => setIsOpenFormCreate(true)}
-        handleCloseDialog={() => setIsOpenFormCreate(false)}
+        handleCloseDialog={() => {
+          setIsOpenFormCreate(false)
+          setCurrentPost(null)
+        }}
       />
     </Container>
   )

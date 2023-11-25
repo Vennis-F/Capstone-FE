@@ -1,8 +1,11 @@
-import { toast } from 'react-toastify'
+import { ToastPosition, toast } from 'react-toastify'
 
-export const toastError = (data: { message: string }) => {
+export const toastError = (data: {
+  message: string | React.ReactNode
+  postion?: ToastPosition
+}) => {
   toast.error(data.message, {
-    position: 'top-right',
+    position: data.postion ? data.postion : 'top-right',
     autoClose: 5000,
     hideProgressBar: false,
     closeOnClick: true,
@@ -10,6 +13,9 @@ export const toastError = (data: { message: string }) => {
     draggable: true,
     progress: undefined,
     theme: 'colored',
+    style: {
+      width: '500px',
+    },
   })
 }
 

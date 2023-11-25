@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import { AddOutlined } from '@material-ui/icons'
 import { Box, Button, Divider, Paper, Typography } from '@mui/material'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -5,10 +6,9 @@ import { DragDropContext, DraggableLocation, DropResult } from 'react-beautiful-
 
 import { CreateChapterLectureDialogForm } from 'features/chapter-lecture/components/CreateChapterLectureDialogForm'
 import { ChapterLecture } from 'features/chapter-lecture/types'
+import { CourseFullInfor } from 'features/courses/types'
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastSuccess } from 'libs/utils/handle-toast'
-import { getUserRole } from 'libs/utils/handle-token'
-import { UserRole } from 'types'
 
 import {
   changeIndexChapterLecture,
@@ -19,16 +19,17 @@ import {
 import DroppableList from './DroppableList'
 
 interface Props {
-  courseId: string
+  course: CourseFullInfor
+  isEditable: boolean
 }
 
-const InstructorCurriculumEdit = ({ courseId }: Props) => {
+const InstructorCurriculumEdit = ({ course, isEditable }: Props) => {
   const [chapterLectures, setChapterLectures] = useState<ChapterLecture[]>([])
   const [openDialog, setOpenDialog] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   const handleGetChapterLecturesByCourseId = useCallback(async () => {
-    const chapterLecturesRes = await getChapterLecturesByCourseId(courseId, true)
+    const chapterLecturesRes = await getChapterLecturesByCourseId(course.id, true)
     const sortedArray = chapterLecturesRes.sort((a, b) => a.index - b.index)
     setChapterLectures(sortedArray)
   }, [])
@@ -69,7 +70,7 @@ const InstructorCurriculumEdit = ({ courseId }: Props) => {
       </Box>
       <Divider />
       <Box padding="30px">
-        {getUserRole() === UserRole.INSTRUCTOR ? (
+        {isEditable ? (
           <DragDropContext onDragEnd={handleDragEnd}>
             <DroppableList chapterLectures={chapterLectures} />
           </DragDropContext>
@@ -79,7 +80,7 @@ const InstructorCurriculumEdit = ({ courseId }: Props) => {
           </DragDropContext>
         )}
 
-        {getUserRole() === UserRole.INSTRUCTOR && (
+        {isEditable && (
           <Button
             variant="outlined"
             sx={{
@@ -102,7 +103,7 @@ const InstructorCurriculumEdit = ({ courseId }: Props) => {
             await createChapterLecture({
               title: data.title,
               description: data.description,
-              courseId,
+              courseId: course.id,
               index: chapterLectures.length + 1,
             })
             toastSuccess({ message: 'Tạo bài giảng mới thành công' })

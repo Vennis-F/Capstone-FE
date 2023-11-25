@@ -24,7 +24,7 @@ interface Props {
 
 const TablePosts = ({ posts, onEditRow }: Props) => {
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 70, sortable: false, filterable: false },
+    // { field: 'id', headerName: 'ID', width: 70, sortable: false, filterable: false },
     { field: 'title', headerName: 'Tiêu đề', width: 130 },
     { field: 'description', headerName: 'Miêu tả', width: 130 },
     {

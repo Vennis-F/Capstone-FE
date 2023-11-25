@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { Box, Button, CircularProgress, Dialog, DialogTitle, Grid, Typography } from '@mui/material'
 import Stack from '@mui/material/Stack'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { UseFormReset, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
@@ -47,7 +47,7 @@ const EditPostDialogForm = (props: Props) => {
     control,
     reset,
     handleSubmit,
-    formState: { isDirty, dirtyFields }, // tự nhiêm làm bước này xong thì lại thành công vcl
+    formState: { isDirty, dirtyFields, isSubmitting }, // tự nhiêm làm bước này xong thì lại thành công vcl
   } = methods
 
   const submitHandler = (data: UpdatePostFormInput) => {
@@ -58,7 +58,12 @@ const EditPostDialogForm = (props: Props) => {
       onSubmitClick(data, reset)
     }
   }
-  console.log('[defaultValues]', defaultValues)
+
+  useEffect(() => {
+    if (!isSubmitting) methods.reset(props.defaultValues)
+  }, [props.defaultValues])
+
+  console.log('[defaultValues]', defaultValues, isSubmitting)
 
   return (
     <Dialog
@@ -88,7 +93,12 @@ const EditPostDialogForm = (props: Props) => {
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
             Bài viết
           </Typography>
-          <FormReactQuillField name="resources" label={'Bài viết'} control={control} />
+          <FormReactQuillField
+            isFull={true}
+            name="resources"
+            label={'Bài viết'}
+            control={control}
+          />
         </Box>
         <Box sx={{ height: '60px' }}></Box>
         <Box sx={{ height: '60px', marginBottom: '40px' }}>

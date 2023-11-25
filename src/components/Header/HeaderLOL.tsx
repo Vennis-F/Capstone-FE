@@ -255,8 +255,9 @@ const HeaderLOL = () => {
               {!currUserRole && <ButtonLinkHeader to="/guest-login">Đăng nhập</ButtonLinkHeader>}
               {!currUserRole && <ButtonLinkHeader to="/guest-signup">Đăng ký</ButtonLinkHeader>}
               {currUserRole && currUserRole === UserRole.CUSTOMER && (
-                <ButtonLinkHeader to="/my-learning">Danh sách khóa học của tôi</ButtonLinkHeader>
+                <ButtonLinkHeader to="/my-learning">Khóa học của tôi</ButtonLinkHeader>
               )}
+              <ButtonLinkHeader to="/blog">Blog</ButtonLinkHeader>
               {currUserRole && (
                 <>
                   <ButtonDropdownHeader handlerClick={handleClick}>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { Box, Button, Grid, Typography } from '@mui/material'
 import Stack from '@mui/material/Stack'
@@ -12,8 +13,6 @@ import FormReactQuillField from 'libs/ui/form-components/FormReactQuillField'
 import FormSelectField from 'libs/ui/form-components/FormSelectField'
 import { FormTextField } from 'libs/ui/form-components/FormTextField'
 import { toastWarn } from 'libs/utils/handle-toast'
-import { getUserRole } from 'libs/utils/handle-token'
-import { UserRole } from 'types'
 
 import { UpdateCourseFormInput } from '../types/form.type'
 
@@ -23,6 +22,7 @@ export type Props = {
   onSubmitClick(data: UpdateCourseFormInput, reset: UseFormReset<UpdateCourseFormInput>): void
   levels: Level[]
   categories: Category[]
+  isEditable: boolean
 }
 
 const EditCourseBasicInformationForm = (props: Props) => {
@@ -32,6 +32,7 @@ const EditCourseBasicInformationForm = (props: Props) => {
     onSubmitClick,
     levels,
     categories,
+    isEditable,
   } = props
 
   const newValidationSchema = Yup.object().shape({
@@ -68,12 +69,7 @@ const EditCourseBasicInformationForm = (props: Props) => {
         <Typography variant="h6" fontWeight="bold" fontSize="18px">
           Tiêu đề
         </Typography>
-        <FormTextField
-          name="title"
-          control={control}
-          size="small"
-          disable={getUserRole() === UserRole.STAFF}
-        />
+        <FormTextField name="title" control={control} size="small" disable={!isEditable} />
         <Typography fontSize="12px" color="grayText" marginTop="5px">
           Tiêu đề của bạn phải là sự kết hợp giữa thu hút sự chú ý, mang tính thông tin và được tối
           ưu hóa cho tìm kiếm
@@ -87,7 +83,7 @@ const EditCourseBasicInformationForm = (props: Props) => {
           name="description"
           label={'Miêu tả'}
           control={control}
-          disable={getUserRole() === UserRole.STAFF}
+          disable={!isEditable}
         />
       </Box>
       <Box sx={{ height: '60px' }}></Box>
@@ -99,7 +95,7 @@ const EditCourseBasicInformationForm = (props: Props) => {
           name="prepareMaterial"
           label={'Miêu tả'}
           control={control}
-          disable={getUserRole() === UserRole.STAFF}
+          disable={!isEditable}
         />
       </Box>
       <Box sx={{ height: '60px' }}></Box>
@@ -114,7 +110,7 @@ const EditCourseBasicInformationForm = (props: Props) => {
               control={control}
               label="Cấp độ"
               formInputOptions={levels}
-              disable={getUserRole() === UserRole.STAFF}
+              disable={!isEditable}
             />
           </Grid>
           <Grid item xs={4}>
@@ -123,13 +119,13 @@ const EditCourseBasicInformationForm = (props: Props) => {
               control={control}
               label="Thể loại"
               formInputOptions={categories}
-              disable={getUserRole() === UserRole.STAFF}
+              disable={!isEditable}
             />
           </Grid>
         </Grid>
       </Box>
       <Box sx={{ height: '60px' }}></Box>
-      {getUserRole() === UserRole.INSTRUCTOR && (
+      {isEditable && (
         <Grid container>
           <Grid item>
             <Button

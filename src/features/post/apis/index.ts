@@ -24,7 +24,7 @@ export const updatePostThumbnailByStaff = (postId: string, body: any): Promise<v
   api.post(`${POST_BASE_URL}/thumbnail/upload?postId=${postId}`, body)
 
 export const getPostById = (postId: string): Promise<PostFilterResponse> =>
-  api.post(`${POST_BASE_URL}/${postId}`)
+  api.get(`${POST_BASE_URL}/${postId}`)
 
 export const searchPosts = (
   body: SearchPostsBodyRequest,

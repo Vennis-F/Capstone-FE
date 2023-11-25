@@ -86,7 +86,12 @@ const CreatePostDialogForm = (props: Props) => {
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
             Bài viết
           </Typography>
-          <FormReactQuillField name="resources" label={'Bài viết'} control={control} />
+          <FormReactQuillField
+            isFull={true}
+            name="resources"
+            label={'Bài viết'}
+            control={control}
+          />
         </Box>
         <Box sx={{ height: '60px' }} />
         <Button

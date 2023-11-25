@@ -101,3 +101,37 @@ export enum SortFieldCourse {
   PRICE = 'price',
   PUBLISHED_DATE = 'publishedDate',
 }
+
+export interface CourseStatusInfo {
+  status: CourseStatus
+  color: string
+  vietnamese: string
+}
+
+export const courseStatusInfors: CourseStatusInfo[] = [
+  {
+    status: CourseStatus.CREATED,
+    color: '#3498db', // Màu sắc cho trạng thái CREATED
+    vietnamese: 'Đã tạo', // Bản dịch tiếng Việt của CREATED
+  },
+  {
+    status: CourseStatus.PENDING,
+    color: '#f1c40f', // Màu sắc cho trạng thái PENDING
+    vietnamese: 'Đang chờ duyệt', // Bản dịch tiếng Việt của PENDING
+  },
+  {
+    status: CourseStatus.APPROVED,
+    color: '#2ecc71', // Màu sắc cho trạng thái APPROVED
+    vietnamese: 'Đã duyệt', // Bản dịch tiếng Việt của APPROVED
+  },
+  {
+    status: CourseStatus.REJECTED,
+    color: '#e74c3c', // Màu sắc cho trạng thái REJECTED
+    vietnamese: 'Bị từ chối', // Bản dịch tiếng Việt của REJECTED
+  },
+  {
+    status: CourseStatus.BANNED,
+    color: '#7f8c8d', // Màu sắc cho trạng thái BANNED
+    vietnamese: 'Bị cấm', // Bản dịch tiếng Việt của BANNED
+  },
+]

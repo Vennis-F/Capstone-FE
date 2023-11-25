@@ -9,12 +9,10 @@ import { updatePriceCourseByInstructor } from '../api'
 import EditLayoutInstructor from './EditLayoutInstructor'
 import EditPricingCourseForm from './EditPricingCourseForm'
 
-type Props = { courseId: string; price?: number | null }
+type Props = { courseId: string; price?: number | null; isEditable: boolean }
 
-const InstructorPricingEdit = ({ courseId, price }: Props) => {
+const InstructorPricingEdit = ({ courseId, price, isEditable }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
-
-  console.log('[price] ', price, price ?? 0)
 
   return (
     <EditLayoutInstructor
@@ -32,6 +30,7 @@ const InstructorPricingEdit = ({ courseId, price }: Props) => {
     >
       {price !== undefined && (
         <EditPricingCourseForm
+          isEditable={isEditable}
           defaultValues={{
             price: price ?? 0,
           }}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import { useEffect, useState } from 'react'
 
 import { getCategories } from 'features/category/api'
@@ -16,18 +17,19 @@ import EditCourseBasicInformationForm from './EditCourseBasicInformationForm'
 import EditLayoutInstructor from './EditLayoutInstructor'
 
 interface Props {
-  courseId: string
+  currentCourse: CourseFullInfor
+  isEditable: boolean
 }
 
-const InstructorBasicsEdit = ({ courseId }: Props) => {
+const InstructorBasicsEdit = ({ currentCourse, isEditable }: Props) => {
   const [levels, setLevels] = useState<Level[]>([])
   const [categories, setCategories] = useState<Category[]>([])
-  const [course, setCourse] = useState<CourseFullInfor | null>(null)
+  const [course, setCourse] = useState<CourseFullInfor | null>(currentCourse)
 
   const handlePrepare = async () => {
     const levelsRes = await getLevels('true')
     const categoriesRes = await getCategories('true')
-    const courseRes = await getCourseById(courseId)
+    const courseRes = await getCourseById(currentCourse.id)
     setLevels(levelsRes)
     setCategories(categoriesRes)
     setCourse(courseRes)
@@ -54,7 +56,7 @@ const InstructorBasicsEdit = ({ courseId }: Props) => {
               const description = textFromHTMLCode(data.description as string)
               const prepareMaterial = textFromHTMLCode(data.prepareMaterial as string)
               await updateCourseByInstructor({
-                courseId,
+                courseId: currentCourse.id,
                 title: data.title,
                 categoryId: data.categoryId,
                 levelId: data.levelId,
@@ -76,6 +78,7 @@ const InstructorBasicsEdit = ({ courseId }: Props) => {
           }}
           levels={levels}
           categories={categories}
+          isEditable={isEditable}
         />
       )}
     </EditLayoutInstructor>

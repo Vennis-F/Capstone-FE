@@ -7,8 +7,6 @@ import * as Yup from 'yup'
 
 import { MainColor } from 'libs/const/color'
 import FormNumberField from 'libs/ui/form-components/FormNumberField'
-import { getUserRole } from 'libs/utils/handle-token'
-import { UserRole } from 'types'
 
 import { UpdatePriceCourseFormInput } from '../types/form.type'
 
@@ -19,6 +17,7 @@ export type Props = {
     reset: UseFormReset<UpdatePriceCourseFormInput>,
   ): void
   isLoading: boolean
+  isEditable: boolean
 }
 
 const EditPricingCourseForm = (props: Props) => {
@@ -53,11 +52,11 @@ const EditPricingCourseForm = (props: Props) => {
             name="price"
             control={control}
             size="small"
-            disable={getUserRole() === UserRole.STAFF}
+            disable={!props.isEditable}
           />
         </Box>
       </Box>
-      {getUserRole() === UserRole.INSTRUCTOR && (
+      {props.isEditable && (
         <Button
           onClick={handleSubmit(submitHandler)}
           variant={'contained'}

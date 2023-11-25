@@ -9,8 +9,6 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { getImage } from 'features/image/components/apis'
 import { MainColor } from 'libs/const/color'
 import { toastSuccess } from 'libs/utils/handle-toast'
-import { getUserRole } from 'libs/utils/handle-token'
-import { UserRole } from 'types'
 
 import { uploadCourseThumbnailByInstructor } from '../api'
 
@@ -32,9 +30,10 @@ interface Props {
   courseId: string
   otherAction?: () => void
   url?: string | null
+  isEditable: boolean
 }
 
-const InstructorEditCourseThumbnail = ({ otherAction, courseId, url }: Props) => {
+const InstructorEditCourseThumbnail = ({ otherAction, courseId, url, isEditable }: Props) => {
   const [previewImage, setPreviewImage] = useState<string | undefined>(undefined)
   const [previewFile, setPreviewFile] = useState<File | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -134,7 +133,7 @@ const InstructorEditCourseThumbnail = ({ otherAction, courseId, url }: Props) =>
         imageStyle={{ height: '248px', width: '444px' }}
       />
 
-      {getUserRole() === UserRole.INSTRUCTOR && (
+      {isEditable && (
         <Box marginTop="20px">
           <Button component="label" variant="contained" startIcon={<UploadIcon />}>
             Tải file lên
