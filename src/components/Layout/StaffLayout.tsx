@@ -4,6 +4,7 @@ import BrushIcon from '@mui/icons-material/Brush'
 import CategoryIcon from '@mui/icons-material/Category'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import DashboardIcon from '@mui/icons-material/Dashboard'
 import ImportContactsIcon from '@mui/icons-material/ImportContacts'
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn'
 import LogoutIcon from '@mui/icons-material/Logout'
@@ -56,6 +57,7 @@ const routesStaff = [
 ]
 
 const routesAdmin = [
+  { path: '/admin/manage/dashboard', icon: <DashboardIcon />, title: 'Thống kê' },
   { path: '/admin/manage/categories', icon: <CategoryIcon />, title: 'Thể loại' },
   { path: '/admin/manage/levels', icon: <AccessibilityIcon />, title: 'Cấp độ' },
   {

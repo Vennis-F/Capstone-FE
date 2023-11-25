@@ -5,6 +5,7 @@ import { NotFound } from 'components/Common'
 import Layout from 'components/Layout'
 import StaffLayout from 'components/Layout/StaffLayout'
 import AdminManageCategoryPage from 'pages/admin/AdminManageCategoryPage'
+import AdminManageDashBoardPage from 'pages/admin/AdminManageDashboardPage'
 import AdminManageLevelPage from 'pages/admin/AdminManageLevelPage'
 import AdminManagePayMentorPage from 'pages/admin/AdminManagePayMentorPage'
 import AdminManagePromotionPage from 'pages/admin/AdminManagePromotionPage'
@@ -93,6 +94,7 @@ const AppRoutes = () => (
         </Route>
         <Route path="/admin" element={<PrivateRoute roles={[UserRole.ADMIN]} />}>
           <Route element={<StaffLayout />}>
+            <Route path="/admin/manage/dashboard" element={<AdminManageDashBoardPage />} />
             <Route path="/admin/manage/categories" element={<AdminManageCategoryPage />} />
             <Route path="/admin/manage/levels" element={<AdminManageLevelPage />} />
             <Route path="/admin/manage/pay-mentor" element={<AdminManagePayMentorPage />} />
