@@ -9,8 +9,8 @@ import TitleTypography from 'libs/ui/components/TitleTypography'
 
 const DashboardAnalsys = () => (
   <Box>
-    <Container maxWidth="lg">
-      <TitleTypography title="Bảng điều khiển Admin" />
+    <Container maxWidth="xl">
+      <TitleTypography title="Bảng thống kê" />
       <Paper elevation={10} sx={{ height: '155vh', marginBottom: '40px', borderRadius: '10px' }}>
         <iframe
           width="100%"

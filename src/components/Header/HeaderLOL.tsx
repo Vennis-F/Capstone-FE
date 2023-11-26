@@ -175,7 +175,7 @@ const HeaderLOL = () => {
               </Button>
             </Grid>
             <Grid item xs={4} width="100%" position="relative">
-              {currUserRole && currUserRole !== UserRole.LEARNER && (
+              {(!getAccessToken() || (currUserRole && currUserRole !== UserRole.LEARNER)) && (
                 <Search>
                   <StyledInputBase
                     placeholder="Tìm kiếm khóa học"

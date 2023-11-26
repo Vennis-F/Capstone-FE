@@ -11,6 +11,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 
 import CustomButton from 'libs/ui/components/CustomButton'
+import { formatCurrency } from 'libs/utils/handle-price'
 
 import { Course } from '../types'
 
@@ -54,7 +55,7 @@ const CourseBeautyCardView = ({ course }: Props) => {
             variant="caption"
             sx={{ color: '#0ea5e9', fontWeight: '600', fontSize: '16px' }}
           >
-            ₫{course.price}
+            ₫{formatCurrency(course.price)}
           </Typography>
         </CardContent>
 

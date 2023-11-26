@@ -20,6 +20,7 @@ import { ChapterLecture } from 'features/chapter-lecture/types'
 import VideoPlayer from 'libs/ui/components/VideoPlayer'
 import { secondsToMinutesString } from 'libs/utils/handle-time'
 import { getUserRole } from 'libs/utils/handle-token'
+import { getVideo } from 'libs/utils/handle-video'
 import { UserRole } from 'types'
 
 import InstructorUploadChapterLectureVideo from './InstructorUploadChapterLectureVideo'
@@ -38,7 +39,7 @@ const InstructorEditChapterLecture = ({ chapterLecture }: Props) => {
       <Grid item xs={2} padding="0px">
         <VideoPlayer
           // videoURL={`${process.env.REACT_APP_API_BASE_CLOUD_URL}/video?id=${chapterLecture.video}`}
-          videoURL={`http://localhost:3000/video?id=${chapterLecture.video}`}
+          videoURL={getVideo(chapterLecture.video)}
         />
       </Grid>
       <Grid item xs={7} padding="0px" marginLeft="10px">

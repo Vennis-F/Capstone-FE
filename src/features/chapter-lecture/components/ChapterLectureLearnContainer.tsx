@@ -20,6 +20,7 @@ import { useSearchParams } from 'react-router-dom'
 // import { MainColor } from 'libs/const/color'
 import VideoPlayer from 'libs/ui/components/VideoPlayer'
 import { formatSecondToMinute } from 'libs/utils/handle-time'
+import { getVideo } from 'libs/utils/handle-video'
 
 import { getChapterLectureOfLearnerStudy, saveUserLectureCompleted } from '../api'
 import { ChapterLectureFilter } from '../types'
@@ -95,17 +96,21 @@ const ChapterLectureLearnContainer = ({ courseId }: Props) => {
     }
   }, [currChapterLecture, setSearchParams])
 
+  console.log('[videoURL]', `"${!currChapterLecture ? '' : getVideo(currChapterLecture.video)}"`)
+
   return (
     <Box sx={{ display: 'flex', marginTop: '-50px' }}>
       <Main open={open}>
         <Box sx={{ height: '65vh' }}>
           <VideoPlayer
             // videoURL={`${process.env.REACT_APP_API_BASE_CLOUD_URL}/video?id=${
-            videoURL={`http://localhost:3000/video?id=${
-              currChapterLecture && currChapterLecture.video
-                ? currChapterLecture.video
-                : 'chapter-lectures/videos/dded2a31-a980-4727-88a8-aa328cedc3e9.mp4'
-            }`}
+            // videoURL={`http://localhost:3000/video?id=${
+            //   currChapterLecture && currChapterLecture.video
+            //     ? currChapterLecture.video
+            //     : 'chapter-lectures/videos/dded2a31-a980-4727-88a8-aa328cedc3e9.mp4'
+            // }`}
+            // videoURL={!currChapterLecture ? '' : getVideo(currChapterLecture.video)}
+            videoURL={!currChapterLecture ? '' : getVideo(currChapterLecture.video)}
             handleSaveCompleteChapterLecture={handleSaveCompleteChapterLecture}
             chapterLectureId={currChapterLecture?.id}
           />
