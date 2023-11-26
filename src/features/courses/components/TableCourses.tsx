@@ -27,7 +27,7 @@ const TableCourses = ({ courses, onEditRow }: Props) => {
   const columns: GridColDef[] = [
     // { field: 'id', headerName: 'ID', width: 70, sortable: false, filterable: false },
     { field: 'title', headerName: 'Tiêu đề', width: 130 },
-    { field: 'price', headerName: 'Giá tiền', type: 'number', width: 130 },
+    // { field: 'price', headerName: 'Giá tiền', type: 'number', width: 130 },
     { field: 'status', headerName: 'Trạng thái', width: 130 },
     { field: 'totalChapter', headerName: 'Số lượng bài giảng', width: 130 },
     // {
@@ -38,24 +38,24 @@ const TableCourses = ({ courses, onEditRow }: Props) => {
     //   valueGetter: (params: GridValueGetterParams) => new Date(params.row.publishedDate),
     // },
     { field: 'totalBought', headerName: 'Số lượng mua', width: 130 },
-    {
-      field: 'thumbnailUrL',
-      headerName: 'Hình ảnh',
-      width: 130,
-      renderCell: (params: GridRenderCellParams) => (
-        <RenderImage
-          src={
-            getImage(params.row.thumbnailUrl) ||
-            'https://s.udemycdn.com/course/750x422/placeholder.jpg'
-          }
-          alt="Preview"
-          style={{ height: '48px', width: '144px', padding: 0 }}
-          imageStyle={{ height: '48px', width: '144px' }}
-        />
-      ),
-      sortable: false,
-      filterable: false,
-    },
+    // {
+    //   field: 'thumbnailUrL',
+    //   headerName: 'Hình ảnh',
+    //   width: 130,
+    //   renderCell: (params: GridRenderCellParams) => (
+    //     <RenderImage
+    //       src={
+    //         getImage(params.row.thumbnailUrl) ||
+    //         'https://s.udemycdn.com/course/750x422/placeholder.jpg'
+    //       }
+    //       alt="Preview"
+    //       style={{ height: '48px', width: '144px', padding: 0 }}
+    //       imageStyle={{ height: '48px', width: '144px' }}
+    //     />
+    //   ),
+    //   sortable: false,
+    //   filterable: false,
+    // },
     { field: 'active', headerName: 'Kích hoạt', type: 'boolean', width: 130 },
     {
       field: 'user',
@@ -82,7 +82,7 @@ const TableCourses = ({ courses, onEditRow }: Props) => {
       field: '',
       headerName: 'Hành động',
       description: 'Cập nhật hoặc ẩn post',
-      width: 170,
+      width: 250,
       renderCell: (params: GridRenderCellParams) => (
         <div>
           {params.row.status === CourseStatus.PENDING ? (
@@ -91,9 +91,15 @@ const TableCourses = ({ courses, onEditRow }: Props) => {
               color="primary"
               size="small"
               onClick={() => navigate(`/course/edit/${params.row.id}/manage/curriculumn`)} // Thay handleEdit bằng hàm xử lý sự kiện edit
-              sx={{ marginRight: '10px' }}
+              sx={{
+                marginRight: '10px',
+                backgroundColor: '#19a1d6',
+                fontWeight: 'bold',
+                textTransform: 'capitalize',
+                ':hover': { backgroundColor: '#3b97bb' },
+              }}
             >
-              Review
+              Phê duyệt
             </Button>
           ) : (
             <Button

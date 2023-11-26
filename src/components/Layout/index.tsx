@@ -40,7 +40,7 @@ const Layout = () => {
           <main>
             <Box
               sx={{
-                pt: '114px',
+                pt: '100px',
                 pb: '50px',
               }}
             >

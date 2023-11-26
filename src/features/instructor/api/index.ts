@@ -2,11 +2,14 @@
 import { Env } from 'config/Env'
 import { Course } from 'features/courses/types'
 import makeApi from 'libs/core/configureAxios'
+import { UploadStatus } from 'types'
 
 import {
+  BankListResponse,
   CreateCourseByInstructorBodyRequest,
   GetCoursesByInstructorBodyRequest,
   GetCoursesByInstructorResponse,
+  UpdateBankForInstructorBodyRequest,
   UpdateCourseByInstructorBodyRequest,
   UpdatePriceCourseByInstructorBodyRequest,
 } from '../types'
@@ -33,3 +36,14 @@ export const updatePriceCourseByInstructor = (
 
 export const uploadCourseThumbnailByInstructor = (courseId: string, body: any): Promise<void> =>
   api.post(`${INSTRUCTOR_BASE_URL}/course/thumbnail/upload?courseId=${courseId}`, body)
+
+export const updateBankForInstructor = (
+  email: string,
+  body: UpdateBankForInstructorBodyRequest,
+): Promise<void> => api.put(`${INSTRUCTOR_BASE_URL}/bank/update?email=${email}`, body)
+
+export const getListBanks = (): Promise<BankListResponse> =>
+  api.get('https://api.vietqr.io/v2/banks')
+
+export const uploadCertifcateForInstructor = (email: string, body: any): Promise<UploadStatus> =>
+  api.post(`${INSTRUCTOR_BASE_URL}/certifications/upload?email=${email}`, body)

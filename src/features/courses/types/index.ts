@@ -108,6 +108,12 @@ export interface CourseStatusInfo {
   vietnamese: string
 }
 
+export type UpdateCourseBodyRequest = {
+  courseId: string
+  reason?: string
+  status: CourseStatus
+}
+
 export const courseStatusInfors: CourseStatusInfo[] = [
   {
     status: CourseStatus.CREATED,

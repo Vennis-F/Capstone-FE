@@ -26,6 +26,9 @@ import CustomerProfilePage from 'pages/CustomerProfilePage'
 import DetailCoursePage from 'pages/DetailCoursePage'
 import GuestLoginPage from 'pages/GuestLoginPage'
 import GuestSingupPage from 'pages/GuestSingupPage'
+import InstructorBankRegisterPage from 'pages/instructor/InstructorBankRegisterPage'
+import InstructorBasicsRegisterPage from 'pages/instructor/InstructorBasicsRegisterPage'
+import InstructorCertificateRegisterPage from 'pages/instructor/InstructorCertificateRegisterPage'
 import InstructorCourseEditPage from 'pages/instructor/InstructorCourseEditPage'
 import InstructorCreateCoursePage from 'pages/instructor/InstructorCreateCoursePage'
 import InstructorHomepagePage from 'pages/instructor/InstructorHomepagePage'
@@ -50,6 +53,12 @@ const AppRoutes = () => (
           <Route path="/" element={<HomePage />} />
           <Route path="/guest-login" element={<GuestLoginPage />} />
           <Route path="/guest-signup" element={<GuestSingupPage />} />
+          <Route path="/instructor/signup" element={<InstructorBasicsRegisterPage />} />
+          <Route path="/instructor/signup/bank" element={<InstructorBankRegisterPage />} />
+          <Route
+            path="/instructor/signup/certificate"
+            element={<InstructorCertificateRegisterPage />}
+          />
           <Route path="/confirm-otp" element={<ConfirmOTPPage />} />
           <Route path="/posts" element={<AboutPage />} />
           <Route path="/about" element={<AboutPage />} />

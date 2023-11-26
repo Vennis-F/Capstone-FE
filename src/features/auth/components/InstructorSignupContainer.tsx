@@ -1,10 +1,8 @@
-import LockOpenIcon from '@mui/icons-material/LockOpen'
 import { Box, Link, Typography } from '@mui/material'
 import Container from '@mui/material/Container'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { MainColor } from 'libs/const/color'
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastSuccess } from 'libs/utils/handle-toast'
 import { getAccessToken } from 'libs/utils/handle-token'
@@ -13,7 +11,7 @@ import { customerSignUp } from '../api'
 
 import { GuestSignupForm } from './GuestSignupForm'
 
-export const GuestSignupContainer = () => {
+const InstructorSignupContainer = () => {
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
 
@@ -25,19 +23,26 @@ export const GuestSignupContainer = () => {
 
   return (
     <Container maxWidth="xs">
-      <Box sx={{ textAlign: 'center', marginBottom: '40px' }}>
-        <LockOpenIcon sx={{ color: MainColor.YELLOW_500 }} fontSize="large" />
-        <Typography variant="h5" sx={{ fontWeight: '600' }}>
-          Đăng ký
+      <Box sx={{ textAlign: 'left', marginBottom: '20px' }}>
+        <Typography
+          variant="h6"
+          fontWeight="bold"
+          sx={{ fontWeight: '600', fontFamily: 'sans-serif', marginBottom: '10px' }}
+        >
+          Trở thành giảng viên trên nền tảng
+        </Typography>
+        <Typography sx={{ fontFamily: 'sans-serif', fontSize: '14px' }}>
+          Khám phá cộng đồng hỗ trợ bao gồm nhiều giảng viên online. Được phép sử dụng ngay tất cả
+          các tài nguyên sáng tạo khóa học.
         </Typography>
       </Box>
       <GuestSignupForm
         onSubmitClick={async data => {
           setIsLoading(true)
           try {
-            const response = await customerSignUp({ ...data, role: 'Customer' })
+            const response = await customerSignUp({ ...data, role: 'Instructor' })
             toastSuccess({ message: 'Đăng ký thành công' })
-            navigate(`/confirm-otp?email=${response.email}`)
+            navigate(`/confirm-otp?email=${response.email}&isInstructor=${true}`)
           } catch (error) {
             showErrorResponseSaga({
               error,
@@ -68,3 +73,5 @@ export const GuestSignupContainer = () => {
     </Container>
   )
 }
+
+export default InstructorSignupContainer

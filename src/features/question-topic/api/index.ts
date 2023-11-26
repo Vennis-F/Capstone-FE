@@ -3,8 +3,12 @@ import { Env } from 'config/Env'
 import makeApi from 'libs/core/configureAxios'
 
 import {
+  CreateQuestionAnswerBodyRequest,
   CreateQuestionTopicBodyRequest,
+  QuestionAnswerFilterResponse,
   QuestionTopicFilterResponse,
+  SearchFilterQuestionAnswerBodyRequest,
+  SearchFilterQuestionAnswerResponse,
   SearchFilterQuestionTopicBodyRequest,
   SearchFilterQuestionTopicResponse,
 } from '../types'
@@ -28,3 +32,20 @@ export const searchFilterQuestionTopic = (
 export const findQuestionTopicById = (
   questionTopicId: string,
 ): Promise<QuestionTopicFilterResponse> => api.get(`${QUESTION_TOPIC_BASE_URL}/${questionTopicId}`)
+
+// ----------------------------------------------------------------
+
+const QUESTION_ANSWER_BASE_URL = `/question-answer`
+
+export const createQuestionAnswer = (body: CreateQuestionAnswerBodyRequest): Promise<void> =>
+  api.post(`${QUESTION_ANSWER_BASE_URL}`, body)
+
+export const searchFilterQuestionAnswer = (
+  body: SearchFilterQuestionAnswerBodyRequest,
+): Promise<SearchFilterQuestionAnswerResponse> =>
+  api.post(`${QUESTION_ANSWER_BASE_URL}/search`, body)
+
+export const findQuestionAnswerById = (
+  questionAnswerId: string,
+): Promise<QuestionAnswerFilterResponse> =>
+  api.get(`${QUESTION_ANSWER_BASE_URL}/${questionAnswerId}`)

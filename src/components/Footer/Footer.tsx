@@ -12,7 +12,7 @@ import { MainColor } from 'libs/const/color'
 const Copyright = () => (
   <Typography variant="body2" color="text.secondary">
     {'Copyright © '}
-    <Link color="inherit" href="https://capstone-40kqzzr0x-vennis-f.vercel.app/">
+    <Link color="inherit" href="https://capstone-fe-git-main-vennis-f.vercel.app/">
       Vẽ cùng trẻ em
     </Link>
     {new Date().getFullYear()}

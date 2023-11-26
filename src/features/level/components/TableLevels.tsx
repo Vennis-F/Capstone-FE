@@ -1,10 +1,5 @@
 import { Button } from '@mui/material'
-import {
-  DataGrid,
-  GridColDef,
-  GridRenderCellParams,
-  GridValueGetterParams,
-} from '@mui/x-data-grid'
+import { DataGrid, GridColDef, GridRenderCellParams, GridValueGetterParams } from '@mui/x-data-grid'
 
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastError, toastSuccess } from 'libs/utils/handle-toast'
@@ -19,7 +14,7 @@ interface Props {
 
 const TableLevels = ({ levels, onDeleteLevel }: Props) => {
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 130, sortable: false, filterable: false },
+    // { field: 'id', headerName: 'ID', width: 130, sortable: false, filterable: false },
     { field: 'name', headerName: 'Tên cấp độ', width: 250, editable: true },
     {
       field: 'active',
@@ -31,14 +26,14 @@ const TableLevels = ({ levels, onDeleteLevel }: Props) => {
       field: 'insertedDate',
       headerName: 'Ngày tạo',
       type: 'date',
-      width: 130,
+      width: 200,
       valueGetter: (params: GridValueGetterParams) => new Date(params.row.insertedDate),
     },
     {
       field: 'updatedDate',
       headerName: 'Ngày cập nhật',
       type: 'date',
-      width: 130,
+      width: 200,
       valueGetter: (params: GridValueGetterParams) => new Date(params.row.updatedDate),
     },
     {

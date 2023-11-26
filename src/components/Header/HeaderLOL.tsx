@@ -31,6 +31,7 @@ import { getCoursesBySearch } from 'features/courses/api'
 import { Course, GetCoursesBySearchRequest, SortFieldCourse } from 'features/courses/types'
 import { MainColor } from 'libs/const/color'
 import ButtonDropdownHeader from 'libs/ui/components/ButtonDropdownHeader'
+import ButtonLinkContain from 'libs/ui/components/ButtonLinkContain'
 import ButtonLinkHeader from 'libs/ui/components/ButtonLinkHeader'
 import { toastSuccess } from 'libs/utils/handle-toast'
 import { decodeToken, getAccessToken, getUserRoleOrNull } from 'libs/utils/handle-token'
@@ -252,12 +253,15 @@ const HeaderLOL = () => {
                   </Badge>
                 </Button>
               )}
-              {!currUserRole && <ButtonLinkHeader to="/guest-login">Đăng nhập</ButtonLinkHeader>}
-              {!currUserRole && <ButtonLinkHeader to="/guest-signup">Đăng ký</ButtonLinkHeader>}
               {currUserRole && currUserRole === UserRole.CUSTOMER && (
                 <ButtonLinkHeader to="/my-learning">Khóa học của tôi</ButtonLinkHeader>
               )}
+              {!currUserRole && (
+                <ButtonLinkContain to="/instructor/signup">Đăng ký giảng viên</ButtonLinkContain>
+              )}
               <ButtonLinkHeader to="/blog">Blog</ButtonLinkHeader>
+              {!currUserRole && <ButtonLinkHeader to="/guest-login">Đăng nhập</ButtonLinkHeader>}
+              {!currUserRole && <ButtonLinkHeader to="/guest-signup">Đăng ký</ButtonLinkHeader>}
               {currUserRole && (
                 <>
                   <ButtonDropdownHeader handlerClick={handleClick}>

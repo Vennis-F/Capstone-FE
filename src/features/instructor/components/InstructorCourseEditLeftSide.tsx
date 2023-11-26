@@ -1,12 +1,14 @@
-import { FormControl, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material'
+import { FormControl, FormControlLabel, Grid, Radio, RadioGroup, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { checkCourseCreateValid } from 'features/courses/api'
+import { checkCourseCreateValid, updateCourseStatus } from 'features/courses/api'
 import { CourseFullInfor, CourseStatus } from 'features/courses/types'
 import CustomButton from 'libs/ui/components/CustomButton'
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastError, toastSuccess } from 'libs/utils/handle-toast'
+import { getUserRole } from 'libs/utils/handle-token'
+import { UserRole } from 'types'
 import { TypeInstructorEditCourseParams } from 'types/params.enum'
 
 interface Props {
@@ -45,6 +47,22 @@ const InstructorCourseEditLeftSide = ({ currentType, course }: Props) => {
       showErrorResponseSaga({ error, defaultMessage: 'Không gửi đi để xem xét được' })
     }
   }
+
+  const handleApprovalOrReject = async (courseStatus: CourseStatus) => {
+    if (courseStatus === CourseStatus.APPROVED) {
+      await updateCourseStatus({
+        courseId: course.id,
+        status: CourseStatus.APPROVED,
+      })
+    } else if (courseStatus === CourseStatus.REJECTED) {
+      await updateCourseStatus({
+        courseId: course.id,
+        status: CourseStatus.REJECTED,
+      })
+    }
+  }
+
+  const isCheckApproval = getUserRole() === UserRole.STAFF && course.status === CourseStatus.PENDING
 
   return (
     <>
@@ -89,6 +107,25 @@ const InstructorCourseEditLeftSide = ({ currentType, course }: Props) => {
       </FormControl>
       {(course.status === CourseStatus.CREATED || course.status === CourseStatus.REJECTED) && (
         <CustomButton onClick={handleSendToVerify}>Gửi đi xem xét</CustomButton>
+      )}
+      {isCheckApproval && (
+        <Grid container>
+          <Grid item>
+            <CustomButton
+              onClick={() => handleApprovalOrReject(CourseStatus.APPROVED)}
+              sxCustom={{
+                backgroundColor: '',
+              }}
+            >
+              Chấp nhận
+            </CustomButton>
+          </Grid>
+          <Grid item marginLeft="10px">
+            <CustomButton onClick={() => handleApprovalOrReject(CourseStatus.REJECTED)}>
+              Từ chối
+            </CustomButton>
+          </Grid>
+        </Grid>
       )}
     </>
   )

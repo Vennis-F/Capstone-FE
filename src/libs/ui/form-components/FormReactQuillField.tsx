@@ -69,7 +69,7 @@ const formatsVideoImage = [
 export interface FormInputProps {
   name: string
   control: Control<any> // eslint-disable-line
-  label: string
+  label?: string
   placeholder?: string
   disable?: boolean
   isFull?: boolean
