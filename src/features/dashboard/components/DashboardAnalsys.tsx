@@ -24,24 +24,7 @@ const DashboardAnalsys = () => (
   </Box>
 )
 
-<<<<<<< HEAD
 export default DashboardAnalsys;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // const navigate = useNavigate()
 // const [search, setSearch] = useState<string>('')
 // const [searchTerm, setSearchTerm] = useState<string>('')
@@ -180,6 +163,3 @@ export default DashboardAnalsys;
 //     </Fab>
 //   </Box>
 // )
-=======
-export default DashboardAnalsys
->>>>>>> refs/remotes/origin/main

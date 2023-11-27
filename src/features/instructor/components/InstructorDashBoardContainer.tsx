@@ -1,6 +1,7 @@
-import { Box, Container,} from '@mui/material';
+import { Box, Container,Paper} from '@mui/material';
 import React from "react";
 
+import TitleTypography from 'libs/ui/components/TitleTypography'
 import { decodeToken, getAccessToken } from 'libs/utils/handle-token';
 
 // interface DashboardProps {
@@ -14,18 +15,16 @@ const InstructorDashboardContainer = () => {
   const instructorId = instructor.id;
   return (
     <Box>
-      <Container>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <h2 className="title">Bảng Thống kê của</h2>
-        </Box>
-        <Box sx={{ width: 1200, height: 1000}}>
+      <Container maxWidth="xl">
+        <TitleTypography title="Bảng thống kê" />
+        <Paper elevation={10} sx={{ height: '155vh', marginBottom: '40px', borderRadius: '10px' }}>
           <iframe 
             width="100%" 
-            height="1000" 
+            height="100%" 
             src={`https://lookerstudio.google.com/embed/reporting/e3de8617-db03-45e8-a67c-b39094bb3049/page/4VDGB?params=%7B"ds27.instructor_id":"${instructorId}"%7D`}
             title="Instructor Dashboard"
           ></iframe>
-        </Box>
+        </Paper>
       </Container>
     </Box>
   )
