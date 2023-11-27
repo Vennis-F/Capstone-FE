@@ -24,9 +24,9 @@ interface Props {
 
 const TableCategories = ({ categories, onDeleteCategory }: Props) => {
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 130, sortable: false, filterable: false },
-    { field: 'name', headerName: 'Tên thể loại', width: 250, editable: true },
-    { field: 'totalCourses', headerName: 'Số lượng khóa học', type: 'number', width: 130 },
+    // { field: 'id', headerName: 'ID', width: 130, sortable: false, filterable: false },
+    { field: 'name', headerName: 'Tên thể loại', width: 300, editable: true },
+    { field: 'totalCourses', headerName: 'Số lượng khóa học', type: 'number', width: 150 },
     {
       field: 'active',
       headerName: 'Hoạt động',
@@ -37,14 +37,14 @@ const TableCategories = ({ categories, onDeleteCategory }: Props) => {
       field: 'insertedDate',
       headerName: 'Ngày tạo',
       type: 'date',
-      width: 130,
+      width: 150,
       valueGetter: (params: GridValueGetterParams) => new Date(params.row.insertedDate),
     },
     {
       field: 'updatedDate',
       headerName: 'Ngày cập nhật',
       type: 'date',
-      width: 130,
+      width: 150,
       valueGetter: (params: GridValueGetterParams) => new Date(params.row.updatedDate),
     },
     {

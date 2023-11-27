@@ -32,3 +32,5 @@ export type SortCriteria<T> = {
   field: T
   order: OrderType
 }
+
+export type UploadStatus = { status: boolean }

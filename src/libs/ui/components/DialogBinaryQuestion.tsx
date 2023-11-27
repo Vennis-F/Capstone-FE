@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogActions,
   DialogContentText,
+  CircularProgress,
   //   Button,
 } from '@mui/material'
 
@@ -14,12 +15,14 @@ type Props = {
   clickAcceptAction: () => void
   titleText: string
   contentText: string
+  isLoading?: boolean
 }
 
 const DialogBinaryQuestion = ({
   titleText,
   contentText,
   open,
+  isLoading,
   clickCloseModal,
   clickAcceptAction,
 }: Props) => (
@@ -34,12 +37,27 @@ const DialogBinaryQuestion = ({
       <DialogContentText id="alert-dialog-description">{contentText}</DialogContentText>
     </DialogContent>
     <DialogActions>
-      <Button onClick={clickCloseModal} sx={{ color: '#19A7CE', fontWeight: '600' }}>
+      <Button
+        onClick={clickCloseModal}
+        disabled={isLoading !== undefined && isLoading}
+        sx={{ color: '#19A7CE', fontWeight: '600' }}
+      >
         Không
       </Button>
-      <Button onClick={clickAcceptAction} autoFocus sx={{ color: '#19A7CE', fontWeight: '600' }}>
-        Có
-      </Button>
+      {isLoading === undefined ? (
+        <Button onClick={clickAcceptAction} autoFocus sx={{ color: '#19A7CE', fontWeight: '600' }}>
+          Có
+        </Button>
+      ) : (
+        <Button
+          onClick={clickAcceptAction}
+          disabled={isLoading}
+          autoFocus
+          sx={{ color: '#19A7CE', fontWeight: '600' }}
+        >
+          {!isLoading ? 'Có' : <CircularProgress size="26px" />}
+        </Button>
+      )}
     </DialogActions>
   </Dialog>
 )

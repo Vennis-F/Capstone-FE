@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import CustomButton from 'libs/ui/components/CustomButton'
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
-import { toastError } from 'libs/utils/handle-toast'
+import { toastError, toastSuccess } from 'libs/utils/handle-toast'
 
 import { customerConfirm } from '../api'
 
@@ -13,6 +13,7 @@ const ConfirmOTPContainer = () => {
   const [code, setCode] = useState('')
   const [searchParams] = useSearchParams()
   const currentEmail = searchParams.get('email')
+  const isInstructor = searchParams.get('isInstructor')
 
   const handleConfirmOTP = async () => {
     if (!code || !currentEmail) {
@@ -20,7 +21,9 @@ const ConfirmOTPContainer = () => {
     } else {
       try {
         await customerConfirm({ email: currentEmail, otp: code })
-        navigate('/guest-login')
+        toastSuccess({ message: 'Xác nhận OTP thành công' })
+        if (isInstructor) navigate(`/instructor/signup/bank?email=${currentEmail}`)
+        else navigate('/guest-login')
       } catch (error) {
         showErrorResponseSaga({ error, defaultMessage: 'OTP không hợp lệ' })
       }
@@ -32,6 +35,7 @@ const ConfirmOTPContainer = () => {
       <Paper
         elevation={10}
         sx={{
+          margin: 'auto',
           textAlign: 'center',
           padding: '40px',
           borderRadius: '15px',

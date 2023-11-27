@@ -21,6 +21,7 @@ import { useState } from 'react'
 import { ChapterLecture } from 'features/chapter-lecture/types'
 import VideoPlayer from 'libs/ui/components/VideoPlayer'
 import { secondsToMinutesString } from 'libs/utils/handle-time'
+import { getVideo } from 'libs/utils/handle-video'
 
 type Props = {
   chapterLectures: ChapterLecture[]
@@ -125,11 +126,7 @@ const ListCoursePreview = ({ chapterLectures }: Props) => {
                 </Typography>
               </DialogTitle>
               <DialogContent>
-                <VideoPlayer
-                  videoURL={`${process.env.REACT_APP_API_BASE_CLOUD_URL}/video?id=${
-                    currChapterLecturePreview?.video as string
-                  }`}
-                />
+                <VideoPlayer videoURL={getVideo(currChapterLecturePreview.video)} />
               </DialogContent>
             </Box>
           </Dialog>

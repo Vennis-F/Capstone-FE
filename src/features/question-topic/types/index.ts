@@ -20,6 +20,7 @@ export type QuestionTopicFilterResponse = {
   chapterLecture: ChapterLectureFilter
   user: UserFilterResponse | null
   learner: LearnerFilterResponse | null
+  totalLengthQuestionAnswers: number
 }
 
 export enum SortFieldSearchFilterQuestionTopic {
@@ -28,6 +29,7 @@ export enum SortFieldSearchFilterQuestionTopic {
 }
 
 export type SearchFilterQuestionTopicBodyRequest = {
+  courseId: string
   chapterLectureId?: string
   search?: string
   active: boolean
@@ -37,5 +39,35 @@ export type SearchFilterQuestionTopicBodyRequest = {
 
 export type SearchFilterQuestionTopicResponse = {
   data: QuestionTopicFilterResponse[]
+  meta: PageMetaResponse
+}
+
+//----------------------------------------------------------------
+
+export type CreateQuestionAnswerBodyRequest = {
+  questionTopicId: string
+  description?: string
+}
+
+export type SearchFilterQuestionAnswerBodyRequest = {
+  questionTopicId?: string
+  active: boolean
+  sortField?: SortFieldSearchFilterQuestionTopic
+  pageOptions: PageOptions
+}
+
+export type QuestionAnswerFilterResponse = {
+  id: string
+  description: string
+  insertedDate: string
+  updatedDate: string
+  active: boolean
+  questionTopic: QuestionTopicFilterResponse
+  user: UserFilterResponse | null
+  learner: LearnerFilterResponse | null
+}
+
+export type SearchFilterQuestionAnswerResponse = {
+  data: QuestionAnswerFilterResponse[]
   meta: PageMetaResponse
 }

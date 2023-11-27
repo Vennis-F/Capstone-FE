@@ -1,22 +1,20 @@
 import LockOpenIcon from '@mui/icons-material/LockOpen'
 import { Box, Link, Typography } from '@mui/material'
 import Container from '@mui/material/Container'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { MainColor } from 'libs/const/color'
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastSuccess } from 'libs/utils/handle-toast'
 import { getAccessToken } from 'libs/utils/handle-token'
-import { useAppSelector } from 'store/hooks'
 
 import { customerSignUp } from '../api'
-import { selectIsLogging } from '../store'
 
 import { GuestSignupForm } from './GuestSignupForm'
 
 export const GuestSignupContainer = () => {
-  const isLogging = useAppSelector(selectIsLogging)
+  const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -35,6 +33,7 @@ export const GuestSignupContainer = () => {
       </Box>
       <GuestSignupForm
         onSubmitClick={async data => {
+          setIsLoading(true)
           try {
             const response = await customerSignUp({ ...data, role: 'Customer' })
             toastSuccess({ message: 'Đăng ký thành công' })
@@ -45,13 +44,25 @@ export const GuestSignupContainer = () => {
               defaultMessage: 'Không đăng ký được, vui lòng kiểm tra lại thông tin',
             })
           }
+          setIsLoading(false)
         }}
-        isLogging={isLogging}
+        isLoading={isLoading}
       />
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-        <Link sx={{ color: 'black', fontSize: '14px', cursor: 'pointer' }}>Quên mật khẩu?</Link>
-        <Link sx={{ color: 'black', fontSize: '14px', cursor: 'pointer' }}>
-          Chưa có tài khoản? Đăng ký
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginTop: '10px',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        {/* <Link sx={{ color: 'black', fontSize: '14px', cursor: 'pointer' }}>Quên mật khẩu?</Link> */}
+        <Link
+          sx={{ color: 'black', fontSize: '14px', cursor: 'pointer' }}
+          onClick={() => navigate('/guest-login')}
+        >
+          Đã có tài khoản? Đăng nhập
         </Link>
       </Box>
     </Container>

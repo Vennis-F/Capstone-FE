@@ -11,7 +11,7 @@ import { FormTextField } from 'libs/ui/form-components/FormTextField'
 import { CustomerSignupRequest } from '../types'
 
 export type Props = {
-  isLogging: boolean
+  isLoading: boolean
   defaultValues?: CustomerSignupRequest
   onSubmitClick(body: CustomerSignupRequest, reset: UseFormReset<CustomerSignupRequest>): void
 }
@@ -88,9 +88,9 @@ export const GuestSignupForm = (props: Props) => {
             backgroundColor: MainColor.RED_600,
           },
         }}
-        disabled={props.isLogging}
+        disabled={props.isLoading}
       >
-        {!props.isLogging ? 'Đăng ký' : <CircularProgress size="26px" />}
+        {!props.isLoading ? 'Đăng ký' : <CircularProgress size="26px" />}
       </Button>
     </Stack>
   )

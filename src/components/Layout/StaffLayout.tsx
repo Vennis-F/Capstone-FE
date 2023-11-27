@@ -2,9 +2,11 @@ import AccessibilityIcon from '@mui/icons-material/Accessibility'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import BarChartIcon from '@mui/icons-material/BarChart';
 import BrushIcon from '@mui/icons-material/Brush'
+import CastForEducationIcon from '@mui/icons-material/CastForEducation'
 import CategoryIcon from '@mui/icons-material/Category'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom'
 import ImportContactsIcon from '@mui/icons-material/ImportContacts'
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn'
 import LogoutIcon from '@mui/icons-material/Logout'
@@ -72,7 +74,9 @@ const routesAdmin = [
     icon: <KeyboardReturnIcon />,
     title: 'Hoàn tiền',
   },
-  { path: '/admin/manage/user', icon: <ManageAccountsIcon />, title: 'Người dùng' },
+  { path: '/admin/manage/staff', icon: <ManageAccountsIcon />, title: 'Người quản lý' },
+  { path: '/admin/manage/instructor', icon: <CastForEducationIcon />, title: 'Giảng viên' },
+  { path: '/admin/manage/customer', icon: <FamilyRestroomIcon />, title: 'Khách hàng' },
 ]
 
 const StaffLayout = () => {

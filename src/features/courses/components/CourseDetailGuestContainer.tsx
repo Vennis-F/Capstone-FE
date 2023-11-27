@@ -114,8 +114,9 @@ David`,
     try {
       const response = await getCoursesDetailById(courseId)
       const chapterLecturesRes = await getChapterLecturesByCourseId(courseId, true)
+      const sortedArray = chapterLecturesRes.sort((a, b) => a.index - b.index)
       setCourseDetail(response)
-      setChapterLectures(chapterLecturesRes)
+      setChapterLectures(sortedArray)
     } catch (error) {
       throw new Error(`Cannot get detail for course by the id ${id}`)
     }

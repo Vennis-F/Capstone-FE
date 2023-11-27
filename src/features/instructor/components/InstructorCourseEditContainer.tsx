@@ -23,6 +23,7 @@ const InstructorCourseEditContainer = ({ courseId, type }: Props) => {
   const [course, setCourse] = useState<CourseFullInfor | null>(null)
 
   const handleGetCourse = async () => {
+    // console.log('---------')
     const courseRes = await getCourseById(courseId)
     setCourse(courseRes)
   }
@@ -71,7 +72,11 @@ const InstructorCourseEditContainer = ({ courseId, type }: Props) => {
       {course && (
         <Grid container spacing={2}>
           <Grid item xs={3}>
-            <InstructorCourseEditLeftSide currentType={type} course={course} />
+            <InstructorCourseEditLeftSide
+              currentType={type}
+              course={course}
+              handleGetCourse={handleGetCourse}
+            />
           </Grid>
           <Grid item xs={9}>
             {renderRightSideComponent()}

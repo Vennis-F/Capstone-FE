@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Button } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import {
   DataGrid,
   GridColDef,
@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { getImage } from 'features/image/components/apis'
 
-import { CourseFullInfor, CourseStatus } from '../types'
+import { CourseFullInfor, CourseStatus, CourseStatusInfo, courseStatusInfors } from '../types'
 
 interface Props {
   courses: CourseFullInfor[]
@@ -27,8 +27,7 @@ const TableCourses = ({ courses, onEditRow }: Props) => {
   const columns: GridColDef[] = [
     // { field: 'id', headerName: 'ID', width: 70, sortable: false, filterable: false },
     { field: 'title', headerName: 'Tiêu đề', width: 130 },
-    { field: 'price', headerName: 'Giá tiền', type: 'number', width: 130 },
-    { field: 'status', headerName: 'Trạng thái', width: 130 },
+    // { field: 'price', headerName: 'Giá tiền', type: 'number', width: 130 },
     { field: 'totalChapter', headerName: 'Số lượng bài giảng', width: 130 },
     // {
     //   field: 'publishedDate',
@@ -38,24 +37,24 @@ const TableCourses = ({ courses, onEditRow }: Props) => {
     //   valueGetter: (params: GridValueGetterParams) => new Date(params.row.publishedDate),
     // },
     { field: 'totalBought', headerName: 'Số lượng mua', width: 130 },
-    {
-      field: 'thumbnailUrL',
-      headerName: 'Hình ảnh',
-      width: 130,
-      renderCell: (params: GridRenderCellParams) => (
-        <RenderImage
-          src={
-            getImage(params.row.thumbnailUrl) ||
-            'https://s.udemycdn.com/course/750x422/placeholder.jpg'
-          }
-          alt="Preview"
-          style={{ height: '48px', width: '144px', padding: 0 }}
-          imageStyle={{ height: '48px', width: '144px' }}
-        />
-      ),
-      sortable: false,
-      filterable: false,
-    },
+    // {
+    //   field: 'thumbnailUrL',
+    //   headerName: 'Hình ảnh',
+    //   width: 130,
+    //   renderCell: (params: GridRenderCellParams) => (
+    //     <RenderImage
+    //       src={
+    //         getImage(params.row.thumbnailUrl) ||
+    //         'https://s.udemycdn.com/course/750x422/placeholder.jpg'
+    //       }
+    //       alt="Preview"
+    //       style={{ height: '48px', width: '144px', padding: 0 }}
+    //       imageStyle={{ height: '48px', width: '144px' }}
+    //     />
+    //   ),
+    //   sortable: false,
+    //   filterable: false,
+    // },
     { field: 'active', headerName: 'Kích hoạt', type: 'boolean', width: 130 },
     {
       field: 'user',
@@ -79,10 +78,32 @@ const TableCourses = ({ courses, onEditRow }: Props) => {
       valueGetter: (params: GridValueGetterParams) => `${params.row.level.name}`,
     },
     {
+      field: 'publishedDate',
+      headerName: 'Ngày cập nhật',
+      type: 'date',
+      width: 150,
+      valueGetter: (params: GridValueGetterParams) => new Date(params.row.publishedDate),
+    },
+    {
+      field: 'status',
+      headerName: 'Trạng thái',
+      width: 170,
+      renderCell: (params: GridRenderCellParams) => {
+        const infor = courseStatusInfors.find(
+          courseInfo => courseInfo.status === params.row.status,
+        ) as CourseStatusInfo
+        return (
+          <Typography color={infor.color} fontWeight="bold">
+            {infor.vietnamese}
+          </Typography>
+        )
+      },
+    },
+    {
       field: '',
       headerName: 'Hành động',
       description: 'Cập nhật hoặc ẩn post',
-      width: 170,
+      width: 250,
       renderCell: (params: GridRenderCellParams) => (
         <div>
           {params.row.status === CourseStatus.PENDING ? (
@@ -91,9 +112,15 @@ const TableCourses = ({ courses, onEditRow }: Props) => {
               color="primary"
               size="small"
               onClick={() => navigate(`/course/edit/${params.row.id}/manage/curriculumn`)} // Thay handleEdit bằng hàm xử lý sự kiện edit
-              sx={{ marginRight: '10px' }}
+              sx={{
+                marginRight: '10px',
+                backgroundColor: '#19a1d6',
+                fontWeight: 'bold',
+                textTransform: 'capitalize',
+                ':hover': { backgroundColor: '#3b97bb' },
+              }}
             >
-              Review
+              Phê duyệt
             </Button>
           ) : (
             <Button
@@ -129,6 +156,14 @@ const TableCourses = ({ courses, onEditRow }: Props) => {
         initialState={{
           pagination: {
             paginationModel: { page: 0, pageSize: 10 },
+          },
+          sorting: {
+            sortModel: [
+              {
+                field: 'publishedDate',
+                sort: 'desc',
+              },
+            ],
           },
         }}
         pageSizeOptions={[10, 15]}

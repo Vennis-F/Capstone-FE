@@ -2,7 +2,6 @@ import AddIcon from '@mui/icons-material/Add'
 import SearchIcon from '@mui/icons-material/Search'
 import {
   Container,
-  Fab,
   FormControl,
   Grid,
   InputLabel,
@@ -19,6 +18,7 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { CourseStatus, SortFieldCourse } from 'features/courses/types'
+import CustomButton from 'libs/ui/components/CustomButton'
 import TitleTypography from 'libs/ui/components/TitleTypography'
 import { OrderType } from 'types'
 
@@ -137,6 +137,11 @@ const InstructorHomepageContainer = () => {
               </Select>
             </FormControl>
           </Grid>
+          <Grid item xs={2} marginLeft="auto">
+            <CustomButton size="large" onClick={() => navigate('/instructor/course/create')}>
+              <AddIcon /> Khóa học mới
+            </CustomButton>
+          </Grid>
         </Grid>
         {courses.map(course => (
           <InstructorCourseCardView key={course.id} course={course} />
@@ -147,7 +152,7 @@ const InstructorHomepageContainer = () => {
           </Stack>
         </Box>
       </Container>
-      <Fab
+      {/* <Fab
         aria-label="add"
         onClick={() => navigate('/instructor/course/create')}
         sx={{
@@ -163,7 +168,7 @@ const InstructorHomepageContainer = () => {
         }}
       >
         <AddIcon />
-      </Fab>
+      </Fab> */}
     </Box>
   )
 }

@@ -107,7 +107,16 @@ const InstructorCreateCourseContainer = () => {
   console.log(activeStep, levelId, levels, categoryId, title)
 
   return (
-    <Box sx={{ width: '100%', marginTop: '-114px', backgroundColor: 'white', height: '94vh' }}>
+    <Box
+      sx={{
+        width: '100%',
+        marginTop: '-50px',
+        backgroundColor: 'white',
+        height: '94vh',
+        // position: 'absolute',
+        // zIndex: 10000000,
+      }}
+    >
       <Stepper
         nonLinear
         activeStep={activeStep}

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
 import { AddOutlined } from '@material-ui/icons'
-import { Box, Button, Divider, Paper, Typography } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import React, { useCallback, useEffect, useState } from 'react'
 import { DragDropContext, DraggableLocation, DropResult } from 'react-beautiful-dnd'
 
@@ -17,6 +17,7 @@ import {
 } from '../../chapter-lecture/api/index'
 
 import DroppableList from './DroppableList'
+import EditLayoutInstructor from './EditLayoutInstructor'
 
 interface Props {
   course: CourseFullInfor
@@ -62,13 +63,10 @@ const InstructorCurriculumEdit = ({ course, isEditable }: Props) => {
   // console.log()
 
   return (
-    <Paper elevation={5}>
-      <Box padding="30px">
-        <Typography variant="h5" fontWeight="bold">
-          Chương trình giảng dậy
-        </Typography>
-      </Box>
-      <Divider />
+    <EditLayoutInstructor
+      title="Chương trình giảng dậy"
+      introduction="Chương trình giảng dạy đóng vai trò quan trọng trong việc thu hút học viên và xây dựng uy tín cho bạn trên nền tảng này. Chúng tôi khuyến khích bạn xây dựng một chương trình với ít nhất 6 bài giảng. Trong khoảng từ 6 đến 10 bài, học viên được xem trước 1 bài giảng để có cái nhìn sơ bộ về nội dung. Nếu chương trình có hơn 10 bài giảng, chỉ tối đa 2 bài được xem trước. Mỗi bài giảng cần phải có video định dạng MP4 để nội dung trở nên sinh động hơn. Video sẽ giúp học viên tiếp cận thông tin một cách sinh động và dễ hiểu, tăng cường trải nghiệm học tập và giữ chân họ trong quá trình học"
+    >
       <Box padding="30px">
         {isEditable ? (
           <DragDropContext onDragEnd={handleDragEnd}>
@@ -119,7 +117,7 @@ const InstructorCurriculumEdit = ({ course, isEditable }: Props) => {
         handleCloseDialog={() => setOpenDialog(false)}
         isLoading={isLoading}
       />
-    </Paper>
+    </EditLayoutInstructor>
   )
 }
 

@@ -8,6 +8,7 @@ import {
   GetCourseDetailResponse,
   CourseFilterResponse,
   CourseFullInfor,
+  UpdateCourseBodyRequest,
 } from '../types'
 
 const api = makeApi(`${Env.API_BASE_URL}`)
@@ -35,3 +36,6 @@ export const getCoursesByStaff = (): Promise<CourseFullInfor[]> =>
 
 export const checkCourseCreateValid = (courseId: string): Promise<{ msgErrors: string[] }> =>
   api.get(`${COURSE_BASE_URL}/instructor/create/valid/${courseId}`)
+
+export const updateCourseStatus = (body: UpdateCourseBodyRequest): Promise<void> =>
+  api.patch(`${COURSE_BASE_URL}/status`, body)

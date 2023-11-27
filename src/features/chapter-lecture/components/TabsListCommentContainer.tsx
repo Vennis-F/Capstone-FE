@@ -1,52 +1,127 @@
-import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer'
-import { Avatar, Container, Grid, Typography, Box, Button, Paper } from '@mui/material'
+import {
+  Container,
+  Button,
+  Grid,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Box,
+  Stack,
+  Pagination,
+} from '@mui/material'
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { UseFormReset } from 'react-hook-form'
+import { useParams, useSearchParams } from 'react-router-dom'
 
 import { CreateQuestionTopicForm } from 'features/question-topic/components/CreateQuestionTopicForm'
+import QuestionTopicCardView from 'features/question-topic/components/QuestionTopicCardView'
 import {
   QuestionTopicFilterResponse,
   SortFieldSearchFilterQuestionTopic,
 } from 'features/question-topic/types'
-import { getStringDayMonthYear } from 'libs/utils/handle-date'
+import { CreateQuestionTopicFormInput } from 'features/question-topic/types/form.type'
 import { toastSuccess } from 'libs/utils/handle-toast'
 import { OrderType } from 'types'
 
 import { createQuestionTopic, searchFilterQuestionTopic } from '../../question-topic/api/index'
 
-import CommentDetail from './CommentDetail'
+import QuestionTopicDetailContainer from './QuestionTopicDetailContainer'
 
 const TabsListCommentContainer = () => {
   const [isAddQuestionTopic, setIsAddQuestionTopic] = useState(false)
   const [btnLoading, setBtnLoading] = useState(false)
   const [searchParams] = useSearchParams()
-  const [comments, setComments] = useState<QuestionTopicFilterResponse[]>([])
-  const [currComment, setCurrComment] = useState<QuestionTopicFilterResponse | null>(null)
+  const { courseId } = useParams()
+  const [questionTopics, setQuestionTopics] = useState<QuestionTopicFilterResponse[]>([])
+  const [currQuestionTopic, setCurrQuestionTopic] = useState<QuestionTopicFilterResponse | null>(
+    null,
+  )
+  const chapterLectureId = searchParams.get('chapterLectureId')
+  const [isCurrent, setIsCurrent] = useState<'true' | 'false'>('true')
+  const [sortField, setSortField] = useState<SortFieldSearchFilterQuestionTopic>(
+    SortFieldSearchFilterQuestionTopic.UPDATED_DATE,
+  )
+  const [page, setPage] = useState(1)
+  const [pageCount, setPageCount] = useState(0)
+  const [reRender, setReRender] = useState(false)
+  // const
 
-  const handleSearchFilterComments = async () => {
+  const handleSearchFilterQuestionTopics = async () => {
     const responses = await searchFilterQuestionTopic({
+      courseId: courseId as string,
+      chapterLectureId: isCurrent === 'true' ? (chapterLectureId as string) : undefined,
       active: true,
-      sortField: SortFieldSearchFilterQuestionTopic.UPDATED_DATE,
+      sortField,
       pageOptions: {
         order: OrderType.DESC,
         take: 5,
-        page: 1,
+        page,
       },
     })
-    setComments(responses.data)
+    setQuestionTopics(responses.data)
+    setPageCount(responses.meta.pageCount)
   }
 
+  const handleCreateQuestionTopic = async (
+    data: CreateQuestionTopicFormInput,
+    comment: string,
+    reset: UseFormReset<CreateQuestionTopicFormInput>,
+  ) => {
+    try {
+      setBtnLoading(true)
+      await createQuestionTopic(searchParams.get('chapterLectureId') as string, {
+        title: data.title,
+        description: comment !== '' ? comment : undefined,
+      })
+      toastSuccess({ message: 'Thêm câu hỏi thành công' })
+      handleSearchFilterQuestionTopics()
+      setIsAddQuestionTopic(false)
+      reset()
+    } catch (error) {
+      console.log(error)
+    }
+    setBtnLoading(false)
+  }
+
+  const renderListOrCreateQuestionTopic = isAddQuestionTopic ? (
+    <CreateQuestionTopicForm isLoading={btnLoading} onSubmitClick={handleCreateQuestionTopic} />
+  ) : (
+    questionTopics.map(questionTopic => (
+      <QuestionTopicCardView
+        onChangeQuestionTopic={() => setCurrQuestionTopic(questionTopic)}
+        key={questionTopic.id}
+        questionTopic={questionTopic}
+      />
+    ))
+  )
+
   useEffect(() => {
-    handleSearchFilterComments()
-  }, [])
+    if (chapterLectureId) {
+      console.log('helo ae')
+      setPage(1)
+      setPageCount(0)
+      setIsCurrent('true')
+      setCurrQuestionTopic(null)
+      setSortField(SortFieldSearchFilterQuestionTopic.UPDATED_DATE)
+      setReRender(!reRender)
+      // handleSearchFilterQuestionTopics()
+    }
+  }, [chapterLectureId])
+
+  useEffect(() => {
+    handleSearchFilterQuestionTopics()
+  }, [page, isCurrent, sortField, reRender])
+
+  console.log('[component=TabsListCommentContainer]', chapterLectureId, page, isCurrent, sortField)
 
   return (
     <Container maxWidth="md">
-      {(currComment || isAddQuestionTopic) && (
+      {(currQuestionTopic || isAddQuestionTopic) && (
         <Button
           variant="text"
           onClick={() => {
-            setCurrComment(null)
+            setCurrQuestionTopic(null)
             setIsAddQuestionTopic(false)
           }}
           sx={{ marginBottom: '20px' }}
@@ -55,84 +130,71 @@ const TabsListCommentContainer = () => {
         </Button>
       )}
 
-      {!currComment ? (
-        <>
-          {isAddQuestionTopic ? (
-            <CreateQuestionTopicForm
-              isLoading={btnLoading}
-              onSubmitClick={async (data, comment) => {
-                try {
-                  setBtnLoading(true)
-                  await createQuestionTopic(searchParams.get('chapterLectureId') as string, {
-                    title: data.title,
-                    description: comment !== '' ? comment : undefined,
-                  })
-                  toastSuccess({ message: 'Thêm câu hỏi thành công' })
-                } catch (error) {
-                  console.log(error)
-                }
-                setBtnLoading(false)
-              }}
-            />
-          ) : (
-            comments.map(comment => (
-              <Paper
-                elevation={2}
-                key={comment.id}
-                sx={{
-                  marginBottom: '25px',
-                  paddingX: '20px',
-                  borderRadius: '10px',
-                  cursor: 'pointer',
-                  ':hover': {
-                    backgroundColor: '#ffffffc8',
-                  },
+      {!currQuestionTopic && !isAddQuestionTopic && (
+        <Grid container spacing={0} marginBottom="40px">
+          <Grid item xs={3}>
+            <FormControl fullWidth sx={{ backgroundColor: 'white' }}>
+              <InputLabel id="label-filter">Bộ lọc:</InputLabel>
+              <Select
+                labelId="label-filter"
+                id="select-filter"
+                onChange={e => {
+                  setIsCurrent(e.target.value as 'true' | 'false')
+                  setPage(1)
                 }}
-                onClick={() => setCurrComment(comment)}
+                label="filter"
+                value={isCurrent}
               >
-                <Grid container wrap="nowrap" spacing={2}>
-                  <Grid item>
-                    <Avatar sx={{ backgroundColor: '#2D2F31' }}>
-                      {comment.user ? comment.user.firstName : comment.learner?.firstName}
-                    </Avatar>
-                  </Grid>
-                  <Grid justifyContent="left" item xs zeroMinWidth>
-                    {comment.user ? (
-                      <h4
-                        style={{ margin: 0, textAlign: 'left' }}
-                      >{`${comment.user?.lastName} ${comment.user?.middleName} ${comment.user?.firstName} `}</h4>
-                    ) : (
-                      <h4
-                        style={{ margin: 0, textAlign: 'left' }}
-                      >{`${comment.learner?.lastName} ${comment.learner?.middleName} ${comment.learner?.firstName} `}</h4>
-                    )}
-                    <h5 style={{ margin: 0, textAlign: 'left' }}>{comment.title}</h5>
-                    <p style={{ textAlign: 'left', color: '#702AD8' }}>
-                      {`Bài giảng số ${comment.chapterLecture.index} - `}
-                      <span style={{ color: 'gray' }}>{`${getStringDayMonthYear(
-                        comment.updatedDate,
-                      )}`}</span>
-                    </p>
-                  </Grid>
-                  <Grid item>
-                    <Box>
-                      <Typography
-                        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                      >
-                        1 <QuestionAnswerIcon />
-                      </Typography>
-                    </Box>
-                  </Grid>
-                </Grid>
-              </Paper>
-            ))
-          )}
-        </>
-      ) : (
-        <CommentDetail comment={currComment} />
+                <MenuItem value={'true'}>{'Bài giảng hiện tại'}</MenuItem>
+                <MenuItem value={'false'}>{'Tất cả các bài giảng'}</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={6} marginLeft="14px">
+            <FormControl fullWidth sx={{ backgroundColor: 'white' }}>
+              <InputLabel id="label-sort">Sắp xếp theo:</InputLabel>
+              <Select
+                labelId="label-sort"
+                id="select-sort"
+                onChange={e => {
+                  setSortField(e.target.value as SortFieldSearchFilterQuestionTopic)
+                  setPage(1)
+                }}
+                label="sort"
+                value={sortField}
+              >
+                <MenuItem value={SortFieldSearchFilterQuestionTopic.UPDATED_DATE}>
+                  {'Sắp xếp theo thứ tự gần đây nhất'}
+                </MenuItem>
+                <MenuItem value={SortFieldSearchFilterQuestionTopic.RATING}>
+                  {'Sắp xếp theo thứ tự nhiều người tán thành nhất'}
+                </MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
       )}
 
-      {!isAddQuestionTopic && (
+      {!currQuestionTopic ? (
+        <>{renderListOrCreateQuestionTopic}</>
+      ) : (
+        <QuestionTopicDetailContainer questionTopic={currQuestionTopic} />
+      )}
+
+      {questionTopics.length > 0 && !currQuestionTopic && !isAddQuestionTopic && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', marginY: '40px' }}>
+          <Stack spacing={2}>
+            <Pagination
+              count={pageCount}
+              page={page}
+              onChange={(e, value) => setPage(value)}
+              color="secondary"
+            />
+          </Stack>
+        </Box>
+      )}
+
+      {!isAddQuestionTopic && !currQuestionTopic && (
         <Button
           variant="text"
           onClick={() => {

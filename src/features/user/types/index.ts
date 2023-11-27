@@ -1,3 +1,5 @@
+import { UserRole } from 'types'
+
 export type UserFilterResponse = {
   id: string
   firstName: string
@@ -7,6 +9,7 @@ export type UserFilterResponse = {
   userName?: string
   avatar?: string
   email?: string
+  role: UserRole
 }
 
 export type UpdateProfileBodyRequest = {
