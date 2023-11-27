@@ -2,7 +2,7 @@
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { Box, Button, Grid, Typography } from '@mui/material'
 import Stack from '@mui/material/Stack'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { UseFormReset, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
@@ -12,6 +12,7 @@ import { MainColor } from 'libs/const/color'
 import FormReactQuillField from 'libs/ui/form-components/FormReactQuillField'
 import FormSelectField from 'libs/ui/form-components/FormSelectField'
 import { FormTextField } from 'libs/ui/form-components/FormTextField'
+import { textFromHTMLCode } from 'libs/utils/handle-html-data'
 import { toastWarn } from 'libs/utils/handle-toast'
 
 import { UpdateCourseFormInput } from '../types/form.type'
@@ -50,18 +51,26 @@ const EditCourseBasicInformationForm = (props: Props) => {
     control,
     reset,
     handleSubmit,
-    formState: { isDirty, dirtyFields }, // tự nhiêm làm bước này xong thì lại thành công vcl
+    formState: { isDirty, dirtyFields, isSubmitting }, // tự nhiêm làm bước này xong thì lại thành công vcl
   } = methods
 
   const submitHandler = (data: UpdateCourseFormInput) => {
     console.log('[submit]', isDirty, dirtyFields, data)
-    if (!isDirty) {
+    if (
+      !isDirty ||
+      textFromHTMLCode(data.description as string).trim().length === 0 ||
+      textFromHTMLCode(data.prepareMaterial as string).trim().length === 0
+    ) {
       toastWarn({ message: 'Cập nhật dữ liệu trước khi tiến hành cập nhật!' })
     } else {
       onSubmitClick(data, reset)
     }
   }
   console.log('[defaultValues]', defaultValues)
+
+  useEffect(() => {
+    if (!isSubmitting) methods.reset(props.defaultValues)
+  }, [props.defaultValues])
 
   return (
     <Stack sx={{ pt: 0 }} direction="column" spacing={1} justifyContent="center">

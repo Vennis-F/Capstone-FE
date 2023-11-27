@@ -38,20 +38,6 @@ const CourseManageContainer = () => {
   return (
     <Container maxWidth="xl">
       <TitleTypography title="Khóa học" />
-      <Box width="100%" textAlign="right" marginBottom="20px">
-        <CustomButton
-          onClick={() => {
-            setIsOpenFormCreate(true)
-          }}
-          sxCustom={{
-            width: '140px',
-            textTransform: 'capitalize',
-            padding: '10px 0px',
-          }}
-        >
-          <AddIcon /> Bài đăng mới
-        </CustomButton>
-      </Box>
       <Paper elevation={10}>
         <TableCourses
           courses={courses}

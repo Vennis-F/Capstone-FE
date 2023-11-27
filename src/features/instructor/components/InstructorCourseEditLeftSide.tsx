@@ -80,6 +80,7 @@ const InstructorCourseEditLeftSide = ({ currentType, course, handleGetCourse }: 
       await updateCourseStatus({
         courseId: course.id,
         status: CourseStatus.REJECTED,
+        reason: reasonReject,
       })
     }
     handleGetCourse()
@@ -155,9 +156,7 @@ const InstructorCourseEditLeftSide = ({ currentType, course, handleGetCourse }: 
             </CustomButton>
           </Grid>
           <Grid item marginLeft="10px">
-            <CustomButton onClick={() => handleApprovalOrReject(CourseStatus.REJECTED)}>
-              Từ chối
-            </CustomButton>
+            <CustomButton onClick={() => setOpenReject(true)}>Từ chối</CustomButton>
           </Grid>
         </Grid>
       )}

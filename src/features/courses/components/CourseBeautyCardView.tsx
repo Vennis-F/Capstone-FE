@@ -10,6 +10,7 @@ import {
 } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
+import { getImage } from 'features/image/components/apis'
 import CustomButton from 'libs/ui/components/CustomButton'
 import { formatCurrency } from 'libs/utils/handle-price'
 
@@ -26,14 +27,20 @@ const CourseBeautyCardView = ({ course }: Props) => {
       sx={{ maxWidth: 250, backgroundColor: '#F5F7F8', borderRadius: '10px' }}
     >
       <CardActionArea onClick={() => navigate(`/detail-course/${course.id}`)}>
-        <CardMedia component="img" height="180px" image={course.thumbnailUrl} alt="green iguana" />
+        <CardMedia component="img" height="180px" image={getImage(course.thumbnailUrl)} alt="Ảnh" />
 
         <CardContent sx={{ paddingBottom: 0 }}>
           <Typography
             gutterBottom
             variant="h6"
             component="div"
-            sx={{ fontWeight: '600', fontSize: '18px' }}
+            sx={{
+              fontWeight: '600',
+              fontSize: '18px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
           >
             {course.title}
           </Typography>

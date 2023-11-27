@@ -35,6 +35,11 @@ export const FormTextField = ({
         variant="outlined"
         type={type}
         disabled={disable}
+        sx={{
+          '& .MuiInputBase-input.Mui-disabled': {
+            WebkitTextFillColor: 'black',
+          },
+        }}
       />
     )}
   />

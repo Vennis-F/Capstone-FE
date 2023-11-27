@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Button } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import {
   DataGrid,
   GridColDef,
@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { getImage } from 'features/image/components/apis'
 
-import { CourseFullInfor, CourseStatus } from '../types'
+import { CourseFullInfor, CourseStatus, CourseStatusInfo, courseStatusInfors } from '../types'
 
 interface Props {
   courses: CourseFullInfor[]
@@ -28,7 +28,6 @@ const TableCourses = ({ courses, onEditRow }: Props) => {
     // { field: 'id', headerName: 'ID', width: 70, sortable: false, filterable: false },
     { field: 'title', headerName: 'Tiêu đề', width: 130 },
     // { field: 'price', headerName: 'Giá tiền', type: 'number', width: 130 },
-    { field: 'status', headerName: 'Trạng thái', width: 130 },
     { field: 'totalChapter', headerName: 'Số lượng bài giảng', width: 130 },
     // {
     //   field: 'publishedDate',
@@ -77,6 +76,28 @@ const TableCourses = ({ courses, onEditRow }: Props) => {
       description: 'Tên cấp độ',
       width: 130,
       valueGetter: (params: GridValueGetterParams) => `${params.row.level.name}`,
+    },
+    {
+      field: 'publishedDate',
+      headerName: 'Ngày cập nhật',
+      type: 'date',
+      width: 150,
+      valueGetter: (params: GridValueGetterParams) => new Date(params.row.publishedDate),
+    },
+    {
+      field: 'status',
+      headerName: 'Trạng thái',
+      width: 170,
+      renderCell: (params: GridRenderCellParams) => {
+        const infor = courseStatusInfors.find(
+          courseInfo => courseInfo.status === params.row.status,
+        ) as CourseStatusInfo
+        return (
+          <Typography color={infor.color} fontWeight="bold">
+            {infor.vietnamese}
+          </Typography>
+        )
+      },
     },
     {
       field: '',
@@ -135,6 +156,14 @@ const TableCourses = ({ courses, onEditRow }: Props) => {
         initialState={{
           pagination: {
             paginationModel: { page: 0, pageSize: 10 },
+          },
+          sorting: {
+            sortModel: [
+              {
+                field: 'publishedDate',
+                sort: 'desc',
+              },
+            ],
           },
         }}
         pageSizeOptions={[10, 15]}

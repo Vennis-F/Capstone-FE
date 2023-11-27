@@ -15,7 +15,10 @@ import {
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 
-import { updateChapterLecture } from 'features/chapter-lecture/api'
+import {
+  getChapterLecturesByChapterLectureId,
+  updateChapterLecture,
+} from 'features/chapter-lecture/api'
 import { ChapterLecture } from 'features/chapter-lecture/types'
 import VideoPlayer from 'libs/ui/components/VideoPlayer'
 import { secondsToMinutesString } from 'libs/utils/handle-time'
@@ -33,18 +36,34 @@ const InstructorEditChapterLecture = ({ chapterLecture }: Props) => {
   const [editVideo, setEditVideo] = useState(false)
   const [isPreviewed, setIsPreviewed] = useState(chapterLecture.isPreviewed)
   const [isExpanded, setIsExpanded] = useState(false)
+  const [currChapterLecture, setCurrChapterLecture] = useState<ChapterLecture>(chapterLecture)
+
+  const handleChangePreviewed = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean,
+  ) => {
+    await updateChapterLecture({
+      chapterLectureId: currChapterLecture.id,
+      isPreviewed: checked,
+    })
+    setIsPreviewed(checked)
+  }
+
+  const handleGetChapterLectureById = async () => {
+    setCurrChapterLecture(await getChapterLecturesByChapterLectureId(currChapterLecture.id))
+  }
 
   const renderVideoOrUpload = !editVideo ? (
     <Grid container spacing="0" margin={0}>
       <Grid item xs={2} padding="0px">
         <VideoPlayer
           // videoURL={`${process.env.REACT_APP_API_BASE_CLOUD_URL}/video?id=${chapterLecture.video}`}
-          videoURL={getVideo(chapterLecture.video)}
+          videoURL={getVideo(currChapterLecture.video)}
         />
       </Grid>
       <Grid item xs={7} padding="0px" marginLeft="10px">
         <Box>
-          <Typography>{secondsToMinutesString(chapterLecture.totalContentLength)}</Typography>
+          <Typography>{secondsToMinutesString(currChapterLecture.totalContentLength)}</Typography>
           <Typography>mp4</Typography>
         </Box>
       </Grid>
@@ -68,27 +87,23 @@ const InstructorEditChapterLecture = ({ chapterLecture }: Props) => {
     </Grid>
   ) : (
     <>
-      <InstructorUploadChapterLectureVideo chapterLecture={chapterLecture} />
-      {editVideo && chapterLecture.video && (
-        <Button onClick={() => setEditVideo(false)}>Trở về</Button>
+      <InstructorUploadChapterLectureVideo chapterLecture={currChapterLecture} />
+      {editVideo && currChapterLecture.video && (
+        <Button
+          onClick={() => {
+            setEditVideo(false)
+            handleGetChapterLectureById()
+          }}
+        >
+          Trở về
+        </Button>
       )}
     </>
   )
 
-  const handleChangePreviewed = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-    checked: boolean,
-  ) => {
-    await updateChapterLecture({
-      chapterLectureId: chapterLecture.id,
-      isPreviewed: checked,
-    })
-    setIsPreviewed(checked)
-  }
-
   useEffect(() => {
-    setEditVideo(!chapterLecture.video)
-  }, [chapterLecture.video])
+    setEditVideo(!currChapterLecture.video)
+  }, [currChapterLecture.video])
 
   return (
     <Accordion
@@ -102,10 +117,10 @@ const InstructorEditChapterLecture = ({ chapterLecture }: Props) => {
       >
         <Grid container spacing="1" margin={0}>
           <Grid item xs={2} padding="0px">
-            Bài giảng {chapterLecture.index}:
+            Bài giảng {currChapterLecture.index}:
           </Grid>
           <Grid item xs={5}>
-            {chapterLecture.title}
+            {currChapterLecture.title}
           </Grid>
           <Grid item xs={2}></Grid>
           <Grid item xs={3}>

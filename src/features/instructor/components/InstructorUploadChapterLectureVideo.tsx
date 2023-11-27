@@ -56,7 +56,7 @@ const InstructorUploadChapterLectureVideo = ({ chapterLecture }: Props) => {
         Chọn video bài giảng
       </Typography>
       <input
-        accept="video/*"
+        accept="video/mp4"
         style={{ display: 'none' }}
         id={`upload-video-${chapterLecture.id}`}
         type="file"

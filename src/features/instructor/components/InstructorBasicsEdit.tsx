@@ -30,6 +30,7 @@ const InstructorBasicsEdit = ({ currentCourse, isEditable }: Props) => {
     const levelsRes = await getLevels('true')
     const categoriesRes = await getCategories('true')
     const courseRes = await getCourseById(currentCourse.id)
+    console.log(courseRes)
     setLevels(levelsRes)
     setCategories(categoriesRes)
     setCourse(courseRes)

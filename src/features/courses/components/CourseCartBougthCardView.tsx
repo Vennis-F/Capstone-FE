@@ -19,6 +19,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useCartService } from 'features/cart/hooks'
+import { getImage } from 'features/image/components/apis'
 import { checkPromotionCourseApply } from 'features/promotion/api'
 import { PromotionCourse } from 'features/promotion/types'
 import CustomButton from 'libs/ui/components/CustomButton'
@@ -96,7 +97,11 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
 
   return (
     <Card sx={{ width: '100%', position: 'absolute', top: 0, right: 0 }}>
-      <CardMedia sx={{ height: 200 }} image={courseDetail.thumbnailUrl} title="green iguana" />
+      <CardMedia
+        sx={{ height: 200 }}
+        image={getImage(courseDetail.thumbnailUrl)}
+        title="green iguana"
+      />
 
       <CardContent sx={{ padding: '20px', paddingBottom: '10px' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>

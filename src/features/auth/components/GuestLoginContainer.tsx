@@ -67,6 +67,7 @@ export const GuestLoginContainer = () => {
                 guessLoginFormInput: data,
                 callbackFail: (message: string) => {
                   toastError({ message })
+                  // console.log()
                 },
                 callbackSuccess: (role: UserRole) => {
                   toastSuccess({ message: 'Đăng nhập thành công' })
@@ -88,7 +89,10 @@ export const GuestLoginContainer = () => {
           }}
         >
           {/* <Link sx={{ color: 'black', fontSize: '14px', cursor: 'pointer' }}>Quên mật khẩu?</Link> */}
-          <Link sx={{ color: 'black', fontSize: '14px', cursor: 'pointer' }} onClick={()=>navigate("/guest-signup")}>
+          <Link
+            sx={{ color: 'black', fontSize: '14px', cursor: 'pointer' }}
+            onClick={() => navigate('/guest-signup')}
+          >
             Chưa có tài khoản? Đăng ký
           </Link>
         </Box>

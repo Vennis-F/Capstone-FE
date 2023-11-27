@@ -1,9 +1,9 @@
 import PostManageContainer from 'features/post/components/PostManageContainer'
 
-const AdminManageUserPage = () => (
+const AdminManageCustomerPage = () => (
   <>
     <PostManageContainer />
   </>
 )
 
-export default AdminManageUserPage
+export default AdminManageCustomerPage

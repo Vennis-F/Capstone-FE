@@ -9,9 +9,12 @@ import {
   CreateCourseByInstructorBodyRequest,
   GetCoursesByInstructorBodyRequest,
   GetCoursesByInstructorResponse,
+  InstructorFilterResponse,
+  InstructorStatus,
   UpdateBankForInstructorBodyRequest,
   UpdateCourseByInstructorBodyRequest,
   UpdatePriceCourseByInstructorBodyRequest,
+  UpdateStatusInstructorByAdminBodyRequest,
 } from '../types'
 
 const api = makeApi(`${Env.API_BASE_URL}`)
@@ -47,3 +50,15 @@ export const getListBanks = (): Promise<BankListResponse> =>
 
 export const uploadCertifcateForInstructor = (email: string, body: any): Promise<UploadStatus> =>
   api.post(`${INSTRUCTOR_BASE_URL}/certifications/upload?email=${email}`, body)
+
+export const getInstructorsByAdmin = (
+  status?: InstructorStatus,
+): Promise<InstructorFilterResponse[]> =>
+  status ? api.get(`${INSTRUCTOR_BASE_URL}?status=${status}`) : api.get(`${INSTRUCTOR_BASE_URL}`)
+
+export const getInstructorByIdByAdmin = (instructorId: string): Promise<InstructorFilterResponse> =>
+  api.get(`${INSTRUCTOR_BASE_URL}/${instructorId}`)
+
+export const updateInstructorStatusByAdmin = (
+  body: UpdateStatusInstructorByAdminBodyRequest,
+): Promise<void> => api.put(`${INSTRUCTOR_BASE_URL}/status/set`, body)
