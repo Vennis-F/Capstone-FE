@@ -144,7 +144,7 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
           <CustomButton onClick={handleAddCartItem}>Thêm vào giỏ hàng</CustomButton>
         )}
 
-        <Button
+        {/* <Button
           variant="outlined"
           disableElevation
           sx={{
@@ -159,7 +159,7 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
           }}
         >
           Mua ngay
-        </Button>
+        </Button> */}
 
         <Typography
           variant="body2"
@@ -188,7 +188,7 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
             color="text.secondary"
             sx={{ textAlign: 'center', marginLeft: '18px' }}
           >
-            {courseDetail.totalLength} giờ video theo yêu cầu
+            {Math.floor(courseDetail.totalLength / 60 / 60)} giờ video theo yêu cầu
           </Typography>
         </Box>
 

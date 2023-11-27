@@ -23,3 +23,9 @@ export const getProfileUser = (): Promise<UserFilterResponse> => api.get(`${USER
 
 export const uploadAvatarUser = (body: any): Promise<void> =>
   api.post(`${USER_BASE_URL}/profile/avatar`, body)
+
+export const getCustomersByAdmin = (): Promise<UserFilterResponse[]> =>
+  api.get(`${USER_BASE_URL}/customer/list`)
+
+export const getCustomersByIdByAdmin = (customerId: string): Promise<UserFilterResponse> =>
+  api.get(`${USER_BASE_URL}/customer/${customerId}`)

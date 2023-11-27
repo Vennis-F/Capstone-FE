@@ -97,12 +97,12 @@ const CustomerOrderDetailContainer = ({ orderId }: Props) => {
                   <Typography variant="h5" sx={{ fontWeight: '600', marginBottom: '10px' }}>
                     Thông tin giao dịch ngân hàng
                   </Typography>
-                  <Typography fontWeight="bold">
+                  {/* <Typography fontWeight="bold">
                     Mã số giao dịch ngân hàng:
                     <Typography component="span" marginLeft="10px" color="GrayText">
                       {order.transaction.bankTranNo}
                     </Typography>
-                  </Typography>
+                  </Typography> */}
                   <Typography fontWeight="bold">
                     Thanh toán thông qua:
                     <Typography component="span" marginLeft="10px" color="GrayText">

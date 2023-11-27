@@ -7,14 +7,16 @@ type Props = {
   children: React.ReactNode
   sxCustom?: SxProps
   size?: string
+  disable?: boolean
 }
 
-const CustomButton = ({ onClick, children, sxCustom, size }: Props) => (
+const CustomButton = ({ onClick, children, sxCustom, size, disable }: Props) => (
   <Button
     variant="contained"
     disableElevation
     // eslint-disable-next-line
     size={size as any}
+    disabled={disable === undefined ? undefined : disable}
     sx={{
       backgroundColor: MainColor.RED_500,
       fontWeight: '600',

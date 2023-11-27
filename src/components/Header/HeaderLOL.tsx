@@ -29,6 +29,7 @@ import useAuthService from 'features/auth/hook/useAuthService'
 import { useCartService } from 'features/cart/hooks'
 import { getCoursesBySearch } from 'features/courses/api'
 import { Course, GetCoursesBySearchRequest, SortFieldCourse } from 'features/courses/types'
+import { getImage } from 'features/image/components/apis'
 import { MainColor } from 'libs/const/color'
 import ButtonDropdownHeader from 'libs/ui/components/ButtonDropdownHeader'
 import ButtonLinkContain from 'libs/ui/components/ButtonLinkContain'
@@ -216,7 +217,7 @@ const HeaderLOL = () => {
                       <ListItem disablePadding key={course.id}>
                         <ListItemButton onClick={() => navigate(`/detail-course/${course.id}`)}>
                           <Image
-                            src={'https://img-c.udemycdn.com/course/100x100/5152322_9a81_3.jpg'}
+                            src={getImage(course.thumbnailUrl)}
                             style={{ height: '40px', width: '40px', padding: 0 }}
                             imageStyle={{ height: '40px', width: '40px' }}
                           />

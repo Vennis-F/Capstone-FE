@@ -20,9 +20,15 @@ interface Props {
   instructors: InstructorFilterResponse[]
   onApproveOrRejectInstructor: (InstructorId: string, status: InstructorStatus) => void
   onEditRow: (id: string) => void
+  onPaymentInstructor: (instructorId: string) => void
 }
 
-const TableInstructors = ({ instructors, onEditRow, onApproveOrRejectInstructor }: Props) => {
+const TableInstructors = ({
+  instructors,
+  onEditRow,
+  onApproveOrRejectInstructor,
+  onPaymentInstructor,
+}: Props) => {
   const columns: GridColDef[] = [
     // { field: 'id', headerName: 'ID', width: 70, sortable: false, filterable: false },
     {
@@ -52,11 +58,11 @@ const TableInstructors = ({ instructors, onEditRow, onApproveOrRejectInstructor 
     //   sortable: false,
     //   filterable: false,
     // },
-    {
-      field: 'phoneNumber',
-      headerName: 'Số điện thoại',
-      width: 130,
-    },
+    // {
+    //   field: 'phoneNumber',
+    //   headerName: 'Số điện thoại',
+    //   width: 130,
+    // },
     {
       field: 'active',
       headerName: 'Hoạt động',
@@ -96,7 +102,7 @@ const TableInstructors = ({ instructors, onEditRow, onApproveOrRejectInstructor 
       field: 'action2',
       headerName: 'Xét duyệt',
       description: 'Chấp nhận hoặc loại bỏ',
-      width: 250,
+      width: 200,
       renderCell: (params: GridRenderCellParams) => {
         const InstructorId = params.row.id
         return (
@@ -123,6 +129,32 @@ const TableInstructors = ({ instructors, onEditRow, onApproveOrRejectInstructor 
             >
               Loại bỏ
             </Button>
+          </div>
+        )
+      },
+      sortable: false,
+      filterable: false,
+    },
+    {
+      field: 'action3',
+      headerName: 'Thanh toán',
+      description: 'Thanh toán cho giảng viên',
+      width: 140,
+      renderCell: (params: GridRenderCellParams) => {
+        const instructorId = params.row.id
+        return (
+          <div>
+            {/* {params.row.status === InstructorStatus.Pending && ( */}
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              onClick={() => onPaymentInstructor(instructorId)} // Thay handleEdit bằng hàm xử lý sự kiện edit
+              sx={{ marginRight: '10px' }}
+            >
+              Thanh toán
+            </Button>
+            {/* )} */}
           </div>
         )
       },

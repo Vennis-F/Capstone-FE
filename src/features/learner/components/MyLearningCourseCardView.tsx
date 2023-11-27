@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { CourseFilterResponse, CourseLearnerFilterResponse } from 'features/courses/types'
+import { getImage } from 'features/image/components/apis'
 import ReadMoreText from 'libs/ui/components/ReadMoreText'
 
 interface Props {
@@ -46,7 +47,7 @@ export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
             <CardMedia
               component="img"
               height="140"
-              image={learningCourse.thumbnailUrl}
+              image={getImage(learningCourse.thumbnailUrl)}
               alt="Hình ảnh"
             />
             <CardContent sx={{ height: '50px' }}>

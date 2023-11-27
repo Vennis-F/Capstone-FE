@@ -107,7 +107,7 @@ const Row = (props: { order: Order }) => {
                         </TableCell>
                         <TableCell sx={{ width: '20%' }} />
                         <TableCell sx={{ width: '15%', color: '#373a3d' }} align="right">
-                          ₫{convertPrice}
+                          ₫{formatCurrency(orderDetail.priceAfterPromotion)}
                         </TableCell>
                         <TableCell sx={{ width: '15%' }} />
                         <TableCell sx={{ width: '15%' }} />

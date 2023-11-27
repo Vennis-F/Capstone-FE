@@ -16,6 +16,7 @@ import {
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { getImage } from 'features/image/components/apis'
 import DialogBinaryQuestion from 'libs/ui/components/DialogBinaryQuestion'
 import ReadMoreText from 'libs/ui/components/ReadMoreText'
 import { formatCurrency } from 'libs/utils/handle-price'
@@ -49,12 +50,12 @@ const CartItemCardView = ({ cartItem: { course, id, promotionCourse } }: Props) 
       <Card sx={{ display: 'flex' }}>
         <CardActionArea
           sx={{ display: 'flex', alignItems: 'stretch' }}
-          onClick={() => navigate('/detail-course', { state: { id: course.id } })}
+          onClick={() => navigate(`/detail-course/${course.id}`)}
         >
           <CardMedia
             component="img"
             sx={{ width: 151, flex: 1 }}
-            image={course.thumbnailUrl}
+            image={getImage(course.thumbnailUrl)}
             alt="Hình ảnh"
           />
           <Box sx={{ flex: 5, display: 'flex', flexDirection: 'column' }}>

@@ -1,8 +1,8 @@
-import PostManageContainer from 'features/post/components/PostManageContainer'
+import CustomerManageContainer from 'features/user/components/CustomerManageContainer'
 
 const AdminManageCustomerPage = () => (
   <>
-    <PostManageContainer />
+    <CustomerManageContainer />
   </>
 )
 
