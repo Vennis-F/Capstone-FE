@@ -37,7 +37,7 @@ const CartCheckoutOutContainer = () => {
         returnUrl: `${
           process.env.NODE_ENV === 'development'
             ? 'http://localhost:3001'
-            : process.env.REACT_APP_API_BASE_CLOUD_URL
+            : 'https://vecungtreem.online/'
         }/payment/check`,
       })
       console.log('INHERE', paymentURL)
