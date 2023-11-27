@@ -1,6 +1,7 @@
 import AccessibilityIcon from '@mui/icons-material/Accessibility'
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
-import BarChartIcon from '@mui/icons-material/BarChart';
+import BarChartIcon from '@mui/icons-material/BarChart'
 import BrushIcon from '@mui/icons-material/Brush'
 import CastForEducationIcon from '@mui/icons-material/CastForEducation'
 import CategoryIcon from '@mui/icons-material/Category'
@@ -48,8 +49,9 @@ interface Route {
 }
 
 const routesInstructor = [
+  { path: '/instructor/dashboard', icon: <BarChartIcon />, title: 'Thống kê' },
   { path: '/instructor/homepage', icon: <VideoSettingsIcon />, title: 'Khóa học' },
-  { path: '/instructor/dashboard', icon: <BarChartIcon />, title: 'Thống kê'  },
+  { path: '/instructor/transaction', icon: <AccountBalanceIcon />, title: 'Danh sách thanh toán' },
 ]
 
 const routesStaff = [

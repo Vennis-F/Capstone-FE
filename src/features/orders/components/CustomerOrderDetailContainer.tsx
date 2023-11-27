@@ -97,12 +97,12 @@ const CustomerOrderDetailContainer = ({ orderId }: Props) => {
                   <Typography variant="h5" sx={{ fontWeight: '600', marginBottom: '10px' }}>
                     Thông tin giao dịch ngân hàng
                   </Typography>
-                  {/* <Typography fontWeight="bold">
+                  <Typography fontWeight="bold">
                     Mã số giao dịch ngân hàng:
                     <Typography component="span" marginLeft="10px" color="GrayText">
-                      {order.transaction.bankTranNo}
+                      {order?.transaction?.bankTranNo}
                     </Typography>
-                  </Typography> */}
+                  </Typography>
                   <Typography fontWeight="bold">
                     Thanh toán thông qua:
                     <Typography component="span" marginLeft="10px" color="GrayText">
@@ -118,13 +118,13 @@ const CustomerOrderDetailContainer = ({ orderId }: Props) => {
                   <Typography fontWeight="bold">
                     Thanh toán bằng ngân hàng:
                     <Typography component="span" marginLeft="10px" color="GrayText">
-                      {order.transaction.bankCode}
+                      {order?.transaction?.bankCode}
                     </Typography>
                   </Typography>
                   <Typography fontWeight="bold">
                     Trạng thái:
                     <Typography component="span" marginLeft="10px">
-                      {order.transaction.status}
+                      {order?.transaction?.status}
                     </Typography>
                   </Typography>
                 </Grid>

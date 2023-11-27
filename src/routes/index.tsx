@@ -35,6 +35,7 @@ import InstructorCourseEditPage from 'pages/instructor/InstructorCourseEditPage'
 import InstructorCreateCoursePage from 'pages/instructor/InstructorCreateCoursePage'
 import InstructorDashboardAnalyst from 'pages/instructor/InstructorDashboardAnalyst'
 import InstructorHomepagePage from 'pages/instructor/InstructorHomepagePage'
+import InstructorTransactionDetailPage from 'pages/instructor/InstructorTransactionDetailPage'
 import ListCoursePage from 'pages/ListCoursePage'
 import MyLearningPage from 'pages/MyLearningPage'
 import StaffManageContestPage from 'pages/staff/StaffManageContestPage'
@@ -44,7 +45,6 @@ import StaffManageReportsPage from 'pages/staff/StaffManageReportsPage'
 import { UserRole } from 'types'
 
 import { PrivateRoute } from '../components/Common/PrivateRoute'
-
 
 const HomePage = React.lazy(() => import('pages/HomePage'))
 const AboutPage = React.lazy(() => import('pages/AboutPage'))
@@ -90,8 +90,9 @@ const AppRoutes = () => (
         <Route path="/instructor" element={<PrivateRoute roles={[UserRole.INSTRUCTOR]} />}>
           <Route element={<StaffLayout />}>
             <Route path="/instructor/homepage" element={<InstructorHomepagePage />} />
-            <Route path="/instructor/dashboard" element={<InstructorDashboardAnalyst/>} />
+            <Route path="/instructor/dashboard" element={<InstructorDashboardAnalyst />} />
             <Route path="/instructor/course/create" element={<InstructorCreateCoursePage />} />
+            <Route path="/instructor/transaction" element={<InstructorTransactionDetailPage />} />
             {/* <Route
                 path="/course/edit/:courseId/manage/:type"
                 element={<InstructorCourseEditPage />}
