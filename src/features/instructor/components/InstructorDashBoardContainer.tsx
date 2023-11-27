@@ -1,42 +1,38 @@
 import { Box, Container,} from '@mui/material';
 import React from "react";
 
+import { decodeToken, getAccessToken } from 'libs/utils/handle-token';
+
 // interface DashboardProps {
 //   userId: string;
 // }
 
-const DashboardAnalsys = () => (
-  <Box>
-    <Container>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <h2 className="title">Admin Dashboard</h2>
-      </Box>
-      <Box sx={{ width: 1200, height: 1000}}>
-        <iframe 
-          width="100%" 
-          height="1000" 
-          src="https://lookerstudio.google.com/embed/reporting/c1cab843-3e27-4ffa-83a8-355dd08503e3/page/p_zh15e9hnbd" 
-          title="Admin Dashboard"
-        ></iframe>
-      </Box>
-    </Container>
-  </Box>
-);
+const InstructorDashboardContainer = () => {
+  const token = getAccessToken
+  if (!token) return null
+  const instructor = decodeToken(getAccessToken() as string)
+  const instructorId = instructor.id;
+  return (
+    <Box>
+      <Container>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <h2 className="title">Bảng Thống kê của</h2>
+        </Box>
+        <Box sx={{ width: 1200, height: 1000}}>
+          <iframe 
+            width="100%" 
+            height="1000" 
+            src={`https://lookerstudio.google.com/embed/reporting/e3de8617-db03-45e8-a67c-b39094bb3049/page/4VDGB?params=%7B"ds27.instructor_id":"${instructorId}"%7D`}
+            title="Instructor Dashboard"
+          ></iframe>
+        </Box>
+      </Container>
+    </Box>
+  )
 
-export default DashboardAnalsys;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
+export default InstructorDashboardContainer;
 
 
 

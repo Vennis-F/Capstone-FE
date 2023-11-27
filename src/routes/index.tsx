@@ -28,6 +28,7 @@ import GuestLoginPage from 'pages/GuestLoginPage'
 import GuestSingupPage from 'pages/GuestSingupPage'
 import InstructorCourseEditPage from 'pages/instructor/InstructorCourseEditPage'
 import InstructorCreateCoursePage from 'pages/instructor/InstructorCreateCoursePage'
+import InstructorDashboardAnalyst from 'pages/instructor/InstructorDashboardAnalyst'
 import InstructorHomepagePage from 'pages/instructor/InstructorHomepagePage'
 import ListCoursePage from 'pages/ListCoursePage'
 import MyLearningPage from 'pages/MyLearningPage'
@@ -38,6 +39,7 @@ import StaffManageReportsPage from 'pages/staff/StaffManageReportsPage'
 import { UserRole } from 'types'
 
 import { PrivateRoute } from '../components/Common/PrivateRoute'
+
 
 const HomePage = React.lazy(() => import('pages/HomePage'))
 const AboutPage = React.lazy(() => import('pages/AboutPage'))
@@ -77,6 +79,7 @@ const AppRoutes = () => (
         <Route path="/instructor" element={<PrivateRoute roles={[UserRole.INSTRUCTOR]} />}>
           <Route element={<StaffLayout />}>
             <Route path="/instructor/homepage" element={<InstructorHomepagePage />} />
+            <Route path="/instructor/dashboard" element={<InstructorDashboardAnalyst/>} />
             <Route path="/instructor/course/create" element={<InstructorCreateCoursePage />} />
             {/* <Route
                 path="/course/edit/:courseId/manage/:type"
