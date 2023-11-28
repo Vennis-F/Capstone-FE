@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Typography } from '@mui/material'
+import { Box, CircularProgress, Container, Grid, Typography } from '@mui/material'
 import Image from 'material-ui-image'
 import { useState, useEffect } from 'react'
 
@@ -21,12 +21,15 @@ const CartCheckoutOutContainer = () => {
     totalPriceAfterPromotion: 0,
     totalPriceDiscount: 0,
   })
+  const [isLoading, setIsLoading] = useState(false)
 
   const getCartPrice = async () => {
     const response = await getCartTotalPrice()
     setCartPrice(response)
   }
+
   const handleCompleteCheckout = async () => {
+    setIsLoading(true)
     try {
       const order = await createOrder()
       const paymentURL = await createPaymentURL({
@@ -45,6 +48,7 @@ const CartCheckoutOutContainer = () => {
     } catch (error) {
       console.log('[handleCompleteCheckout_in_CartCheckoutContainer]', error)
     }
+    setIsLoading(false)
   }
 
   useEffect(() => {
@@ -103,8 +107,8 @@ const CartCheckoutOutContainer = () => {
             >
               Bằng cách hoàn tất giao dịch mua của bạn, bạn đồng ý với các Điều khoản Dịch vụ này.
             </Typography>
-            <CustomButton size="large" onClick={handleCompleteCheckout}>
-              Hoàn thành thanh toán
+            <CustomButton disable={isLoading} size="large" onClick={handleCompleteCheckout}>
+              {isLoading ? <CircularProgress size="26px" /> : 'Hoàn thành thanh toán'}
             </CustomButton>
             <Typography
               variant="body2"

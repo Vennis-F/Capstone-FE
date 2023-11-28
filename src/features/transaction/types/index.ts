@@ -29,5 +29,16 @@ export type Transaction = {
   bankTranNo: string
   cardType: string
   insertedDate: Date
-  status: string
+  status: TransactionStatus
+}
+
+export const convertTransactionStatus = (status: TransactionStatus) => {
+  switch (status) {
+    case TransactionStatus.Success:
+      return { color: '#008000', vietnamse: 'Thành công' }
+    case TransactionStatus.Fail:
+      return { color: '#FF0000', vietnamse: 'Thất bại' }
+    default:
+      return { color: '#808080', vietnamse: 'Unkown' }
+  }
 }

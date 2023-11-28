@@ -25,7 +25,9 @@ export const getCourseById = (id: string): Promise<CourseFullInfor> =>
 export const getCoursesDetailById = (id: string): Promise<GetCourseDetailResponse> =>
   api.get(`${COURSE_BASE_URL}/detail/${id}`)
 
-export const checkCourseIsOwnedByCourseId = (id: string): Promise<{ status: boolean }> =>
+export const checkCourseIsOwnedByCourseId = (
+  id: string,
+): Promise<{ status: boolean; isRefund: boolean }> =>
   api.get(`${COURSE_BASE_URL}/order/check-owned/${id}`)
 
 export const getCourseByCustomer = (): Promise<CourseFilterResponse[]> =>

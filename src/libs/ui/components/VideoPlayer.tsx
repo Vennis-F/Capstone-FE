@@ -50,7 +50,7 @@ const VideoPlayer = ({
 
   return (
     <ReactPlayer
-      className="first-step"
+      className="third-step"
       controls={true}
       ref={playerRef}
       url={videoURL}

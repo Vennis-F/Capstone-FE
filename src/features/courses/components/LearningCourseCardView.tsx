@@ -11,6 +11,7 @@ import {
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 
+import { getImage } from 'features/image/components/apis'
 import { getLearnerIsLearningCourseByCourseId, updateLearnerCourse } from 'features/learner/api'
 import { LearnerFilterResponse } from 'features/learner/types'
 import DialogBinaryQuestion from 'libs/ui/components/DialogBinaryQuestion'
@@ -85,7 +86,7 @@ export const LearningCourseCardView = ({
           <CardMedia
             component="img"
             height="140"
-            image={learningCourse.thumbnailUrl}
+            image={getImage(learningCourse.thumbnailUrl)}
             alt="Hình ảnh"
           />
           <CardContent sx={{ height: '90px' }}>

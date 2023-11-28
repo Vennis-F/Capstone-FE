@@ -36,7 +36,7 @@ export const MyLearningContainer = () => {
         backgroundImage: `url("https://img4.thuthuatphanmem.vn/uploads/2020/07/05/background-vui-nhon-cho-tre-em_035755170.jpg")`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
-        height: '100vh',
+        height: '150vh',
         margin: '-50px 0',
       }}
     >

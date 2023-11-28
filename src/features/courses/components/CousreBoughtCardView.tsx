@@ -34,7 +34,7 @@ const CousreBoughtCardView = ({ course }: Props) => {
         <CardActionArea sx={{ display: 'flex', height: '150px' }}>
           <CardMedia
             component="img"
-            sx={{ flex: 1, width: '240px', height: '135px' }}
+            sx={{ flex: 1, width: '240px !important' }}
             //   image={course.thumbnailUrl}
             image={getImage(course.thumbnailUrl)}
             alt="Ảnh khóa học"
@@ -62,14 +62,14 @@ const CousreBoughtCardView = ({ course }: Props) => {
                   {course.ratedStar}
                 </Typography>
                 <Rating name="read-only" value={course.ratedStar} readOnly />
-                <Typography
-                  sx={{ marginLeft: '5px', fontSize: '14px', color: 'gray' }}
-                >{`(${course.totalBought})`}</Typography>
+                <Typography sx={{ marginLeft: '5px', fontSize: '14px', color: 'gray' }}>{`(${
+                  course.totalBought ? course.totalBought : 0
+                })`}</Typography>
               </Box>
               <Box>
                 <Typography variant="subtitle2" color="text.secondary" component="span">
                   {`${formatSecondToMinute(course.totalLength)} giờ học - ${
-                    course.totalChapter
+                    course.totalChapter ? course.totalChapter : 0
                   } bài giảng - ${course.level}`}
                 </Typography>
               </Box>

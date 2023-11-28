@@ -47,14 +47,14 @@ const CartItemCardView = ({ cartItem: { course, id, promotionCourse } }: Props) 
 
   return (
     <>
-      <Card sx={{ display: 'flex' }}>
+      <Card sx={{ display: 'flex', height: 151 }}>
         <CardActionArea
           sx={{ display: 'flex', alignItems: 'stretch' }}
           onClick={() => navigate(`/detail-course/${course.id}`)}
         >
           <CardMedia
             component="img"
-            sx={{ width: 151, flex: 1 }}
+            sx={{ width: '151px', height: '100%' }}
             image={getImage(course.thumbnailUrl)}
             alt="Hình ảnh"
           />

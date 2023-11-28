@@ -91,6 +91,14 @@ const TableCourseReport = ({ courseReports }: Props) => {
           pagination: {
             paginationModel: { page: 0, pageSize: 10 },
           },
+          sorting: {
+            sortModel: [
+              {
+                field: 'insertedDate',
+                sort: 'desc',
+              },
+            ],
+          },
         }}
         pageSizeOptions={[10, 15]}
         density="comfortable"

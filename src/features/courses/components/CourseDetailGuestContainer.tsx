@@ -4,19 +4,34 @@ import GrainIcon from '@mui/icons-material/Grain'
 import HomeIcon from '@mui/icons-material/Home'
 import StarIcon from '@mui/icons-material/Star'
 import WhatshotIcon from '@mui/icons-material/Whatshot'
-import { Box, Container, Typography, Rating, Card, CardHeader, CardContent } from '@mui/material'
+import {
+  Box,
+  Container,
+  Typography,
+  Rating,
+  Card,
+  CardHeader,
+  CardContent,
+  Stack,
+  Pagination,
+} from '@mui/material'
 import Breadcrumbs from '@mui/material/Breadcrumbs'
 import Link from '@mui/material/Link'
 import DOMPurify from 'dompurify'
 import Parser from 'html-react-parser'
+import RenderImage from 'material-ui-image'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { getChapterLecturesByCourseId } from 'features/chapter-lecture/api'
 import { ChapterLecture } from 'features/chapter-lecture/types'
+import { getCoursesFeedback } from 'features/course-feedback/apis'
+import { CourseFeedbackFilterResponse } from 'features/course-feedback/types'
 import { MainColor } from 'libs/const/color'
 import ReadMoreText from 'libs/ui/components/ReadMoreText'
+import BackdropCustom from 'libs/ui/custom-components/BackdropCustom'
 import { getStringDayMonthYear } from 'libs/utils/handle-date'
+import { OrderType } from 'types'
 
 import { getCoursesDetailById } from '../api'
 import { GetCourseDetailResponse } from '../types'
@@ -32,262 +47,234 @@ export const CouresDetailGuestContainer = ({ id }: CouresDetailGuestContainerPro
   const [courseDetail, setCourseDetail] = useState<GetCourseDetailResponse | null>(null)
   const [chapterLectures, setChapterLectures] = useState<ChapterLecture[]>([])
   const navigate = useNavigate()
-
-  const currentCourse = {
-    id,
-    title: 'Linux for Network Engineers: Practical Linux with GNS3',
-    rating: 4.6,
-    numsOfEnroll: 189535,
-    author: 'David Bombal',
-    updatedAt: '1/2023',
-    target: '',
-    description: `It is important for you as a network engineer to learn Linux!\n
-Why? There are many reasons including:\n
-1) A lot of network operating systems are based on Linux, or have a Linux shell you can access, or use Linux type commands. I'll show you an example using Cisco, Arista and Cumulus Linux.\n
-2) Network Automation tools such as Ansible don't run the command node on Windows. You are probably going to use Linux with tools such as Ansible, Netmkio, NAPALM and other network automation tools.
-\n
-3) SDN controllers such as OpenDaylight, ONOS, RYU and APIC-EM run on Linux.You will find that many SDN tools require Linux.
-\n
-4) DevOps tools such as git work best with Linux.
-\n
-5) IoT devices typically run Linux
-\n
-6) A new breed of network devices from companies like Facebook, Microsoft and Cumulus Linux use Linux.
-\n
-There are even more reasons, but make sure you don't get left behind! You as a network engineer start learning Linux.
-
-This course teaches foundational Linux knowledge without assuming that you have any Linux experience. Learn practically with GNS3!
-
-Learn how to configure Linux networking, how to create users and assign permissions, how to install and run Linux services such as DNS and DHCP.
-
-The course uses various GNS3 topologies with devices such as:
-
-1) Linux Docker containers
-\n
-2) Linux GNS3 QEMU virtual machines
-\n
-3) Traditional Linux virtual mahcines
-\n
-4) Network devices - you could use Cisco, Arista, Cumulus Linux or others
-\n
-Do you want to see something else added to the course? Just let me know. I like to get your feedback on ways I can improve the course and add more content that you think is relevant.
-\n
-Networking is changing. Make sure you keep up to date!
-\n
-All the very best!
-\n
-David`,
-    requirement: 'CCNA or basic networking knowledge',
-    comments: [
-      {
-        id: 1,
-        user: { username: 'Nguyen Hoang Anh' },
-        ratedStar: 4,
-        updatedDate: '4 months ago',
-        description: `This course has a very vast knowledge of the backend stuff. However, it was a little difficult to understand the voice in English I'm not sure why maybe because I'm from India.`,
-      },
-      {
-        id: 2,
-        user: { username: 'Nguyen Hoang Loc' },
-        ratedStar: 4,
-        updatedDate: '1 months ago',
-        description: `Accent is a bit rough and the volume can be a bit low, but the guy explains some complicated stuff very well. I appreciate this course. It gets a lot better once you get into the AWS stuffs.`,
-      },
-      {
-        id: 3,
-        user: { username: 'Nguyen Phuoc Tho' },
-        ratedStar: 4,
-        updatedDate: '2 months ago',
-        description: `Top shelf course - this course has amazing value. It covers some very advance topics with databases and gRPC. Recommend for anyone who is looking to do a monster project that incorporates a ton of technology.`,
-      },
-      {
-        id: 4,
-        user: { username: 'Lam Hung Nguyen' },
-        ratedStar: 4,
-        updatedDate: '3 months ago',
-        description: `Nice, great and too much useful guidelines, deeply knowledge in the course, many thanks the author @phamlequang, hope you can bring more interesting topics like GraphQL, API proxy, WebHook/WebSocket or even a MongoDB implementation in your future courses!`,
-      },
-    ],
-  }
+  const [isLoading, setIsLoading] = useState(false)
+  const [page, setPage] = useState(1)
+  const [pageCount, setPageCount] = useState(0)
+  const [courseFeedbacks, setCourseFeedbacks] = useState<CourseFeedbackFilterResponse[]>([])
 
   const getCourseDetail = async (courseId: string) => {
+    setIsLoading(true)
     try {
       const response = await getCoursesDetailById(courseId)
+      setCourseDetail(response)
+
       const chapterLecturesRes = await getChapterLecturesByCourseId(courseId, true)
       const sortedArray = chapterLecturesRes.sort((a, b) => a.index - b.index)
-      setCourseDetail(response)
       setChapterLectures(sortedArray)
+      setPage(1)
     } catch (error) {
-      throw new Error(`Cannot get detail for course by the id ${id}`)
+      console.log(`Cannot get detail for course by the id ${id}`)
     }
+    setIsLoading(false)
+  }
+
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value)
+  }
+
+  const getCourseFeedbacks = async () => {
+    const responses = await getCoursesFeedback(id, {
+      order: OrderType.DESC,
+      page,
+      take: 4,
+    })
+    setCourseFeedbacks(responses.data)
+    setPageCount(responses.meta.pageCount)
   }
 
   useEffect(() => {
     getCourseDetail(id)
   }, [id])
 
-  return courseDetail ? (
-    <>
-      <Container
-        maxWidth={false}
-        sx={{
-          backgroundColor: '#2D2F31',
-          paddingTop: '30px',
-          paddingBottom: '22px',
-          marginTop: '-50px',
-        }}
-      >
-        <Container maxWidth="lg" sx={{ display: 'flex' }}>
-          <Box sx={{ width: '70%' }}>
-            <Breadcrumbs aria-label="breadcrumb" sx={{ color: 'white', marginBottom: '10px' }}>
-              <Link
-                underline="hover"
-                sx={{ display: 'flex', alignItems: 'center', color: MainColor.YELLOW_500 }}
-                color="inherit"
-                href="/"
-              >
-                <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                Trang chủ
-              </Link>
-              <Link
-                underline="hover"
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  color: MainColor.YELLOW_500,
-                  cursor: 'pointer',
-                }}
-                color="inherit"
-                onClick={() =>
-                  navigate('/list-course', { state: { categorySearchId: courseDetail.categoryId } })
-                }
-              >
-                <WhatshotIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                {courseDetail.category}
-              </Link>
-              <Typography
-                sx={{ display: 'flex', alignItems: 'center', color: '#9c7d21' }}
-                color="text.primary"
-              >
-                <GrainIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                {courseDetail.title}
-              </Typography>
-            </Breadcrumbs>
-            <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>
-              {courseDetail?.title}
-            </Typography>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-            >
-              <Typography
-                variant="h6"
-                color="text.primary"
-                sx={{ fontWeight: 'bold', marginRight: 1, color: '#FAAF00', fontSize: '16px' }}
-              >
-                {courseDetail.ratedStar}
-              </Typography>
-              <Rating
-                name="read-only"
-                value={courseDetail.ratedStar}
-                readOnly
-                sx={{ fontSize: '16px', marginRight: '10px' }}
-              />
-              <Typography component="span" sx={{ color: 'white', fontSize: '16px' }}>
-                {courseDetail.totalBought} Học sinh
-              </Typography>
-            </Box>
-            <Typography sx={{ color: 'white', fontWeight: 'bold', marginBottom: '10px' }}>
-              Được tạo bởi
-              <Link component="button" sx={{ fontSize: '16px', marginLeft: '10px' }}>
-                {courseDetail.author}
-              </Link>
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <EventIcon sx={{ color: 'white', marginRight: '10px' }} />
-              <Typography sx={{ color: 'white' }}>
-                Cập nhật {getStringDayMonthYear(courseDetail.publishedDate)}
-              </Typography>
-            </Box>
-          </Box>
-          <Box sx={{ width: '30%', position: 'relative' }}>
-            <CourseCartBougthCardView courseDetail={courseDetail} />
-          </Box>
-        </Container>
-      </Container>
-      <Container maxWidth={false}>
-        <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
-          <Box sx={{ width: '67%' }}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: '10px' }}>
-              Nội dung khóa học
-            </Typography>
-            <ListCoursePreview chapterLectures={chapterLectures} />
-          </Box>
-        </Container>
-        <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
-          <Box sx={{ width: '67%' }}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-              Yêu cầu
-            </Typography>
-            {Parser(DOMPurify.sanitize(courseDetail.prepareMaterial as string))}
-          </Box>
-        </Container>
-        <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
-          <Box sx={{ width: '67%' }}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-              Miêu tả
-            </Typography>
-            {courseDetail.description && (
-              <ReadMoreText maxCharacterCount={400} text={courseDetail.description} />
-            )}
-          </Box>
-        </Container>
-        <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
-          <Box sx={{ width: '67%' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-              <StarIcon sx={{ color: '#FAAF00', marginRight: '10px' }} />
-              <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-                {courseDetail.ratedStar} đánh giá khóa học
-              </Typography>
-            </Box>
-            <Grid container spacing={2}>
-              {currentCourse.comments.map(comment => (
-                <Grid key={comment.id} item sm={12} md={6}>
-                  <Card sx={{ width: '100%' }}>
-                    <CardHeader
-                      avatar={<Avatar>A</Avatar>}
-                      title={comment.user.username}
-                      subheader={
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Rating
-                            name="read-only"
-                            value={comment.ratedStar}
-                            readOnly
-                            sx={{ fontSize: '16px', marginRight: '10px' }}
-                          />
-                          {comment.updatedDate}
-                        </Box>
-                      }
-                    />
-                    <CardContent>
-                      <ReadMoreText text={comment.description} maxCharacterCount={50} />
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-          </Box>
-        </Container>
-      </Container>
-    </>
+  useEffect(() => {
+    getCourseFeedbacks()
+  }, [page])
+
+  return isLoading ? (
+    <BackdropCustom open={true} />
   ) : (
     <>
-      <Container>
-        <Typography>NotFound</Typography>
-      </Container>
+      {courseDetail ? (
+        <>
+          <Container
+            maxWidth={false}
+            sx={{
+              backgroundColor: '#2D2F31',
+              paddingTop: '30px',
+              paddingBottom: '22px',
+              marginTop: '-50px',
+            }}
+          >
+            <Container maxWidth="lg" sx={{ display: 'flex' }}>
+              <Box sx={{ width: '70%' }}>
+                <Breadcrumbs aria-label="breadcrumb" sx={{ color: 'white', marginBottom: '10px' }}>
+                  <Link
+                    underline="hover"
+                    sx={{ display: 'flex', alignItems: 'center', color: MainColor.YELLOW_500 }}
+                    color="inherit"
+                    href="/"
+                  >
+                    <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+                    Trang chủ
+                  </Link>
+                  <Link
+                    underline="hover"
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      color: MainColor.YELLOW_500,
+                      cursor: 'pointer',
+                    }}
+                    color="inherit"
+                    onClick={() =>
+                      navigate('/list-course', {
+                        state: { categorySearchId: courseDetail.categoryId },
+                      })
+                    }
+                  >
+                    <WhatshotIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+                    {courseDetail.category}
+                  </Link>
+                  <Typography
+                    sx={{ display: 'flex', alignItems: 'center', color: '#9c7d21' }}
+                    color="text.primary"
+                  >
+                    <GrainIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+                    {courseDetail.title}
+                  </Typography>
+                </Breadcrumbs>
+                <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>
+                  {courseDetail?.title}
+                </Typography>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    color="text.primary"
+                    sx={{ fontWeight: 'bold', marginRight: 1, color: '#FAAF00', fontSize: '16px' }}
+                  >
+                    {courseDetail.ratedStar}
+                  </Typography>
+                  <Rating
+                    name="read-only"
+                    value={courseDetail.ratedStar}
+                    readOnly
+                    sx={{ fontSize: '16px', marginRight: '10px' }}
+                  />
+                  <Typography component="span" sx={{ color: 'white', fontSize: '16px' }}>
+                    {courseDetail.totalBought ? courseDetail.totalBought : 0} Học sinh
+                  </Typography>
+                </Box>
+                <Typography sx={{ color: 'white', fontWeight: 'bold', marginBottom: '10px' }}>
+                  Được tạo bởi
+                  <Link component="button" sx={{ fontSize: '16px', marginLeft: '10px' }}>
+                    {courseDetail.author}
+                  </Link>
+                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <EventIcon sx={{ color: 'white', marginRight: '10px' }} />
+                  <Typography sx={{ color: 'white' }}>
+                    Cập nhật {getStringDayMonthYear(courseDetail.publishedDate)}
+                  </Typography>
+                </Box>
+              </Box>
+              <Box sx={{ width: '30%', position: 'relative' }}>
+                <CourseCartBougthCardView courseDetail={courseDetail} />
+              </Box>
+            </Container>
+          </Container>
+          <Container maxWidth={false}>
+            <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
+              <Box sx={{ width: '67%' }}>
+                <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: '10px' }}>
+                  Nội dung khóa học
+                </Typography>
+                <ListCoursePreview chapterLectures={chapterLectures} />
+              </Box>
+            </Container>
+            <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
+              <Box sx={{ width: '67%' }}>
+                <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                  Yêu cầu
+                </Typography>
+                {Parser(DOMPurify.sanitize(courseDetail.prepareMaterial as string))}
+              </Box>
+            </Container>
+            <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
+              <Box sx={{ width: '67%' }}>
+                <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                  Miêu tả
+                </Typography>
+                {courseDetail.description && (
+                  <ReadMoreText maxCharacterCount={400} text={courseDetail.description} />
+                )}
+              </Box>
+            </Container>
+            <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
+              <Box sx={{ width: '67%' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                  <StarIcon sx={{ color: '#FAAF00', marginRight: '10px' }} />
+                  <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                    {courseDetail.ratedStar} đánh giá khóa học
+                  </Typography>
+                </Box>
+                <Grid container spacing={2}>
+                  {courseFeedbacks.map(comment => (
+                    <Grid key={comment.id} item sm={12} md={6}>
+                      <Card sx={{ width: '100%' }}>
+                        <CardHeader
+                          avatar={<Avatar>A</Avatar>}
+                          title={`${comment.insertedBy}`}
+                          subheader={
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                              <Rating
+                                name="read-only"
+                                value={comment.ratedStar}
+                                readOnly
+                                sx={{ fontSize: '16px', marginRight: '10px' }}
+                              />
+                              {getStringDayMonthYear(comment.updatedDate)}
+                            </Box>
+                          }
+                        />
+                        <CardContent>
+                          <ReadMoreText text={comment.description} maxCharacterCount={50} />
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+                <Box sx={{ display: 'flex', justifyContent: 'center', marginY: '40px' }}>
+                  <Stack spacing={2}>
+                    <Pagination
+                      count={pageCount}
+                      page={page}
+                      onChange={handleChange}
+                      color="secondary"
+                    />
+                  </Stack>
+                </Box>
+              </Box>
+            </Container>
+          </Container>
+        </>
+      ) : (
+        <>
+          <Container maxWidth="md" sx={{ height: '80vh' }}>
+            <RenderImage
+              src="https://media.istockphoto.com/vectors/error-page-not-found-vector-id962223846?k=6&m=962223846&s=612x612&w=0&h=FmE7jhtdf9FHMFR8m336RnNaCFFEGDZo-xqB-v3CN1M="
+              alt="Preview"
+              style={{ width: '100%', height: '100%', padding: 0 }}
+              imageStyle={{ width: '100%', height: '100%' }}
+            />
+          </Container>
+        </>
+      )}
     </>
   )
 }

@@ -53,13 +53,17 @@ export const CourseListGuestContainer = ({ searchText, categorySearchId }: Props
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
+
   const handleClose = () => {
     setAnchorEl(null)
   }
+
   const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, data: ISortCourseByData) => {
     setSortBy(data)
     setAnchorEl(null)
+    setPage(1)
   }
+
   const handleToggleLevel = (value: string) => {
     const currentIndex = checkedLevelIds.findIndex(id => id === value)
     const newChecked = [...checkedLevelIds]
@@ -71,7 +75,9 @@ export const CourseListGuestContainer = ({ searchText, categorySearchId }: Props
     }
 
     setCheckedLevelIds(newChecked)
+    setPage(1)
   }
+
   const handleToggleCategory = (value: string) => {
     const currentIndex = checkedCategoryIds.findIndex(id => id === value)
     const newChecked = [...checkedCategoryIds]
@@ -83,7 +89,9 @@ export const CourseListGuestContainer = ({ searchText, categorySearchId }: Props
     }
 
     setCheckedCategoryIds(newChecked)
+    setPage(1)
   }
+
   const handleClearFilter = () => {
     setCheckedCategoryIds([])
     setCheckedLevelIds([])
@@ -96,6 +104,7 @@ export const CourseListGuestContainer = ({ searchText, categorySearchId }: Props
     setListLevels([...levels])
     setListCategories([...categories])
   }
+
   const getCourse = async () => {
     const bodyRequest: GetCoursesBySearchRequest = {
       categories: checkedCategoryIds,

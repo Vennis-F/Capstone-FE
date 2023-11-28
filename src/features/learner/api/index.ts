@@ -8,6 +8,7 @@ import {
   CreateLearnerBodyRequest,
   CreateLearnerCourseBodyRequest,
   LearnerFilterResponse,
+  UpdateLearnerBodyRequest,
   UpdateLearnerCourseBodyRequest,
 } from '../types'
 
@@ -19,6 +20,12 @@ const LEARNER_COURSE_BASE_URL = `/learner-course`
 
 export const createLearner = (body: CreateLearnerBodyRequest): Promise<void> =>
   api.post(`${LEARNER_BASE_URL}/create`, body)
+
+export const updateLearner = (body: UpdateLearnerBodyRequest): Promise<void> =>
+  api.put(`${LEARNER_BASE_URL}`, body)
+
+export const changePasswordLearner = (body: UpdateLearnerBodyRequest): Promise<void> =>
+  api.put(`${LEARNER_BASE_URL}/passowrd/change`, body)
 
 export const getLearnersByUser = (): Promise<LearnerFilterResponse[]> =>
   api.get(`${LEARNER_BASE_URL}/user`)

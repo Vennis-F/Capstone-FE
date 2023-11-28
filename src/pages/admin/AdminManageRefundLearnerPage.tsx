@@ -1,8 +1,8 @@
-import PostManageContainer from 'features/post/components/PostManageContainer'
+import RefundsManageContainer from 'features/refund/components/RefundsManageContainer'
 
 const AdminManageRefundLearnerPage = () => (
   <>
-    <PostManageContainer />
+    <RefundsManageContainer />
   </>
 )
 

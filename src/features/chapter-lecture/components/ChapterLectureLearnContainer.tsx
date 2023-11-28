@@ -96,28 +96,18 @@ const ChapterLectureLearnContainer = ({ courseId }: Props) => {
     }
   }, [currChapterLecture, setSearchParams])
 
-  console.log('[videoURL]', `"${!currChapterLecture ? '' : getVideo(currChapterLecture.video)}"`)
-
   return (
-    <Box sx={{ display: 'flex', marginTop: '-50px' }}>
+    <Box sx={{ display: 'flex', marginTop: '-50px' }} className="six-step">
       <Main open={open}>
         <Box sx={{ height: '65vh' }}>
           <VideoPlayer
-            // videoURL={`${process.env.REACT_APP_API_BASE_CLOUD_URL}/video?id=${
-            // videoURL={`http://localhost:3000/video?id=${
-            //   currChapterLecture && currChapterLecture.video
-            //     ? currChapterLecture.video
-            //     : 'chapter-lectures/videos/dded2a31-a980-4727-88a8-aa328cedc3e9.mp4'
-            // }`}
-            // videoURL={!currChapterLecture ? '' : getVideo(currChapterLecture.video)}
             videoURL={!currChapterLecture ? '' : getVideo(currChapterLecture.video)}
             handleSaveCompleteChapterLecture={handleSaveCompleteChapterLecture}
             chapterLectureId={currChapterLecture?.id}
           />
         </Box>
-        <button onClick={() => setIsOpen(true)}>Open Tour</button>
 
-        <TabsChapterLectureLearn />
+        <TabsChapterLectureLearn courseId={courseId} />
 
         {!open && (
           <Button
@@ -152,16 +142,19 @@ const ChapterLectureLearnContainer = ({ courseId }: Props) => {
         open={open}
       >
         <Toolbar />
-        <Box>
+        <Box width="100%">
           <IconButton onClick={handleDrawerClose}>
             <ChevronRightIcon />
             <Typography component={'span'} sx={{ color: 'black', fontWeight: '500' }}>
               Nội dung khóa học
             </Typography>
           </IconButton>
+          <Button sx={{ marginLeft: '40px' }} onClick={() => setIsOpen(true)}>
+            Hướng dẫn xem khóa học
+          </Button>
         </Box>
         <Divider />
-        <List>
+        <List className="first-step">
           {chapterLectures.map(chapterLecture => (
             <>
               <ListItem
@@ -176,9 +169,17 @@ const ChapterLectureLearnContainer = ({ courseId }: Props) => {
               >
                 <ListItemButton onClick={() => setCurrChapterLecture(chapterLecture)}>
                   {chapterLecture.isCompleted ? (
-                    <LocalFloristIcon fontSize="large" sx={{ color: '#4ade80' }} />
+                    <LocalFloristIcon
+                      className="fourth-step"
+                      fontSize="large"
+                      sx={{ color: '#4ade80' }}
+                    />
                   ) : (
-                    <SpaOutlinedIcon fontSize="large" sx={{ color: '#78716c' }} />
+                    <SpaOutlinedIcon
+                      className="fourth-step"
+                      fontSize="large"
+                      sx={{ color: '#78716c' }}
+                    />
                   )}
                   {/* <LocalFloristOutlined fontSize="large" />
                   <SpaOutlinedIcon fontSize="medium" sx={{ color: '#78716c' }} /> */}

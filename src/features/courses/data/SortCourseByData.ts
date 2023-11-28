@@ -13,18 +13,18 @@ export interface ISortCourseByData {
 
 export const SortCourseByData: ISortCourseByData[] = [
   {
-    key: SortCourseBy.PUBLISHED_DATE_ASC,
+    key: SortCourseBy.PUBLISHED_DATE_DESC,
     text: 'Mới nhất',
     value: {
-      order: OrderType.ASC,
+      order: OrderType.DESC,
       sortField: SortFieldCourse.PUBLISHED_DATE,
     },
   },
   {
-    key: SortCourseBy.PUBLISHED_DATE_DESC,
+    key: SortCourseBy.PUBLISHED_DATE_ASC,
     text: 'Cũ nhất',
     value: {
-      order: OrderType.DESC,
+      order: OrderType.ASC,
       sortField: SortFieldCourse.PUBLISHED_DATE,
     },
   },

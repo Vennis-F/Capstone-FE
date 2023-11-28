@@ -30,7 +30,7 @@ export const GuestLoginContainer = () => {
         navigate('/my-learning')
         break
       case UserRole.INSTRUCTOR:
-        navigate('/instructor/homepage')
+        navigate('/instructor/dashboard')
         break
       case UserRole.STAFF:
         navigate('/staff/manage/posts')

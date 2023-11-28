@@ -1,27 +1,39 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/indent */
 import AddIcon from '@mui/icons-material/Add'
-import { Box, Container, Paper } from '@mui/material'
+import {
+  Box,
+  Container,
+  Dialog,
+  Paper,
+  DialogTitle,
+  DialogContent,
+  Grid,
+  Typography,
+} from '@mui/material'
 import { useEffect, useState } from 'react'
 
-import CustomButton from 'libs/ui/components/CustomButton'
 import TitleTypography from 'libs/ui/components/TitleTypography'
-import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
-import { toastSuccess } from 'libs/utils/handle-toast'
-import { OrderType, PageOptions } from 'types'
+import { calcTotalPaymentAmount, formatCurrency } from 'libs/utils/handle-price'
+import { toastError } from 'libs/utils/handle-toast'
 
-import { getTransactionPayOffsByInstructor } from '../api'
-import { TransactionPayOffResponse } from '../types'
+import {
+  getTransactionOrderDetailByTransacionPayOffByInstructor,
+  getTransactionPayOffsByInstructor,
+} from '../api'
+import { TransactionOrderDetailResponse, TransactionPayOffResponse } from '../types'
 
+import TableTransactionOrderDetailsInInstructor from './TableTransactionOrderDetailsInInstructor'
 import TableTransactionPayOffsInstructor from './TableTransactionPayOffsInstructor'
 
 const InstructorManageTransactionPayOffContainer = () => {
   const [transactionPayOffs, setTransactionPayOffs] = useState<TransactionPayOffResponse[]>([])
   const [currentTransactionPayoff, setCurrentTransactionPayoff] =
     useState<TransactionPayOffResponse | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
   const [isOpenForm, setIsOpenForm] = useState(false)
-  const [isLoadingCreate, setIsLoadingCreate] = useState(false)
-  const [isOpenFormCreate, setIsOpenFormCreate] = useState(false)
+  const [currentTransactionOrderDetails, setCurrentTransactionOrderDetails] = useState<
+    TransactionOrderDetailResponse[] | null
+  >(null)
 
   const fetchTransactionPayoffs = async () => {
     try {
@@ -32,64 +44,74 @@ const InstructorManageTransactionPayOffContainer = () => {
     }
   }
 
+  const fetchTransactionOrderDetail = async (transactionPayOffId: string) => {
+    try {
+      const fetchedTransactionOrderDetails =
+        await getTransactionOrderDetailByTransacionPayOffByInstructor(transactionPayOffId)
+      setCurrentTransactionOrderDetails(fetchedTransactionOrderDetails)
+    } catch (error) {
+      console.error('Error fetching TransactionPayoffs:', error)
+    }
+    return null
+  }
+
   useEffect(() => {
     fetchTransactionPayoffs()
   }, [])
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="md">
       <TitleTypography title="Danh sách thanh toán" />
 
       <Paper elevation={10}>
         <TableTransactionPayOffsInstructor
           transactionPayOffsResponse={transactionPayOffs}
-          onEditRow={currId => {
+          onEditRow={async currId => {
             const transactionPayoff = transactionPayOffs.find(
               transactionPayOff => transactionPayOff.id === currId,
             ) as TransactionPayOffResponse
+            await fetchTransactionOrderDetail(currId)
             setCurrentTransactionPayoff(transactionPayoff)
             setIsOpenForm(true)
           }}
         />
       </Paper>
-      {/* 
-      {currentPost && (
-        <EditPostDialogForm
-          defaultValues={{
-            title: currentPost.title,
-            active: currentPost.active,
-            description: currentPost.description,
-            resources: currentPost.resources,
+
+      {currentTransactionOrderDetails && (
+        <Dialog
+          open={isOpenForm}
+          onClose={() => {
+            setIsOpenForm(false)
+            setCurrentTransactionOrderDetails(null)
+            setCurrentTransactionPayoff(null)
           }}
-          otherValues={{
-            url: currentPost.thumbnail,
-            postId: currentPost.id,
-          }}
-          onSubmitClick={async data => {
-            setIsLoading(true)
-            try {
-              await updatePostByStaff({
-                postId: currentPost.id,
-                active: data.active,
-                description: data.description,
-                resources: data.resources,
-                title: data.title,
-              })
-              fetchPosts()
-              setCurrentPost(null)
-              setIsOpenForm(false)
-              toastSuccess({ message: 'Cập nhật bài đăng thành công' })
-            } catch (error) {
-              showErrorResponseSaga({ defaultMessage: 'Không thể cập nhật bài đăng', error })
-            }
-            setIsLoading(false)
-          }}
-          openDialog={isOpenForm}
-          isLoading={isLoading}
-          handleOpenDialog={() => setIsOpenForm(true)}
-          handleCloseDialog={() => setIsOpenForm(false)}
-        />
-      )} */}
+          fullWidth={true}
+          maxWidth="lg"
+        >
+          {/* <DialogTitle>Bản chi tiết giao dịch thanh toán  </DialogTitlte> */}
+          <DialogContent>
+            <TableTransactionOrderDetailsInInstructor
+              transactionOrderDetailsResponse={currentTransactionOrderDetails}
+            />
+            <Grid container sx={{ marginTop: '20px' }} alignItems="center">
+              <Grid item marginLeft="auto">
+                <Typography fontWeight="bold" color="GrayText">
+                  Tổng tiền thanh toán:
+                  <Typography
+                    fontWeight="bold"
+                    fontSize="26px"
+                    component="span"
+                    color="black"
+                    marginLeft="20px"
+                  >
+                    {formatCurrency(calcTotalPaymentAmount(currentTransactionOrderDetails))}VND
+                  </Typography>
+                </Typography>
+              </Grid>
+            </Grid>
+          </DialogContent>
+        </Dialog>
+      )}
     </Container>
   )
 }

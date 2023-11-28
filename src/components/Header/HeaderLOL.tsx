@@ -293,15 +293,17 @@ const HeaderLOL = () => {
                       horizontal: 'center',
                     }}
                   >
-                    <MenuItem
-                      sx={{ ':hover': { color: '#047C8F' } }}
-                      onClick={() => {
-                        navigate('/user/edit-profile')
-                        handleClose()
-                      }}
-                    >
-                      Cài đặt tài khoản
-                    </MenuItem>
+                    {currUserRole && currUserRole === UserRole.CUSTOMER && (
+                      <MenuItem
+                        sx={{ ':hover': { color: '#047C8F' } }}
+                        onClick={() => {
+                          navigate('/user/edit-profile')
+                          handleClose()
+                        }}
+                      >
+                        Cài đặt tài khoản
+                      </MenuItem>
+                    )}
                     {currUserRole && currUserRole === UserRole.CUSTOMER && (
                       <MenuItem
                         sx={{ ':hover': { color: '#047C8F' } }}
@@ -313,11 +315,11 @@ const HeaderLOL = () => {
                         Giỏ hàng của tôi
                       </MenuItem>
                     )}
-                    {currUserRole && currUserRole === UserRole.CUSTOMER && (
+                    {/* {currUserRole && currUserRole === UserRole.CUSTOMER && (
                       <MenuItem sx={{ ':hover': { color: '#047C8F' } }} onClick={handleClose}>
                         Phương thức thanh toán
                       </MenuItem>
-                    )}
+                    )} */}
                     {currUserRole && currUserRole === UserRole.CUSTOMER && (
                       <MenuItem
                         sx={{ ':hover': { color: '#047C8F' } }}
@@ -327,6 +329,17 @@ const HeaderLOL = () => {
                         }}
                       >
                         Lịch sử mua hàng
+                      </MenuItem>
+                    )}
+                    {currUserRole && currUserRole === UserRole.CUSTOMER && (
+                      <MenuItem
+                        sx={{ ':hover': { color: '#047C8F' } }}
+                        onClick={() => {
+                          navigate('/user/refunds')
+                          handleClose()
+                        }}
+                      >
+                        Lịch sử hoàn tiền
                       </MenuItem>
                     )}
                     {currUserRole && currUserRole === UserRole.CUSTOMER && <Divider />}

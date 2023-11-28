@@ -34,11 +34,12 @@ const InstructorPricingEdit = ({ courseId, price, isEditable }: Props) => {
           defaultValues={{
             price: price ?? 0,
           }}
-          onSubmitClick={async data => {
+          onSubmitClick={async (data, reset) => {
             setIsLoading(true)
             try {
               await updatePriceCourseByInstructor({ courseId, price: data.price })
               toastSuccess({ message: 'Cập nhật giá tiền thành công' })
+              reset({ price: data.price })
             } catch (error) {
               showErrorResponseSaga({ defaultMessage: 'Không thể cập nhật giá tiền', error })
             }

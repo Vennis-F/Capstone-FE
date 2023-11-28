@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import FlagIcon from '@mui/icons-material/Flag'
 import {
   Card,
   CardActionArea,
@@ -11,22 +12,40 @@ import {
   LinearProgress,
   Rating,
   Paper,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  Button,
+  DialogContent,
+  TextField,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { createCourseFeedback } from 'features/course-feedback/apis'
+import { createCourseReportByCustomerOrLearner } from 'features/course-report/apis'
 import { CourseFilterResponse, CourseLearnerFilterResponse } from 'features/courses/types'
 import { getImage } from 'features/image/components/apis'
 import ReadMoreText from 'libs/ui/components/ReadMoreText'
+import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
+import { toastError, toastSuccess } from 'libs/utils/handle-toast'
 
 interface Props {
   learningCourse: CourseLearnerFilterResponse | CourseFilterResponse
 }
 
 export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
-  const [open, setOpen] = useState(false)
   const navigate = useNavigate()
   const [completePercent, setCompletePercent] = useState<null | number>(null)
+
+  const [open, setOpen] = useState(false)
+  const [description, setDescription] = useState('')
+  const [star, setStar] = useState<number>(5)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const [openReport, setOpenReport] = useState(false)
+  const [descriptionReport, setDescriptionReport] = useState('')
+  const [isLoadingReport, setIsLoadingReport] = useState(false)
 
   function processCourse(courseLearning: Props['learningCourse']) {
     if ('completedPercent' in courseLearning) {
@@ -39,6 +58,8 @@ export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
     if (learningCourse) processCourse(learningCourse)
   }, [learningCourse])
 
+  console.log(star, description)
+
   return (
     <>
       <Paper elevation={5} sx={{ maxWidth: 345 }}>
@@ -50,13 +71,21 @@ export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
               image={getImage(learningCourse.thumbnailUrl)}
               alt="Hình ảnh"
             />
-            <CardContent sx={{ height: '50px' }}>
-              <ReadMoreText
-                maxCharacterCount={40}
-                isTruncatedText={true}
-                text={learningCourse.title}
-                sxCustom={{ fontWeight: '600', fontSize: '20px' }}
-              />
+            <CardContent sx={{ height: '60px' }}>
+              <Typography
+                // color={MainColor.RED_600}
+                fontWeight="bold"
+                fontSize="20px"
+                sx={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  fontFamily: 'sans-serif',
+                  marginBottom: '10px',
+                }}
+              >
+                {learningCourse.title}
+              </Typography>
             </CardContent>
           </CardActionArea>
           {completePercent !== null && (
@@ -74,67 +103,177 @@ export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
                   <Typography sx={{ fontSize: '12px', marginTop: '4px' }}>
                     {completePercent}% Hoàn thành
                   </Typography>
-                  {/* <Link
-                sx={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}
-                // onClick={handleClickOpen}
-              >
-                <Box sx={{ textAlign: 'right' }}>
-                  <Rating value={learningCourse.rating} readOnly sx={{ fontSize: '12px' }} />
-                  <Typography sx={{ fontSize: '12px' }}>
-                    {learningCourse.rating !== 0 ? 'Đánh giá của bạn' : 'Hãy đánh giá'}
-                  </Typography>
-                </Box>
-              </Link> */}
                 </Box>
               </Box>
             </CardActions>
           )}
+          <CardActions sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
+            <Link
+              sx={{
+                textDecoration: 'none',
+                cursor: 'pointer',
+                color: 'blueviolet',
+                fontSize: '18px',
+              }}
+              onClick={() => {
+                setDescriptionReport('')
+                setOpenReport(true)
+              }}
+            >
+              <Box>
+                <FlagIcon />
+              </Box>
+            </Link>
+            <Link
+              sx={{
+                textDecoration: 'none',
+                cursor: 'pointer',
+                color: 'blueviolet',
+                fontSize: '18px',
+              }}
+              onClick={() => {
+                setOpen(true)
+                setStar(5)
+                setDescription('')
+              }}
+            >
+              <Box>
+                <Typography sx={{ fontSize: '12px' }}>{'Hãy đánh giá'}</Typography>
+              </Box>
+            </Link>
+          </CardActions>
         </Card>
       </Paper>
-    </>
-  )
-}
-
-/* <Dialog
+      <Dialog
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false)
+          setStar(5)
+          setDescription('')
+        }}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        sx={{ textAlign: 'center' }}
       >
         <DialogTitle id="alert-dialog-title">
           {'Bạn đáng giá về khóa học này như thế nào?'}
         </DialogTitle>
+        <DialogContent>
+          <Rating
+            name="size-large"
+            value={star}
+            onChange={(event, newValue) => {
+              setStar(newValue as number)
+            }}
+            size="large"
+          />
+          <TextField
+            fullWidth
+            size="medium"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            multiline
+            placeholder="Hãy cho chúng tôi biết trải nghiệm cá nhân của riêng bạn khi tham gia khóa học này. Khóa học có phù hợp với bạn không?"
+          />
+        </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Disagree</Button>
-          <Button onClick={() => setOpen(false)} autoFocus>
-            Agree
+          <Button
+            onClick={() => {
+              setOpen(false)
+              setStar(5)
+              setDescription('')
+            }}
+          >
+            Không
+          </Button>
+          <Button
+            disabled={isLoading}
+            onClick={async () => {
+              if (!star || !description || description.trim().length === 0)
+                return toastError({ message: 'Hãy đánh giá trước khi gửi' })
+
+              setIsLoading(true)
+              try {
+                await createCourseFeedback(learningCourse.id, {
+                  description,
+                  ratedStar: star,
+                })
+                toastSuccess({ message: 'Đánh giá khóa học thành công' })
+                setOpen(false)
+                setStar(5)
+                setDescription('')
+              } catch (error) {
+                showErrorResponseSaga({ defaultMessage: 'Không đánh giá khóa học được', error })
+              }
+              return setIsLoading(false)
+            }}
+            autoFocus
+          >
+            Đánh giá
           </Button>
         </DialogActions>
-      </Dialog> */
+      </Dialog>
+      <Dialog
+        open={openReport}
+        onClose={() => {
+          setOpenReport(false)
+          setDescriptionReport('')
+        }}
+        aria-labelledby="alert-report-title"
+        aria-describedby="alert-dialog-report"
+        sx={{ textAlign: 'center' }}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle id="alert-dialog-title-report">
+          {'Bạn báo cáo gì về khóa học này?'}
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            fullWidth
+            size="medium"
+            value={descriptionReport}
+            onChange={e => setDescriptionReport(e.target.value)}
+            multiline
+            placeholder="Ghi chi tiết báo cáo"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setOpenReport(false)
+              setDescriptionReport('')
+            }}
+          >
+            Không
+          </Button>
+          <Button
+            disabled={isLoading}
+            onClick={async () => {
+              if (!descriptionReport || descriptionReport.trim().length === 0)
+                return toastError({ message: 'Hãy ghi điều cần báo cáo' })
 
-/* <CardActions>
-          <Box sx={{ width: '100%' }}>
-            <LinearProgress variant="determinate" value={50} color="secondary" />
-            <Box
-              sx={{
-                display: 'flex',
-                width: '100%',
-                alignItems: 'flex-start',
-                justifyContent: 'space-between',
-              }}
-            >
-              <Typography sx={{ fontSize: '12px', marginTop: '4px' }}>{13}% Hoàn thành</Typography>
-              <Link
-                sx={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}
-                onClick={handleClickOpen}
-              >
-                <Box sx={{ textAlign: 'right' }}>
-                  <Rating value={learningCourse.rating} readOnly sx={{ fontSize: '12px' }} />
-                  <Typography sx={{ fontSize: '12px' }}>
-                    {learningCourse.rating !== 0 ? 'Đánh giá của bạn' : 'Hãy đánh giá'}
-                  </Typography>
-                </Box>
-              </Link>
-            </Box>
-          </Box>
-        </CardActions> */
+              setIsLoadingReport(true)
+              try {
+                await createCourseReportByCustomerOrLearner(learningCourse.id, {
+                  description: descriptionReport,
+                })
+                toastSuccess({
+                  message: 'Đánh gửi báo cáo thành công, chúng tôi sẽ xử lý báo cáo của bạn',
+                })
+                setOpenReport(false)
+                setDescriptionReport('')
+              } catch (error) {
+                showErrorResponseSaga({ defaultMessage: 'Không gửi báo cáo được', error })
+              }
+              return setIsLoadingReport(false)
+            }}
+            autoFocus
+          >
+            Gửi
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  )
+}

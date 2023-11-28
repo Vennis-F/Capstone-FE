@@ -1,6 +1,6 @@
 import AccessibilityIcon from '@mui/icons-material/Accessibility'
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
+// import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import BarChartIcon from '@mui/icons-material/BarChart'
 import BrushIcon from '@mui/icons-material/Brush'
 import CastForEducationIcon from '@mui/icons-material/CastForEducation'
@@ -14,7 +14,7 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import MenuIcon from '@mui/icons-material/Menu'
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo'
-import PaidIcon from '@mui/icons-material/Paid'
+// import PaidIcon from '@mui/icons-material/Paid'
 import ReportIcon from '@mui/icons-material/Report'
 import VideoSettingsIcon from '@mui/icons-material/VideoSettings'
 import {
@@ -29,6 +29,7 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
+  Typography,
 } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import React, { useEffect, useState } from 'react'
@@ -65,12 +66,12 @@ const routesAdmin = [
   { path: '/admin/manage/dashboard', icon: <BarChartIcon />, title: 'Thống kê' },
   { path: '/admin/manage/categories', icon: <CategoryIcon />, title: 'Thể loại' },
   { path: '/admin/manage/levels', icon: <AccessibilityIcon />, title: 'Cấp độ' },
-  {
-    path: '/admin/manage/pay-mentor',
-    icon: <PaidIcon />,
-    title: 'Tiền giáo viên',
-  },
-  { path: '/admin/manage/promotions', icon: <AttachMoneyIcon />, title: 'Giảm giá' },
+  // {
+  //   path: '/admin/manage/pay-mentor',
+  //   icon: <PaidIcon />,
+  //   title: 'Tiền giáo viên',
+  // },
+  // { path: '/admin/manage/promotions', icon: <AttachMoneyIcon />, title: 'Giảm giá' },
   {
     path: '/admin/manage/refund-learner',
     icon: <KeyboardReturnIcon />,
@@ -89,6 +90,11 @@ const StaffLayout = () => {
   const location = useLocation()
   const [currentRole, setCurrentRole] = useState<UserRole | null>(null)
   const [currentRoutes, setCurrentRoutes] = useState<Route[]>([])
+  const [currPathName, setCurrentPathName] = useState('')
+
+  useEffect(() => {
+    setCurrentPathName(location.pathname)
+  }, [location])
 
   const handleDrawerOpen = () => {
     setOpen(true)
@@ -123,6 +129,7 @@ const StaffLayout = () => {
           >
             <MenuIcon />
           </IconButton>
+          <Typography>{currentRole}</Typography>
         </Toolbar>
       </AppBar>
 
@@ -145,7 +152,11 @@ const StaffLayout = () => {
               <ListItem
                 key={index}
                 disablePadding
-                sx={{ display: 'block', padding: '0 !important', borderLeft: '2px solid red' }}
+                sx={{
+                  display: 'block',
+                  padding: '0 !important',
+                  borderLeft: currPathName === path ? '4px solid #ef4444' : undefined,
+                }}
               >
                 <ListItemButton
                   onClick={() => navigate(path)}
@@ -172,7 +183,7 @@ const StaffLayout = () => {
           <ListItem
             key={'logout'}
             disablePadding
-            sx={{ display: 'block', padding: '0 !important', borderLeft: '2px solid red' }}
+            sx={{ display: 'block', padding: '0 !important', borderLeft: '2px solid transparent' }}
           >
             <ListItemButton
               onClick={async () => {

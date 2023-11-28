@@ -24,48 +24,64 @@ interface Props {
 
 const TableTransactionPayOffsInstructor = ({ transactionPayOffsResponse, onEditRow }: Props) => {
   const columns: GridColDef[] = [
+    // {
+    //   field: 'senderId',
+    //   headerName: 'ID người thanh toán',
+    //   width: 70,
+    //   sortable: false,
+    //   filterable: false,
+    // },
     {
-      field: 'senderId',
-      headerName: 'ID người thanh toán',
-      width: 70,
-      sortable: false,
-      filterable: false,
+      field: 'insertedDate',
+      headerName: 'Ngày thanh toán',
+      type: 'date',
+      width: 200,
+      valueGetter: (params: GridValueGetterParams) =>
+        params.row.insertedDate ? new Date(params.row.insertedDate) : null,
     },
     {
       field: 'totalPaymentAmount',
       headerName: 'Tổng tiền thanh toán',
-      width: 150,
+      width: 250,
       valueGetter: (params: GridValueGetterParams) =>
         params.row.paymentAmount === 0 ? 0 : `${formatCurrency(params.row.totalPaymentAmount)}VND`,
     },
     {
-      field: 'insertedDate',
-      headerName: 'Ngày tạo',
-      type: 'date',
-      width: 130,
-      valueGetter: (params: GridValueGetterParams) =>
-        params.row.insertedDate ? new Date(params.row.insertedDate) : null,
-    },
-
-    {
       field: 'active',
       headerName: 'Hoạt động',
       type: 'boolean',
-      width: 130,
+      width: 200,
       valueGetter: (params: GridValueGetterParams) =>
         params.row.active !== null ? params.row.active : null,
     },
+    {
+      // field: 'u',
+      field: '',
+      headerName: 'Hành động',
+      description: 'Cập nhật hoặc ẩn post',
+      width: 160,
+      renderCell: (params: GridRenderCellParams) => (
+        <div>
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            onClick={() => onEditRow(params.row.id)} // Thay handleEdit bằng hàm xử lý sự kiện edit
+            sx={{ marginRight: '10px' }}
+          >
+            Xem chi tiết
+          </Button>
+        </div>
+      ),
+      sortable: false,
+      filterable: false,
+    },
   ]
-
-  const renderData = transactionPayOffsResponse.map(transaction => ({
-    ...transaction,
-    id: uuidv4(),
-  }))
 
   return (
     <div style={{ height: 500, width: '100%' }}>
       <DataGrid
-        rows={renderData}
+        rows={transactionPayOffsResponse}
         columns={columns}
         initialState={{
           pagination: {

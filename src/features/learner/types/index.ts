@@ -6,6 +6,20 @@ export type CreateLearnerBodyRequest = {
   password: string
 }
 
+export type UpdateLearnerBodyRequest = {
+  learnerId: string
+  firstName: string
+  lastName: string
+  middleName: string
+}
+
+export type ChangePasswordLearnerBodyRequest = {
+  learnerId: string
+  currentPassword: string
+  newPassword: string
+  confirmNewPassword: string
+}
+
 export type LearnerFilterResponse = {
   id: string
   firstName: string

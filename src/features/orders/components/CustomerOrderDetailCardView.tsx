@@ -1,28 +1,57 @@
 import { Grid, Typography } from '@mui/material'
 import Image from 'material-ui-image'
-import React from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
+import { getImage } from 'features/image/components/apis'
+import { createRefundByCustomer } from 'features/refund/apis'
+import CreateRefundDialogForm from 'features/refund/components/CreateRefundDialogForm'
+import { TransactionStatus } from 'features/transaction/types'
+import CustomButton from 'libs/ui/components/CustomButton'
 import { formatCurrency } from 'libs/utils/handle-price'
+import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
+import { toastSuccess } from 'libs/utils/handle-toast'
 
-import { OrderDetail } from '../types'
+import { NameOrderStatus, Order, OrderDetail } from '../types'
 
 type Props = {
   orderDetail: OrderDetail
+  handleGetOrder: () => Promise<void>
+  order: Order
 }
 
-const CustomerOrderDetailCardView = ({ orderDetail }: Props) => {
-  console.log(orderDetail)
+const CustomerOrderDetailCardView = ({ orderDetail, order, handleGetOrder }: Props) => {
+  const navigate = useNavigate()
+  const [openForm, setOpenForm] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const canRefund =
+    order.orderStatus === NameOrderStatus.Success &&
+    order.transaction.status === TransactionStatus.Success &&
+    !orderDetail.refund
+
+  // console.log(order.orderStatus, order.transaction.status, !orderDetail.refund)
 
   return (
-    <Grid container alignItems="center" key={orderDetail.id} sx={{ marginTop: '15px' }}>
-      <Grid item md={1}>
+    <Grid
+      container
+      alignItems="center"
+      key={orderDetail.id}
+      sx={{ marginTop: '15px', cursor: 'pointer' }}
+    >
+      <Grid item md={1} onClick={() => navigate(`/detail-course/${orderDetail.course.id}`)}>
         <Image
-          src={'https://img-c.udemycdn.com/course/100x100/5152322_9a81_3.jpg'}
+          src={getImage(orderDetail.course.thumbnailUrl)}
           style={{ height: '80px', width: '130px', padding: 0 }}
           imageStyle={{ height: '80px', width: '130px' }}
         />
       </Grid>
-      <Grid item md={9} padding={0}>
+      <Grid
+        item
+        md={7}
+        padding={0}
+        onClick={() => navigate(`/detail-course/${orderDetail.course.id}`)}
+      >
         <Typography
           variant="caption"
           sx={{ fontWeight: 'bold', fontSize: '18px', marginLeft: '80px' }}
@@ -51,6 +80,48 @@ const CustomerOrderDetailCardView = ({ orderDetail }: Props) => {
           </Typography>
         )}
       </Grid>
+      <Grid item md={2} sx={{ textAlign: 'right', display: 'flex', flexDirection: 'column' }}>
+        {canRefund && (
+          <CustomButton
+            onClick={() => {
+              setOpenForm(true)
+            }}
+          >
+            Hoàn tiền
+          </CustomButton>
+        )}
+      </Grid>
+
+      <CreateRefundDialogForm
+        isLoading={isLoading}
+        openDialog={openForm}
+        handleCloseDialog={() => {
+          setOpenForm(false)
+        }}
+        defaultValues={{
+          accountName: '',
+          accountNumber: '',
+          bank: '',
+          refundReason: '',
+        }}
+        onSubmitClick={async (data, reset) => {
+          setIsLoading(true)
+          try {
+            await createRefundByCustomer(orderDetail.id, data)
+
+            setOpenForm(false)
+            toastSuccess({
+              message: 'Đã gửi đơn hoàn tiền thành công, xin vui lòng đợi chấp thuận',
+            })
+            reset()
+            handleGetOrder()
+          } catch (error) {
+            showErrorResponseSaga({ defaultMessage: 'Không thể hoàn tiền', error })
+            console.log(error)
+          }
+          setIsLoading(false)
+        }}
+      />
     </Grid>
   )
 }

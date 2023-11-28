@@ -127,11 +127,11 @@ const InstructorCourseEditLeftSide = ({ currentType, course, handleGetCourse }: 
             control={<Radio />}
             label="Giá khóa học"
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             value={TypeInstructorEditCourseParams.PROMOTION}
             control={<Radio />}
             label="Khuyến mãi"
-          />
+          /> */}
         </RadioGroup>
       </FormControl>
 

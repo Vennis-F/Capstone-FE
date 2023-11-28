@@ -16,9 +16,9 @@ import { toastError, toastWarn } from 'libs/utils/handle-toast'
 import EqualTitle from './EqualTitle'
 
 const CheckPaymentContainer = () => {
-  const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const { deleteAllCartItems } = useCartService()
+  const [searchParams] = useSearchParams()
   const vnpAmount = searchParams.get('vnp_Amount')
   const vnpBankCode = searchParams.get('vnp_BankCode')
   const vnpBankTranNo = searchParams.get('vnp_BankTranNo')

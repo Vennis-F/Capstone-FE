@@ -1,5 +1,6 @@
 import { Course } from 'features/courses/types'
 import { PromotionCourse } from 'features/promotion/types'
+import { RefundFilterResponse } from 'features/refund/types'
 import { Transaction } from 'features/transaction/types'
 import { UserFilterResponse } from 'features/user/types'
 
@@ -49,6 +50,7 @@ export type OrderDetail = {
   active: boolean
   course: Course
   promotionCourse: PromotionCourse
+  refund: RefundFilterResponse | null
 }
 
 export type UpdateOrderBodyRequest = {

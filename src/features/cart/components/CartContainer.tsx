@@ -5,6 +5,7 @@ import {
   Box,
   Stack,
   Button,
+  CircularProgress,
   //   Button,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
@@ -32,6 +33,7 @@ export const CartContainer = () => {
   const [openModalDeleteAll, setOpenModalDeleteAll] = useState(false)
   const navigate = useNavigate()
   const { cart, fetchCart, deleteAllCartItems } = useCartService()
+  const [isLoading, setIsLoading] = useState(false)
 
   // Handle
   const handleOpenModalDeleteAll = () => {
@@ -49,6 +51,7 @@ export const CartContainer = () => {
     setCartPrice(response)
   }
   const handleCheckout = async () => {
+    setIsLoading(true)
     try {
       const errorsResponse = await checkCartIsValid()
       if (errorsResponse.length === 0) {
@@ -64,6 +67,7 @@ export const CartContainer = () => {
       console.log('[error in CartContainer]', error)
       toastError({ message: 'Không thể thanh toán đơn hàng' })
     }
+    setIsLoading(false)
   }
 
   useEffect(() => {
@@ -116,7 +120,9 @@ export const CartContainer = () => {
             <Box sx={{ flex: 3 }}>
               <Box sx={{ paddingLeft: '20px' }}>
                 <TotalPriceCartCardView cartPrice={cartPrice} />
-                <CustomButton onClick={handleCheckout}>Thanh toán</CustomButton>
+                <CustomButton onClick={handleCheckout} disable={isLoading}>
+                  {isLoading ? <CircularProgress size="26px" /> : 'Thanh toán'}
+                </CustomButton>
               </Box>
             </Box>
           </Box>

@@ -1,5 +1,5 @@
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
-import { Avatar } from '@mui/material'
+import { Avatar, Grid, Paper, Typography } from '@mui/material'
 import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
 import { ChangeEvent } from 'react'
@@ -46,11 +46,24 @@ const UserUploadAvatar = ({ avatar, otherAction }: Props) => {
 
   return (
     <>
-      <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
-        Upload file
-        <VisuallyHiddenInput type="file" onChange={handleImageChange} />
-      </Button>
-      {avatar && <Avatar alt="Avatar" src={getImage(avatar)} sx={{ width: 100, height: 100 }} />}
+      <Paper elevation={10} sx={{ padding: '40px', marginX: '50px' }}>
+        <Typography variant="h5" fontWeight="bold" marginBottom="20px">
+          Ảnh đại diện
+        </Typography>
+        <Grid container alignItems="center">
+          <Grid item>
+            <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
+              Chọn ảnh
+              <VisuallyHiddenInput type="file" onChange={handleImageChange} />
+            </Button>
+          </Grid>
+          <Grid item marginLeft="20px">
+            {avatar && (
+              <Avatar alt="Avatar" src={getImage(avatar)} sx={{ width: 100, height: 100 }} />
+            )}
+          </Grid>
+        </Grid>
+      </Paper>
     </>
   )
 }

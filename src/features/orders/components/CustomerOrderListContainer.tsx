@@ -58,7 +58,7 @@ const Row = (props: { order: Order }) => {
               </Box>
             </TableCell>
             <TableCell align="right" sx={{ color: '#6A6F73' }}>
-              {getStringDayMonthYear(order.updatedDate)}
+              {getStringDayMonthYear(order.insertedDate)}
             </TableCell>
             <TableCell align="right" sx={{ color: '#373a3d', fontSize: '20px' }}>
               ₫{convertPrice}
@@ -98,9 +98,7 @@ const Row = (props: { order: Order }) => {
                         <TableCell component="th" scope="row" sx={{ width: '30%' }}>
                           <Link
                             sx={{ color: '#146C94', cursor: 'pointer', textDecorationLine: 'none' }}
-                            onClick={() =>
-                              navigate('/detail-course', { state: { id: orderDetail.course.id } })
-                            }
+                            onClick={() => navigate(`/detail-course/${orderDetail.course.id}`)}
                           >
                             {orderDetail.course.title}
                           </Link>
@@ -129,16 +127,14 @@ const Row = (props: { order: Order }) => {
               <ShoppingCartOutlinedIcon />
               <Link
                 sx={{ color: '#146C94', cursor: 'pointer', textDecorationLine: 'none' }}
-                onClick={() =>
-                  navigate('/detail-course', { state: { id: order.orderDetails[0].id } })
-                }
+                onClick={() => navigate(`/detail-course/${order.orderDetails[0].course.id}`)}
               >
                 {order.orderDetails[0].course.title}
               </Link>
             </Box>
           </TableCell>
           <TableCell align="right" sx={{ color: '#6A6F73' }}>
-            {getStringDayMonthYear(order.updatedDate)}
+            {getStringDayMonthYear(order.insertedDate)}
           </TableCell>
           <TableCell align="right" sx={{ color: '#373a3d', fontSize: '20px' }}>
             ₫{convertPrice}

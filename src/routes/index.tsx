@@ -18,13 +18,12 @@ import BlogPage from 'pages/BlogListPage'
 import CartCheckoutPage from 'pages/CartCheckoutPage'
 import CartPage from 'pages/CartPage'
 import ChapterLectureLearnPage from 'pages/ChapterLectureLearnPage'
-import CharacterDetailPage from 'pages/CharacterDetailPage'
-import CharactersPage from 'pages/CharactersPage'
 import CheckPaymentPage from 'pages/CheckPaymentPage'
 import ConfirmOTPPage from 'pages/ConfirmOTPPage'
 import CustomerOrderDetailPage from 'pages/CustomerOrderDetailPage'
 import CustomerOrderListPage from 'pages/CustomerOrderListPage'
 import CustomerProfilePage from 'pages/CustomerProfilePage'
+import CustomerRefundManagePage from 'pages/CustomerRefundManagePage'
 import DetailCoursePage from 'pages/DetailCoursePage'
 import GuestLoginPage from 'pages/GuestLoginPage'
 import GuestSingupPage from 'pages/GuestSingupPage'
@@ -68,8 +67,6 @@ const AppRoutes = () => (
           <Route path="/about" element={<AboutPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/detail/:id" element={<BlogDetailPage />} />
-          <Route path="/characters" element={<CharactersPage />} />
-          <Route path="/character-detail" element={<CharacterDetailPage />} />
           <Route path="/list-course" element={<ListCoursePage />} />
           <Route path="/detail-course/:courseId" element={<DetailCoursePage />} />
           {/* <Route path="/course/chapter-lecture/id" element={<ChapterLectureLearnPage />} /> */}
@@ -77,8 +74,6 @@ const AppRoutes = () => (
           <Route path="/cart" element={<CartPage />} />
           <Route path="/cart/checkout" element={<CartCheckoutPage />} />
           <Route path="/payment/check" element={<CheckPaymentPage />} />
-          <Route path="/user/order-list" element={<CustomerOrderListPage />} />
-          <Route path="/user/order/oder-detail/:id" element={<CustomerOrderDetailPage />} />
           <Route path="/user/:type" element={<CustomerProfilePage />} />
           <Route
             path="/my-learning"
@@ -86,11 +81,19 @@ const AppRoutes = () => (
           >
             <Route path="/my-learning" element={<MyLearningPage />} />
           </Route>
+          <Route
+            path="/user"
+            element={<PrivateRoute roles={[UserRole.CUSTOMER, UserRole.LEARNER]} />}
+          >
+            <Route path="/user/refunds" element={<CustomerRefundManagePage />} />
+            <Route path="/user/order-list" element={<CustomerOrderListPage />} />
+            <Route path="/user/order/oder-detail/:id" element={<CustomerOrderDetailPage />} />
+          </Route>
         </Route>
         <Route path="/instructor" element={<PrivateRoute roles={[UserRole.INSTRUCTOR]} />}>
           <Route element={<StaffLayout />}>
-            <Route path="/instructor/homepage" element={<InstructorHomepagePage />} />
             <Route path="/instructor/dashboard" element={<InstructorDashboardAnalyst />} />
+            <Route path="/instructor/homepage" element={<InstructorHomepagePage />} />
             <Route path="/instructor/course/create" element={<InstructorCreateCoursePage />} />
             <Route path="/instructor/transaction" element={<InstructorTransactionDetailPage />} />
             {/* <Route

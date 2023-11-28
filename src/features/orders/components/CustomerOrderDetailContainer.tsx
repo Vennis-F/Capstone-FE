@@ -2,6 +2,7 @@
 import { Backdrop, Box, CircularProgress, Container, Grid, Typography, Paper } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 
+import { convertTransactionStatus } from 'features/transaction/types'
 import TitleTypography from 'libs/ui/components/TitleTypography'
 import { getStringDayMonthYear } from 'libs/utils/handle-date'
 import { formatCurrency } from 'libs/utils/handle-price'
@@ -28,7 +29,6 @@ const CustomerOrderDetailContainer = ({ orderId }: Props) => {
   useEffect(() => {
     handleGetOrder()
   }, [orderId])
-  console.log('[order]', order)
 
   const convertOrderStatusName = order ? convertOrderStatus(order.orderStatus) : null
 
@@ -60,7 +60,7 @@ const CustomerOrderDetailContainer = ({ orderId }: Props) => {
                   <Typography fontWeight="bold">
                     Ngày:
                     <Typography component="span" marginLeft="10px" color="GrayText">
-                      {getStringDayMonthYear(order?.updatedDate)}
+                      {getStringDayMonthYear(order?.insertedDate)}
                     </Typography>
                   </Typography>
                   <Typography fontWeight="bold">
@@ -93,41 +93,47 @@ const CustomerOrderDetailContainer = ({ orderId }: Props) => {
                     </Typography>
                   </Typography>
                 </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="h5" sx={{ fontWeight: '600', marginBottom: '10px' }}>
-                    Thông tin giao dịch ngân hàng
-                  </Typography>
-                  <Typography fontWeight="bold">
-                    Mã số giao dịch ngân hàng:
-                    <Typography component="span" marginLeft="10px" color="GrayText">
-                      {order?.transaction?.bankTranNo}
+                {order.transaction && (
+                  <Grid item xs={6}>
+                    <Typography variant="h5" sx={{ fontWeight: '600', marginBottom: '10px' }}>
+                      Thông tin giao dịch ngân hàng
                     </Typography>
-                  </Typography>
-                  <Typography fontWeight="bold">
-                    Thanh toán thông qua:
-                    <Typography component="span" marginLeft="10px" color="GrayText">
-                      {'VNPAY'}
+                    <Typography fontWeight="bold">
+                      Mã giao dịch ngân hàng:
+                      <Typography component="span" marginLeft="10px" color="GrayText">
+                        {order?.transaction?.bankTranNo}
+                      </Typography>
                     </Typography>
-                  </Typography>
-                  <Typography fontWeight="bold">
-                    Ngày:
-                    <Typography component="span" marginLeft="10px" color="GrayText">
-                      {getStringDayMonthYear(order?.updatedDate)}
+                    <Typography fontWeight="bold">
+                      Thanh toán thông qua:
+                      <Typography component="span" marginLeft="10px" color="GrayText">
+                        {'VNPAY'}
+                      </Typography>
                     </Typography>
-                  </Typography>
-                  <Typography fontWeight="bold">
-                    Thanh toán bằng ngân hàng:
-                    <Typography component="span" marginLeft="10px" color="GrayText">
-                      {order?.transaction?.bankCode}
+                    <Typography fontWeight="bold">
+                      Ngày:
+                      <Typography component="span" marginLeft="10px" color="GrayText">
+                        {getStringDayMonthYear(order?.insertedDate)}
+                      </Typography>
                     </Typography>
-                  </Typography>
-                  <Typography fontWeight="bold">
-                    Trạng thái:
-                    <Typography component="span" marginLeft="10px">
-                      {order?.transaction?.status}
+                    <Typography fontWeight="bold">
+                      Thanh toán bằng ngân hàng:
+                      <Typography component="span" marginLeft="10px" color="GrayText">
+                        {order?.transaction?.bankCode}
+                      </Typography>
                     </Typography>
-                  </Typography>
-                </Grid>
+                    <Typography fontWeight="bold">
+                      Trạng thái:
+                      <Typography
+                        component="span"
+                        marginLeft="10px"
+                        color={convertTransactionStatus(order?.transaction?.status).color}
+                      >
+                        {convertTransactionStatus(order?.transaction?.status).vietnamse}
+                      </Typography>
+                    </Typography>
+                  </Grid>
+                )}
               </Grid>
             </Box>
             <Box>
@@ -135,13 +141,16 @@ const CustomerOrderDetailContainer = ({ orderId }: Props) => {
                 Chi tiết đơn hàng
               </Typography>
               <Grid container>
-                <Grid item xs={7}>
+                <Grid item xs={10}>
                   {order?.orderDetails.map(orderDetail => (
-                    <CustomerOrderDetailCardView orderDetail={orderDetail} key={orderDetail.id} />
+                    <CustomerOrderDetailCardView
+                      handleGetOrder={handleGetOrder}
+                      orderDetail={orderDetail}
+                      key={orderDetail.id}
+                      order={order}
+                    />
                   ))}
                 </Grid>
-                {/* <Grid item xs={1}></Grid>
-                <Grid item xs={4}></Grid> */}
               </Grid>
             </Box>
           </Paper>

@@ -56,7 +56,7 @@ const CourseBeautyCardView = ({ course }: Props) => {
             }}
           >
             <OndemandVideoIcon sx={{ marginRight: '7px' }} />
-            {course.totalChapter} Bài học
+            {course.totalChapter ? course.totalChapter : 0} Bài học
           </Typography>
           <Typography
             variant="caption"
