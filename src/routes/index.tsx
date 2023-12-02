@@ -20,6 +20,8 @@ import CartPage from 'pages/CartPage'
 import ChapterLectureLearnPage from 'pages/ChapterLectureLearnPage'
 import CheckPaymentPage from 'pages/CheckPaymentPage'
 import ConfirmOTPPage from 'pages/ConfirmOTPPage'
+import ContestDetailPage from 'pages/contest/ContestDetailPage'
+import ContestHomePage from 'pages/contest/ContestHomePage'
 import CustomerOrderDetailPage from 'pages/CustomerOrderDetailPage'
 import CustomerOrderListPage from 'pages/CustomerOrderListPage'
 import CustomerProfilePage from 'pages/CustomerProfilePage'
@@ -44,6 +46,7 @@ import StaffManageReportsPage from 'pages/staff/StaffManageReportsPage'
 import { UserRole } from 'types'
 
 import { PrivateRoute } from '../components/Common/PrivateRoute'
+
 
 const HomePage = React.lazy(() => import('pages/HomePage'))
 const AboutPage = React.lazy(() => import('pages/AboutPage'))
@@ -75,6 +78,8 @@ const AppRoutes = () => (
           <Route path="/cart/checkout" element={<CartCheckoutPage />} />
           <Route path="/payment/check" element={<CheckPaymentPage />} />
           <Route path="/user/:type" element={<CustomerProfilePage />} />
+          <Route path="/contest" element={<ContestHomePage />} />
+          <Route path="/contest/detail" element={<ContestDetailPage />} />
           <Route
             path="/my-learning"
             element={<PrivateRoute roles={[UserRole.CUSTOMER, UserRole.LEARNER]} />}
