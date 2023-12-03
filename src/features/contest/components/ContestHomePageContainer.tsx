@@ -1,16 +1,17 @@
 /* eslint-disable */
 import { Typography } from '@material-ui/core'
-import { Box, Container, Paper, Grid, Button } from '@mui/material'
+import { Box, Container, Grid, Button } from '@mui/material'
 import Divider from '@mui/material/Divider';
 import React from 'react'
 import LearnerDrawingCardView from './LearnerDrawingCardView';
 import Carousel from 'react-material-ui-carousel';
 import { sliderContestData } from 'features/courses/data/sliderContestData';
 import Image from 'material-ui-image'
-import { MainColor } from 'libs/const/color';
-
-
-
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import StarIcon from '@mui/icons-material/Star';
 const ContestHomePageContainer = () => {
     console.log(123)
 
@@ -49,9 +50,26 @@ const ContestHomePageContainer = () => {
                 </Grid>
             ))}
         </Carousel>
-        <Typography style={{ marginBottom: 35, marginTop: 10, fontSize: 16 }}>
-            Join hundreds of thousands of artists, photographers, and graphic designers from all over the world who compete in our daily art competitions.   Win cash prizes, gift certificates, Fine Art America products, featured placement in our newsletters, featured placement throughout our website, and more!   Members can start a new competition at any time!
-        </Typography>
+        <List sx={{ backgroundColor: '#ff8c94', color: "#fff", borderRadius: '10px', padding: '16px', marginBottom: 3, marginTop: 2 }}>
+            <ListItem disablePadding>
+                <ListItemIcon>
+                    <StarIcon style={{ color: "#FFf" }} />
+                </ListItemIcon>
+                <ListItemText primary="Chào mừng các bạn đến với cuộc thi vẽ dành cho trẻ em trên trang web của chúng tôi! Đây là một cơ hội tuyệt vời để các bạn thể hiện tài năng sáng tạo của mình và tạo ra những tác phẩm nghệ thuật đẹp mắt. Bạn có biết rằng vẽ có thể giúp bạn phát triển trí não, tăng khả năng tưởng tượng và cải thiện kỹ năng giao tiếp không? Hãy cùng chúng tôi khám phá thế giới màu sắc và hình ảnh qua cuộc thi vẽ này nhé!" />
+            </ListItem>
+            <ListItem disablePadding>
+                <ListItemIcon>
+                    <StarIcon style={{ color: "#FFf" }} />
+                </ListItemIcon>
+                <ListItemText primary="Các phụ huynh cũng có thể đăng ký khi có một cuộc thi mới và tham gia cùng con em mình. Các bạn sẽ có cơ hội giành được những phần thưởng hấp dẫn như các mã giảm giá để trải nghiệm thêm nhiều sản phẩm thú vị trên trang web của chúng tôi. Ngoài ra, các tác phẩm xuất sắc còn có cơ hội được đăng tải nổi bật trên trang web của chúng tôi và được nhiều người biết đến." />
+            </ListItem>
+            <ListItem disablePadding>
+                <ListItemIcon>
+                    <StarIcon style={{ color: "#FFf" }} />
+                </ListItemIcon>
+                <ListItemText primary="Chúng tôi khuyến khích các em tham gia để phát huy kỹ năng nghệ thuật của mình, tạo ra những tác phẩm độc đáo và thể hiện sự sáng tạo của mình trong một môi trường thú vị và truyền cảm hứng. Đừng ngần ngại, hãy đăng ký và tham gia cùng chúng tôi và để tài năng của bạn tỏa sáng!" />
+            </ListItem>
+        </List>
         {/* <Paper elevation={10}> */}
         <Grid container spacing={10} >
             <Grid item xs={4} >
@@ -74,8 +92,6 @@ const ContestHomePageContainer = () => {
             </Grid>
         </Grid>
         {/* </Paper> */}
-
     </Container>
 }
-
 export default ContestHomePageContainer
