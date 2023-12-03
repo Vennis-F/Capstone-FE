@@ -24,7 +24,7 @@ const CourseBeautyCardView = ({ course }: Props) => {
   return (
     <Card
       key={course.title}
-      sx={{ maxWidth: 250, backgroundColor: '#F5F7F8', borderRadius: '10px' }}
+      sx={{ maxWidth: 250, backgroundColor: '#F5F7F8', borderRadius: '10px', marginBottom: "2px" }}
     >
       <CardActionArea onClick={() => navigate(`/detail-course/${course.id}`)}>
         <CardMedia component="img" height="180px" image={getImage(course.thumbnailUrl)} alt="Ảnh" />

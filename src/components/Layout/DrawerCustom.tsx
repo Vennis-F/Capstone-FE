@@ -10,7 +10,7 @@ const openedMixin = (theme: Theme): CSSObject => ({
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: 'hidden',
-  backgroundColor: '#111827',
+  backgroundColor: '#FFFFFF',
 })
 
 const closedMixin = (theme: Theme): CSSObject => ({
@@ -21,9 +21,9 @@ const closedMixin = (theme: Theme): CSSObject => ({
   overflowX: 'hidden',
   width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up('sm')]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
+    width: `calc(${theme.spacing(9)} + 1px)`,
   },
-  backgroundColor: '#111827',
+  backgroundColor: '#FFFFFF',
 })
 
 export const DrawerHeader = styled('div')(({ theme }) => ({

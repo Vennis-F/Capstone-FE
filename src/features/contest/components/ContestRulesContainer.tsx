@@ -4,6 +4,7 @@ import { Box, Container, Paper } from '@mui/material'
 import Image from 'material-ui-image'
 import Stack from '@mui/material/Stack';
 import React from 'react'
+import ContestPaint from './ContestPaint';
 const ContestRulesContainer = () => {
     console.log(123)
     return <Container maxWidth="lg" style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px' }}>

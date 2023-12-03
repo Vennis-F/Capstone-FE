@@ -5,14 +5,14 @@ import BarChartIcon from '@mui/icons-material/BarChart'
 import BrushIcon from '@mui/icons-material/Brush'
 import CastForEducationIcon from '@mui/icons-material/CastForEducation'
 import CategoryIcon from '@mui/icons-material/Category'
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import ColorLensIcon from '@mui/icons-material/ColorLens';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom'
 import ImportContactsIcon from '@mui/icons-material/ImportContacts'
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn'
 import LogoutIcon from '@mui/icons-material/Logout'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import MenuIcon from '@mui/icons-material/Menu'
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo'
 // import PaidIcon from '@mui/icons-material/Paid'
 import ReportIcon from '@mui/icons-material/Report'
@@ -29,13 +29,13 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
-  Typography,
 } from '@mui/material'
-import { useTheme } from '@mui/material/styles'
+import Avatar from '@mui/material/Avatar';
+import Stack from '@mui/material/Stack';
 import React, { useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
-import Footer from 'components/Footer/Footer'
+// import Footer from 'components/Footer/Footer'
 import useAuthService from 'features/auth/hook/useAuthService'
 import { toastSuccess } from 'libs/utils/handle-toast'
 import { getUserRole } from 'libs/utils/handle-token'
@@ -83,7 +83,6 @@ const routesAdmin = [
 ]
 
 const StaffLayout = () => {
-  const theme = useTheme()
   const navigate = useNavigate()
   const { guestLogout } = useAuthService()
   const [open, setOpen] = useState(false)
@@ -115,8 +114,8 @@ const StaffLayout = () => {
   return (
     <>
       <CssBaseline />
-      <AppBar>
-        <Toolbar>
+      <AppBar sx={{ backgroundColor: "#FFFFFF" }}>
+        <Toolbar sx={{ textAlign: "right", width: "100%", justifyContent: "flex-end" }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -129,7 +128,11 @@ const StaffLayout = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography>{currentRole}</Typography>
+          {/* <Typography sx={{ color: "rgb(99, 115, 129)", fontWeight: "600", '& .MuiListItemText-primary': { fontWeight: "bold" }, fontSize: "20px" }}>{currentRole}</Typography> */}
+          <Stack direction="row" spacing={2}>
+            <NotificationsIcon sx={{ color: "rgb(99, 115, 129)", fontSize: "35px" }} />
+            <Avatar alt="Remy Sharp" src="https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_25.jpg" />
+          </Stack>
         </Toolbar>
       </AppBar>
 
@@ -138,14 +141,13 @@ const StaffLayout = () => {
         open={open}
         onMouseEnter={handleDrawerOpen}
         onMouseLeave={handleDrawerClose}
+
       >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
+        <DrawerHeader sx={{ display: "flex", justifyContent: "center" }}>
+          <ColorLensIcon fontSize='large' sx={{ color: "rgb(0, 167, 111)" }} />
         </DrawerHeader>
         <Divider />
-        <List>
+        <List sx={{ paddingX: "10px" }}>
           {currentRole &&
             currentRoutes.length > 0 &&
             currentRoutes.map(({ icon, path, title }, index) => (
@@ -155,7 +157,11 @@ const StaffLayout = () => {
                 sx={{
                   display: 'block',
                   padding: '0 !important',
-                  borderLeft: currPathName === path ? '4px solid #ef4444' : undefined,
+                  // borderLeft: currPathName === path ? '4px solid rgb(0, 167, 111)' : undefined,
+                  backgroundColor: currPathName === path ? " rgb(216,245,232)" : "#FFFFFF",
+                  borderRadius: 2,
+                  // paddingX: "5px"
+
                 }}
               >
                 <ListItemButton
@@ -164,6 +170,8 @@ const StaffLayout = () => {
                     minHeight: 48,
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
+                    color: "rgb(99, 115, 129)",
+                    marginBottom: "5px",
                   }}
                 >
                   <ListItemIcon
@@ -171,12 +179,12 @@ const StaffLayout = () => {
                       minWidth: 0,
                       mr: open ? 3 : 'auto',
                       justifyContent: 'center',
-                      color: 'white',
+                      color: currPathName === path ? " rgb(0, 167, 111)" : "rgb(99, 115, 129)",
                     }}
                   >
                     {icon}
                   </ListItemIcon>
-                  <ListItemText primary={title} sx={{ opacity: open ? 1 : 0, color: 'white' }} />
+                  <ListItemText primary={title} sx={{ opacity: open ? 1 : 0, color: currPathName === path ? " rgb(0, 167, 111)" : "rgb(99, 115, 129)", fontWeight: "600", '& .MuiListItemText-primary': { fontWeight: "bold" } }} />
                 </ListItemButton>
               </ListItem>
             ))}
@@ -204,19 +212,19 @@ const StaffLayout = () => {
                   minWidth: 0,
                   mr: open ? 3 : 'auto',
                   justifyContent: 'center',
-                  color: 'white',
+                  color: "rgb(99, 115, 129)",
                 }}
               >
                 <LogoutIcon />
               </ListItemIcon>
-              <ListItemText primary={'Thoát'} sx={{ opacity: open ? 1 : 0, color: 'white' }} />
+              <ListItemText primary={'Đăng xuất'} sx={{ opacity: open ? 1 : 0, color: "rgb(99, 115, 129)", fontWeight: "600", '& .MuiListItemText-primary': { fontWeight: "bold" } }} />
             </ListItemButton>
           </ListItem>
         </List>
       </Drawer>
       <main>
         <Box
-          sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: '#F0F2F5' }}
+          sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: '#FFFFFF' }}
         >
           <main>
             <Box
@@ -228,7 +236,7 @@ const StaffLayout = () => {
               <Outlet />
             </Box>
           </main>
-          {location.pathname !== `/instructor/course/create` && <Footer />}
+          {/* {location.pathname !== `/instructor/course/create` && <Footer />} */}
         </Box>
       </main>
     </>
