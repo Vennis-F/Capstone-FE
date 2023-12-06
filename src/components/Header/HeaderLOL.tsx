@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/indent */
+import { Brush } from '@material-ui/icons'
 import PaletteIcon from '@mui/icons-material/Palette'
 import PersonIcon from '@mui/icons-material/Person'
+import SchoolIcon from '@mui/icons-material/School'
 import SearchIcon from '@mui/icons-material/Search'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
 import {
@@ -255,12 +257,17 @@ const HeaderLOL = () => {
                 </Button>
               )}
               {currUserRole && currUserRole === UserRole.CUSTOMER && (
-                <ButtonLinkHeader to="/my-learning">Khóa học của tôi</ButtonLinkHeader>
+                <ButtonLinkHeader to="/my-learning">
+                  <SchoolIcon />
+                </ButtonLinkHeader>
               )}
               {!currUserRole && (
                 <ButtonLinkContain to="/instructor/signup">Đăng ký giảng viên</ButtonLinkContain>
               )}
               <ButtonLinkHeader to="/blog">Blog</ButtonLinkHeader>
+              <ButtonLinkHeader to="/contest">
+                <Brush />
+              </ButtonLinkHeader>
               {!currUserRole && <ButtonLinkHeader to="/guest-login">Đăng nhập</ButtonLinkHeader>}
               {!currUserRole && <ButtonLinkHeader to="/guest-signup">Đăng ký</ButtonLinkHeader>}
               {currUserRole && (
@@ -342,6 +349,18 @@ const HeaderLOL = () => {
                         Lịch sử hoàn tiền
                       </MenuItem>
                     )}
+                    {currUserRole &&
+                      (currUserRole === UserRole.CUSTOMER || currUserRole === UserRole.LEARNER) && (
+                        <MenuItem
+                          sx={{ ':hover': { color: '#047C8F' } }}
+                          onClick={() => {
+                            navigate('/user/achivements')
+                            handleClose()
+                          }}
+                        >
+                          Thành tựu
+                        </MenuItem>
+                      )}
                     {currUserRole && currUserRole === UserRole.CUSTOMER && <Divider />}
                     <MenuItem sx={{ ':hover': { color: '#047C8F' } }} onClick={handleLogout}>
                       Đăng xuất

@@ -10,6 +10,7 @@ export interface FormInputProps {
   size?: 'small' | 'medium'
   type?: React.HTMLInputTypeAttribute
   disable?: boolean
+  rows?: number
 }
 
 export const FormTextField = ({
@@ -19,12 +20,15 @@ export const FormTextField = ({
   control,
   label,
   disable = false,
+  rows = 1,
 }: FormInputProps) => (
   <Controller
     name={name}
     control={control}
     render={({ field: { onChange, value }, fieldState: { error } }) => (
       <TextField
+        rows={rows}
+        multiline
         helperText={error ? error.message : null}
         size={size}
         error={!!error}

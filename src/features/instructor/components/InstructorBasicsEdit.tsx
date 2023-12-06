@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import { useEffect, useState } from 'react'
 
+import LayoutBodyContainer from 'components/Layout/LayoutBodyContainer'
 import { getCategories } from 'features/category/api'
 import { Category } from 'features/category/types'
 import { getCourseById } from 'features/courses/api'
@@ -14,7 +15,6 @@ import { toastSuccess } from 'libs/utils/handle-toast'
 import { updateCourseByInstructor } from '../api'
 
 import EditCourseBasicInformationForm from './EditCourseBasicInformationForm'
-import EditLayoutInstructor from './EditLayoutInstructor'
 
 interface Props {
   currentCourse: CourseFullInfor
@@ -41,7 +41,7 @@ const InstructorBasicsEdit = ({ currentCourse, isEditable }: Props) => {
   }, [])
 
   return (
-    <EditLayoutInstructor
+    <LayoutBodyContainer
       title="Trang chủ khóa học"
       introduction="Trang đích khóa học của bạn rất quan trọng cho sự thành công của bạn trên nền tảng của
     chúng tôi. Nếu làm đúng, nó cũng có thể giúp bạn có được khả năng hiển thị trên các công
@@ -82,7 +82,7 @@ const InstructorBasicsEdit = ({ currentCourse, isEditable }: Props) => {
           isEditable={isEditable}
         />
       )}
-    </EditLayoutInstructor>
+    </LayoutBodyContainer>
   )
 }
 

@@ -77,6 +77,9 @@ const CousreBoughtCardView = ({ course }: Props) => {
           </Box>
           <Box sx={{ flex: 1, padding: '16px', textAlign: 'right' }}>
             <Typography component="span" variant="h5" sx={{ fontWeight: 'bold' }}>
+              ₫{formatCurrency(course.price)}
+            </Typography>
+            {/* <Typography component="span" variant="h5" sx={{ fontWeight: 'bold' }}>
               ₫
               {course.discount === 0
                 ? formatCurrency(course.price)
@@ -86,7 +89,7 @@ const CousreBoughtCardView = ({ course }: Props) => {
               <Typography sx={{ color: 'gray', fontSize: 14, textDecorationLine: 'line-through' }}>
                 ₫{formatCurrency(course.price)}
               </Typography>
-            )}
+            )} */}
           </Box>
         </CardActionArea>
       </Card>

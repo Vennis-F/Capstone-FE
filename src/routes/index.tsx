@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom'
 import { NotFound } from 'components/Common'
 import Layout from 'components/Layout'
 import StaffLayout from 'components/Layout/StaffLayout'
+import AchiviementPage from 'pages/AchiviementPage'
 import AdminManageCategoryPage from 'pages/admin/AdminManageCategoryPage'
 import AdminManageCustomerPage from 'pages/admin/AdminManageCustomerPage'
 import AdminManageDashBoardPage from 'pages/admin/AdminManageDashboardPage'
@@ -36,6 +37,7 @@ import InstructorCourseEditPage from 'pages/instructor/InstructorCourseEditPage'
 import InstructorCreateCoursePage from 'pages/instructor/InstructorCreateCoursePage'
 import InstructorDashboardAnalyst from 'pages/instructor/InstructorDashboardAnalyst'
 import InstructorHomepagePage from 'pages/instructor/InstructorHomepagePage'
+import InstructorPromotionPage from 'pages/instructor/InstructorPromotionPage'
 import InstructorTransactionDetailPage from 'pages/instructor/InstructorTransactionDetailPage'
 import ListCoursePage from 'pages/ListCoursePage'
 import MyLearningPage from 'pages/MyLearningPage'
@@ -46,7 +48,6 @@ import StaffManageReportsPage from 'pages/staff/StaffManageReportsPage'
 import { UserRole } from 'types'
 
 import { PrivateRoute } from '../components/Common/PrivateRoute'
-
 
 const HomePage = React.lazy(() => import('pages/HomePage'))
 const AboutPage = React.lazy(() => import('pages/AboutPage'))
@@ -79,7 +80,7 @@ const AppRoutes = () => (
           <Route path="/payment/check" element={<CheckPaymentPage />} />
           <Route path="/user/:type" element={<CustomerProfilePage />} />
           <Route path="/contest" element={<ContestHomePage />} />
-          <Route path="/contest/detail" element={<ContestDetailPage />} />
+          <Route path="/contest/detail/:id" element={<ContestDetailPage />} />
           <Route
             path="/my-learning"
             element={<PrivateRoute roles={[UserRole.CUSTOMER, UserRole.LEARNER]} />}
@@ -91,6 +92,7 @@ const AppRoutes = () => (
             element={<PrivateRoute roles={[UserRole.CUSTOMER, UserRole.LEARNER]} />}
           >
             <Route path="/user/refunds" element={<CustomerRefundManagePage />} />
+            <Route path="/user/achivements" element={<AchiviementPage />} />
             <Route path="/user/order-list" element={<CustomerOrderListPage />} />
             <Route path="/user/order/oder-detail/:id" element={<CustomerOrderDetailPage />} />
           </Route>
@@ -101,6 +103,7 @@ const AppRoutes = () => (
             <Route path="/instructor/homepage" element={<InstructorHomepagePage />} />
             <Route path="/instructor/course/create" element={<InstructorCreateCoursePage />} />
             <Route path="/instructor/transaction" element={<InstructorTransactionDetailPage />} />
+            <Route path="/instructor/promotion" element={<InstructorPromotionPage />} />
             {/* <Route
                 path="/course/edit/:courseId/manage/:type"
                 element={<InstructorCourseEditPage />}

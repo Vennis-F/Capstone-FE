@@ -7,7 +7,7 @@ type Props = {
   children?: React.ReactNode
 }
 
-const EditLayoutInstructor = (props: Props) => (
+const LayoutBodyContainer = (props: Props) => (
   <>
     <Paper elevation={5}>
       <Box padding="30px">
@@ -26,4 +26,4 @@ const EditLayoutInstructor = (props: Props) => (
   </>
 )
 
-export default EditLayoutInstructor
+export default LayoutBodyContainer

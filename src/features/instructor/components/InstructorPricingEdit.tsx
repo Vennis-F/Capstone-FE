@@ -1,12 +1,12 @@
 import { Typography } from '@mui/material'
 import React, { useState } from 'react'
 
+import LayoutBodyContainer from 'components/Layout/LayoutBodyContainer'
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastSuccess } from 'libs/utils/handle-toast'
 
 import { updatePriceCourseByInstructor } from '../api'
 
-import EditLayoutInstructor from './EditLayoutInstructor'
 import EditPricingCourseForm from './EditPricingCourseForm'
 
 type Props = { courseId: string; price?: number | null; isEditable: boolean }
@@ -15,7 +15,7 @@ const InstructorPricingEdit = ({ courseId, price, isEditable }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
 
   return (
-    <EditLayoutInstructor
+    <LayoutBodyContainer
       title="Định giá"
       introduction={
         <>
@@ -48,7 +48,7 @@ const InstructorPricingEdit = ({ courseId, price, isEditable }: Props) => {
           isLoading={isLoading}
         />
       )}
-    </EditLayoutInstructor>
+    </LayoutBodyContainer>
   )
 }
 

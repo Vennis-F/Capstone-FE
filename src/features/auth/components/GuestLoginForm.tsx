@@ -36,27 +36,27 @@ export const GuestLoginForm = (props: GuestLoginFormProps) => {
 
   return (
     <Stack sx={{ pt: 0 }} direction="column" spacing={1} justifyContent="center">
-      <Box sx={{ height: '80px' }}>
+      <Box sx={{ height: '60px' }}>
         <FormTextField
           name="emailOrUsername"
           label={'Email hoặc Tên đăng nhập'}
           control={control}
-          size="medium"
+          size="small"
         />
       </Box>
-      <Box sx={{ height: '80px' }}>
+      <Box sx={{ height: '60px' }}>
         <FormTextField
           name="password"
           label={'Mật khẩu'}
           control={control}
-          size="medium"
+          size="small"
           type="password"
         />
       </Box>
       <Button
         onClick={handleSubmit(submitHandler)}
         variant={'contained'}
-        size="large"
+        size="medium"
         sx={{
           backgroundColor: MainColor.RED_500,
           fontWeight: '600',

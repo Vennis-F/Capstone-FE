@@ -21,8 +21,8 @@ const Layout = () => {
           mode,
         },
         typography: {
-          fontFamily: 'Comic Sans MS',
-          // fontFamily: 'Comic Neue',
+          // fontFamily: 'Comic Sans MS',
+          fontFamily: 'sans-serif',
           // Các cài đặt typography khác ở đây nếu bạn muốn thay đổi
         },
       }),

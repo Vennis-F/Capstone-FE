@@ -99,7 +99,13 @@ export const CreateChapterLectureDialogForm = (props: Props) => {
               <FormTextField name="title" label={'Tiêu đề'} control={control} size="small" />
             </Box>
             <Box sx={style.formInput}>
-              <FormTextField name="description" label={'Mô tả'} control={control} size="small" />
+              <FormTextField
+                name="description"
+                label={'Mô tả'}
+                control={control}
+                size="small"
+                rows={4}
+              />
             </Box>
           </Stack>
         </Stack>

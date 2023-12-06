@@ -1,4 +1,5 @@
 import {
+  CreateCourseByInstructorBodyRequest,
   UpdateBankForInstructorBodyRequest,
   UpdateCourseByInstructorBodyRequest,
   UpdatePriceCourseByInstructorBodyRequest,
@@ -9,3 +10,5 @@ export type UpdateCourseFormInput = Omit<UpdateCourseByInstructorBodyRequest, 'c
 export type UpdatePriceCourseFormInput = Omit<UpdatePriceCourseByInstructorBodyRequest, 'courseId'>
 
 export type UpdateBankForInstructorFormInput = UpdateBankForInstructorBodyRequest
+
+export type CreateCourseFormInput = CreateCourseByInstructorBodyRequest

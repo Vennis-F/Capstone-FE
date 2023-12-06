@@ -167,7 +167,7 @@ export const CouresDetailGuestContainer = ({ id }: CouresDetailGuestContainerPro
                     sx={{ fontSize: '16px', marginRight: '10px' }}
                   />
                   <Typography component="span" sx={{ color: 'white', fontSize: '16px' }}>
-                    {courseDetail.totalBought ? courseDetail.totalBought : 0} Học sinh
+                    {courseDetail.totalBought ? courseDetail.totalBought : 0} Học viên
                   </Typography>
                 </Box>
                 <Typography sx={{ color: 'white', fontWeight: 'bold', marginBottom: '10px' }}>

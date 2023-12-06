@@ -20,13 +20,14 @@ import { useNavigate } from 'react-router-dom'
 
 import { useCartService } from 'features/cart/hooks'
 import { getImage } from 'features/image/components/apis'
-import { checkPromotionCourseApply } from 'features/promotion/api'
+import { checkPromotionCourseCanApplyByCode } from 'features/promotion/api'
 import { PromotionCourse } from 'features/promotion/types'
 import CustomButton from 'libs/ui/components/CustomButton'
 import { calcPriceDiscount, formatCurrency } from 'libs/utils/handle-price'
 import { toastError, toastSuccess, toastWarn } from 'libs/utils/handle-toast'
 import { getAccessToken } from 'libs/utils/handle-token'
 
+import { formatSecondToHour } from '../../../libs/utils/handle-time'
 import { checkCourseIsOwnedByCourseId } from '../api'
 import { GetCourseDetailResponse } from '../types'
 
@@ -41,7 +42,8 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
   const [activeInput, setActiveInput] = useState(true)
   const { createCartItem } = useCartService()
   const [currPromotionCourseId, setCurrPromotionCourseId] = useState<string | null>(
-    courseDetail.promotionCourseByStaffId,
+    // courseDetail.promotionCourseByStaffId,
+    null,
   )
   const [promotionCourseApply, setPromotionCourseApply] = useState<PromotionCourse | null>(null)
   const [isOwned, setIsOwned] = useState(false)
@@ -63,10 +65,7 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
     if (!coupon) return toastError({ message: 'Vui lòng nhập mã khuyến mãi' })
 
     setActiveInput(false)
-    const { promotionCourse } = await checkPromotionCourseApply({
-      code: coupon,
-      courseId: courseDetail.id,
-    })
+    const { promotionCourse } = await checkPromotionCourseCanApplyByCode(courseDetail.id, coupon)
 
     if (promotionCourse) {
       setCoupon('')
@@ -111,12 +110,13 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
 
       <CardContent sx={{ padding: '20px', paddingBottom: '10px' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          {!courseDetail.promotionCourseByStaffId && !promotionCourseApply && (
+          {/* {!courseDetail.promotionCourseByStaffId && !promotionCourseApply && ( */}
+          {!promotionCourseApply && (
             <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: 32, marginRight: 2 }}>
               ₫{formatCurrency(courseDetail.price)}
             </Typography>
           )}
-          {courseDetail.promotionCourseByStaffId && (
+          {/* {courseDetail.promotionCourseByStaffId && (
             <>
               <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: 32, marginRight: 2 }}>
                 ₫{formatCurrency(courseDetail.discountPrice)}
@@ -125,7 +125,7 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
                 ₫{formatCurrency(courseDetail.price)}
               </Typography>
             </>
-          )}
+          )} */}
           {promotionCourseApply && (
             <>
               <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: 32, marginRight: 2 }}>
@@ -194,7 +194,7 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
             color="text.secondary"
             sx={{ textAlign: 'center', marginLeft: '18px' }}
           >
-            {Math.floor(courseDetail.totalLength / 60 / 60)} giờ video theo yêu cầu
+            {formatSecondToHour(courseDetail.totalLength)} giờ video theo yêu cầu
           </Typography>
         </Box>
 
@@ -246,10 +246,14 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
           sx={{ color: '#8b5cf6', fontWeight: '600', marginBottom: '10px' }}
           size="small"
           onClick={() => {
-            if (!courseDetail.promotionCourseByStaffId) {
-              setShowInputCoupon(!showInputCoupon)
-              setCoupon('')
-            } else toastWarn({ message: 'Khóa học đã được giảm giá!' })
+            // if (!courseDetail.promotionCourseByStaffId) {
+            //   setShowInputCoupon(!showInputCoupon)
+            //   setCoupon('')
+            // } else toastWarn({ message: 'Khóa học đã được giảm giá!' })
+            // if (!courseDetail.promotionCourseByStaffId) {
+            setShowInputCoupon(!showInputCoupon)
+            setCoupon('')
+            // } else toastWarn({ message: 'Khóa học đã được giảm giá!' })
           }}
         >
           Áp mã giảm giá
@@ -271,6 +275,10 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
                 backgroundColor: '#a78bfa',
                 color: 'white',
                 fontWeight: '600',
+                ':hover': {
+                  backgroundColor: '#b4a0ee',
+                },
+                marginLeft: '10px',
               }}
               disabled={!activeInput}
               onClick={handleClickApplyCoupon}

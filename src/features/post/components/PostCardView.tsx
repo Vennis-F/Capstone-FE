@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { getImage } from 'features/image/components/apis'
 import { MainColor } from 'libs/const/color'
+import { getStringDayMonthYear } from 'libs/utils/handle-date'
 
 import { PostFilterResponse } from '../types'
 
@@ -35,7 +36,7 @@ const PostCardView = ({ post }: Props) => {
           style={{ height: '320px', width: '100%', padding: 0 }}
           imageStyle={{ height: '320px', width: '100%' }}
         />
-        <Box height="120px" padding="20px">
+        <Box height="120px" padding="10px">
           <Typography
             color={MainColor.RED_600}
             fontWeight="bold"
@@ -49,6 +50,13 @@ const PostCardView = ({ post }: Props) => {
             }}
           >
             {post.title}
+          </Typography>
+          <Typography fontSize="12px" marginBottom="10px">
+            <Typography
+              variant="inherit"
+              component="span"
+              color="GrayText"
+            >{` ${getStringDayMonthYear(post.updatedDate)}`}</Typography>
           </Typography>
           <Typography
             sx={{

@@ -59,6 +59,7 @@ export const CartContainer = () => {
         navigate('/cart/checkout')
       } else {
         fetchCart()
+        getCartPrice()
         errorsResponse.forEach(error => {
           toastError({ message: error })
         })

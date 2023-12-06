@@ -47,14 +47,15 @@ const EditPricingCourseForm = (props: Props) => {
         <Typography variant="h6" fontWeight="bold" fontSize="18px">
           Mức giá
         </Typography>
-        <Box width="150px">
+        <Stack width="150px" direction="row">
           <FormNumberField
             name="price"
             control={control}
             size="small"
             disable={!props.isEditable}
           />
-        </Box>
+          <Typography>VND</Typography>
+        </Stack>
       </Box>
       {props.isEditable && (
         <Button

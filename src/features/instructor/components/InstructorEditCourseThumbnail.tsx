@@ -6,13 +6,12 @@ import { styled } from '@mui/material/styles'
 import RenderImage from 'material-ui-image'
 import { ChangeEvent, useEffect, useState } from 'react'
 
+import LayoutBodyContainer from 'components/Layout/LayoutBodyContainer'
 import { getImage } from 'features/image/components/apis'
 import { MainColor } from 'libs/const/color'
 import { toastSuccess } from 'libs/utils/handle-toast'
 
 import { uploadCourseThumbnailByInstructor } from '../api'
-
-import EditLayoutInstructor from './EditLayoutInstructor'
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -113,7 +112,7 @@ const InstructorEditCourseThumbnail = ({ otherAction, courseId, url, isEditable 
   }, [url])
 
   return (
-    <EditLayoutInstructor
+    <LayoutBodyContainer
       title="Hình ảnh khóa học"
       introduction={
         <>
@@ -137,7 +136,11 @@ const InstructorEditCourseThumbnail = ({ otherAction, courseId, url, isEditable 
         <Box marginTop="20px">
           <Button component="label" variant="contained" startIcon={<UploadIcon />}>
             Tải file lên
-            <VisuallyHiddenInput type="file" onChange={handleImageChange} />
+            <VisuallyHiddenInput
+              type="file"
+              onChange={handleImageChange}
+              accept="image/png, image/jpeg, image/gif"
+            />
           </Button>
           <Button
             component="label"
@@ -155,7 +158,7 @@ const InstructorEditCourseThumbnail = ({ otherAction, courseId, url, isEditable 
           </Button>
         </Box>
       )}
-    </EditLayoutInstructor>
+    </LayoutBodyContainer>
   )
 }
 

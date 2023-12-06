@@ -29,7 +29,7 @@ const NumericFormatCustom = (
       }}
       thousandSeparator
       valueIsNumericString
-      suffix="VND"
+      // suffix="VND"
     />
   )
 }

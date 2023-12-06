@@ -1,6 +1,6 @@
 import { Button, SxProps } from '@mui/material'
 
-// import { MainColor } from 'libs/const/color'
+import { MainColor } from 'libs/const/color'
 
 type Props = {
   onClick: () => void
@@ -18,11 +18,13 @@ const CustomButton = ({ onClick, children, sxCustom, size, disable }: Props) => 
     size={size as any}
     disabled={disable === undefined ? undefined : disable}
     sx={{
-      backgroundColor: "rgb(0, 167, 111)",
+      // backgroundColor: "rgb(0, 167, 111)",
+      backgroundColor: MainColor.RED_500,
       fontWeight: '600',
       width: '100%',
       '&:hover': {
-        backgroundColor: " rgb(216,245,232)",
+        // backgroundColor: ' rgb(216,245,232)',
+        backgroundColor: MainColor.RED_400,
       },
       ...sxCustom,
     }}

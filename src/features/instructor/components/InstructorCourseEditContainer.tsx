@@ -13,6 +13,7 @@ import InstructorCourseEditLeftSide from './InstructorCourseEditLeftSide'
 import InstructorCurriculumEdit from './InstructorCurriculumEdit'
 import InstructorEditCourseThumbnail from './InstructorEditCourseThumbnail'
 import InstructorPricingEdit from './InstructorPricingEdit'
+// import InstructorPromotionEdit from './InstructorPromotionEdit'
 
 type Props = {
   courseId: string
@@ -61,6 +62,8 @@ const InstructorCourseEditContainer = ({ courseId, type }: Props) => {
             isEditable={isEditable}
           />
         )
+      // case TypeInstructorEditCourseParams.PROMOTION:
+      //   return <InstructorPromotionEdit courseId={courseId} isEditable={isEditable} />
       default:
         return <InstructorCurriculumEdit course={course} isEditable={isEditable} />
     }

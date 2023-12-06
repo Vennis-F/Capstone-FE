@@ -71,7 +71,7 @@ export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
               image={getImage(learningCourse.thumbnailUrl)}
               alt="Hình ảnh"
             />
-            <CardContent sx={{ height: '60px' }}>
+            <CardContent sx={{ height: '50px' }}>
               <Typography
                 // color={MainColor.RED_600}
                 fontWeight="bold"
@@ -88,25 +88,27 @@ export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
               </Typography>
             </CardContent>
           </CardActionArea>
-          {completePercent !== null && (
-            <CardActions>
-              <Box sx={{ width: '100%' }}>
-                <LinearProgress variant="determinate" value={completePercent} color="secondary" />
-                <Box
-                  sx={{
-                    display: 'flex',
-                    width: '100%',
-                    alignItems: 'flex-start',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <Typography sx={{ fontSize: '12px', marginTop: '4px' }}>
-                    {completePercent}% Hoàn thành
-                  </Typography>
-                </Box>
+          <CardActions>
+            <Box sx={{ width: '100%' }}>
+              <LinearProgress
+                variant="determinate"
+                value={completePercent === null ? 0 : completePercent}
+                color="secondary"
+              />
+              <Box
+                sx={{
+                  display: 'flex',
+                  width: '100%',
+                  alignItems: 'flex-start',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Typography sx={{ fontSize: '12px', marginTop: '4px' }}>
+                  {completePercent === null ? 0 : completePercent}% Hoàn thành
+                </Typography>
               </Box>
-            </CardActions>
-          )}
+            </Box>
+          </CardActions>
           <CardActions sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
             <Link
               sx={{
@@ -236,6 +238,7 @@ export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
             onChange={e => setDescriptionReport(e.target.value)}
             multiline
             placeholder="Ghi chi tiết báo cáo"
+            rows={5}
           />
         </DialogContent>
         <DialogActions>
@@ -251,7 +254,7 @@ export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
             disabled={isLoading}
             onClick={async () => {
               if (!descriptionReport || descriptionReport.trim().length === 0)
-                return toastError({ message: 'Hãy ghi điều cần báo cáo' })
+                return toastError({ message: 'Hãy ghi chi tiết báo cáo' })
 
               setIsLoadingReport(true)
               try {

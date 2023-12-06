@@ -5,14 +5,14 @@ import BarChartIcon from '@mui/icons-material/BarChart'
 import BrushIcon from '@mui/icons-material/Brush'
 import CastForEducationIcon from '@mui/icons-material/CastForEducation'
 import CategoryIcon from '@mui/icons-material/Category'
-import ColorLensIcon from '@mui/icons-material/ColorLens';
+import ColorLensIcon from '@mui/icons-material/ColorLens'
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom'
 import ImportContactsIcon from '@mui/icons-material/ImportContacts'
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn'
 import LogoutIcon from '@mui/icons-material/Logout'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import MenuIcon from '@mui/icons-material/Menu'
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import NotificationsIcon from '@mui/icons-material/Notifications'
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo'
 // import PaidIcon from '@mui/icons-material/Paid'
 import ReportIcon from '@mui/icons-material/Report'
@@ -30,8 +30,8 @@ import {
   ListItemText,
   Toolbar,
 } from '@mui/material'
-import Avatar from '@mui/material/Avatar';
-import Stack from '@mui/material/Stack';
+import Avatar from '@mui/material/Avatar'
+import Stack from '@mui/material/Stack'
 import React, { useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
@@ -52,7 +52,8 @@ interface Route {
 const routesInstructor = [
   { path: '/instructor/dashboard', icon: <BarChartIcon />, title: 'Thống kê' },
   { path: '/instructor/homepage', icon: <VideoSettingsIcon />, title: 'Khóa học' },
-  { path: '/instructor/transaction', icon: <AccountBalanceIcon />, title: 'Danh sách thanh toán' },
+  { path: '/instructor/transaction', icon: <AccountBalanceIcon />, title: 'Thanh toán' },
+  { path: '/instructor/promotion', icon: <AccountBalanceIcon />, title: 'Mã giảm giá' },
 ]
 
 const routesStaff = [
@@ -114,8 +115,8 @@ const StaffLayout = () => {
   return (
     <>
       <CssBaseline />
-      <AppBar sx={{ backgroundColor: "#FFFFFF" }}>
-        <Toolbar sx={{ textAlign: "right", width: "100%", justifyContent: "flex-end" }}>
+      <AppBar sx={{ backgroundColor: '#FFFFFF' }}>
+        <Toolbar sx={{ textAlign: 'right', width: '100%', justifyContent: 'flex-end' }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -130,8 +131,11 @@ const StaffLayout = () => {
           </IconButton>
           {/* <Typography sx={{ color: "rgb(99, 115, 129)", fontWeight: "600", '& .MuiListItemText-primary': { fontWeight: "bold" }, fontSize: "20px" }}>{currentRole}</Typography> */}
           <Stack direction="row" spacing={2}>
-            <NotificationsIcon sx={{ color: "rgb(99, 115, 129)", fontSize: "35px" }} />
-            <Avatar alt="Remy Sharp" src="https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_25.jpg" />
+            <NotificationsIcon sx={{ color: 'rgb(99, 115, 129)', fontSize: '35px' }} />
+            <Avatar
+              alt="Remy Sharp"
+              src="https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_25.jpg"
+            />
           </Stack>
         </Toolbar>
       </AppBar>
@@ -141,13 +145,12 @@ const StaffLayout = () => {
         open={open}
         onMouseEnter={handleDrawerOpen}
         onMouseLeave={handleDrawerClose}
-
       >
-        <DrawerHeader sx={{ display: "flex", justifyContent: "center" }}>
-          <ColorLensIcon fontSize='large' sx={{ color: "rgb(0, 167, 111)" }} />
+        <DrawerHeader sx={{ display: 'flex', justifyContent: 'center' }}>
+          <ColorLensIcon fontSize="large" sx={{ color: 'rgb(0, 167, 111)' }} />
         </DrawerHeader>
         <Divider />
-        <List sx={{ paddingX: "10px" }}>
+        <List sx={{ paddingX: '10px' }}>
           {currentRole &&
             currentRoutes.length > 0 &&
             currentRoutes.map(({ icon, path, title }, index) => (
@@ -158,10 +161,9 @@ const StaffLayout = () => {
                   display: 'block',
                   padding: '0 !important',
                   // borderLeft: currPathName === path ? '4px solid rgb(0, 167, 111)' : undefined,
-                  backgroundColor: currPathName === path ? " rgb(216,245,232)" : "#FFFFFF",
+                  backgroundColor: currPathName === path ? ' rgb(216,245,232)' : '#FFFFFF',
                   borderRadius: 2,
                   // paddingX: "5px"
-
                 }}
               >
                 <ListItemButton
@@ -170,8 +172,8 @@ const StaffLayout = () => {
                     minHeight: 48,
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
-                    color: "rgb(99, 115, 129)",
-                    marginBottom: "5px",
+                    color: 'rgb(99, 115, 129)',
+                    marginBottom: '5px',
                   }}
                 >
                   <ListItemIcon
@@ -179,12 +181,20 @@ const StaffLayout = () => {
                       minWidth: 0,
                       mr: open ? 3 : 'auto',
                       justifyContent: 'center',
-                      color: currPathName === path ? " rgb(0, 167, 111)" : "rgb(99, 115, 129)",
+                      color: currPathName === path ? ' rgb(0, 167, 111)' : 'rgb(99, 115, 129)',
                     }}
                   >
                     {icon}
                   </ListItemIcon>
-                  <ListItemText primary={title} sx={{ opacity: open ? 1 : 0, color: currPathName === path ? " rgb(0, 167, 111)" : "rgb(99, 115, 129)", fontWeight: "600", '& .MuiListItemText-primary': { fontWeight: "bold" } }} />
+                  <ListItemText
+                    primary={title}
+                    sx={{
+                      opacity: open ? 1 : 0,
+                      color: currPathName === path ? ' rgb(0, 167, 111)' : 'rgb(99, 115, 129)',
+                      fontWeight: '600',
+                      '& .MuiListItemText-primary': { fontWeight: 'bold' },
+                    }}
+                  />
                 </ListItemButton>
               </ListItem>
             ))}
@@ -212,19 +222,27 @@ const StaffLayout = () => {
                   minWidth: 0,
                   mr: open ? 3 : 'auto',
                   justifyContent: 'center',
-                  color: "rgb(99, 115, 129)",
+                  color: 'rgb(99, 115, 129)',
                 }}
               >
                 <LogoutIcon />
               </ListItemIcon>
-              <ListItemText primary={'Đăng xuất'} sx={{ opacity: open ? 1 : 0, color: "rgb(99, 115, 129)", fontWeight: "600", '& .MuiListItemText-primary': { fontWeight: "bold" } }} />
+              <ListItemText
+                primary={'Đăng xuất'}
+                sx={{
+                  opacity: open ? 1 : 0,
+                  color: 'rgb(99, 115, 129)',
+                  fontWeight: '600',
+                  '& .MuiListItemText-primary': { fontWeight: 'bold' },
+                }}
+              />
             </ListItemButton>
           </ListItem>
         </List>
       </Drawer>
       <main>
         <Box
-          sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: '#FFFFFF' }}
+          sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: '#f0fdf4' }}
         >
           <main>
             <Box

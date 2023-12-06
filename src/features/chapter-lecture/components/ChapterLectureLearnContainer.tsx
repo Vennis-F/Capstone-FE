@@ -17,9 +17,12 @@ import { useTour } from '@reactour/tour'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
+import { generateCertifcate } from 'features/achivement/api'
 // import { MainColor } from 'libs/const/color'
 import VideoPlayer from 'libs/ui/components/VideoPlayer'
+import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { formatSecondToMinute } from 'libs/utils/handle-time'
+import { toastSuccess } from 'libs/utils/handle-toast'
 import { getVideo } from 'libs/utils/handle-video'
 
 import { getChapterLectureOfLearnerStudy, saveUserLectureCompleted } from '../api'
@@ -79,6 +82,18 @@ const ChapterLectureLearnContainer = ({ courseId }: Props) => {
     handleGetChapterLectureStudy()
   }
 
+  const handleGeneratePdf = async () => {
+    console.log(chapterLectures[chapterLectures.length - 1].id, currChapterLecture?.id)
+    if (chapterLectures[chapterLectures.length - 1].id === currChapterLecture?.id) {
+      try {
+        generateCertifcate(courseId)
+        toastSuccess({ message: 'Chúc mừng bạn đã hoàn thành khóa học, bạn đã được nhận bằng cấp' })
+      } catch (error) {
+        showErrorResponseSaga({ error, defaultMessage: 'Không tạo bằng cấp được' })
+      }
+    }
+  }
+
   useEffect(() => {
     console.log(searchParams)
     handleGetChapterLectureStudy()
@@ -104,6 +119,7 @@ const ChapterLectureLearnContainer = ({ courseId }: Props) => {
             videoURL={!currChapterLecture ? '' : getVideo(currChapterLecture.video)}
             handleSaveCompleteChapterLecture={handleSaveCompleteChapterLecture}
             chapterLectureId={currChapterLecture?.id}
+            handleGeneratePdf={handleGeneratePdf}
           />
         </Box>
 

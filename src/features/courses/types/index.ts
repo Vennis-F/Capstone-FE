@@ -10,14 +10,20 @@ export enum CourseStatus {
   BANNED = 'Banned',
 }
 
+export enum CourseLearnStatus {
+  COMPLETED = 'Completed',
+  LEARNING = 'Learning',
+  NOT_LEARNING = 'NotLearning',
+}
+
 export type Course = {
   id: string
   title: string
   description: string | null
   price: number
-  discount: number
-  discountPrice: number
-  promotionCourseByStaffId: string | null
+  // discount: number
+  // discountPrice: number
+  // promotionCourseByStaffId: string | null
   ratedStar: number
   author: string
   totalLength: number
@@ -62,11 +68,10 @@ export type CourseFilterResponse = {
   totalBought: number
   thumbnailUrl: string
   active: boolean
+  completedPercent: number | null
 }
 
-export type CourseLearnerFilterResponse = {
-  completedPercent: number
-} & CourseFilterResponse
+export type CourseLearnerFilterResponse = CourseFilterResponse
 
 // Components
 export enum SortCourseBy {

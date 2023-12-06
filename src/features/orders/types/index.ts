@@ -3,6 +3,7 @@ import { PromotionCourse } from 'features/promotion/types'
 import { RefundFilterResponse } from 'features/refund/types'
 import { Transaction } from 'features/transaction/types'
 import { UserFilterResponse } from 'features/user/types'
+import { PageOptions } from 'types'
 
 export enum NameOrderStatus {
   Pending = 'Pending',
@@ -14,15 +15,15 @@ export enum NameOrderStatus {
 export const convertOrderStatus = (orderStatus: NameOrderStatus) => {
   switch (orderStatus) {
     case NameOrderStatus.Success:
-      return { color: '#008000', vietnamse: 'Thành công' }
+      return { color: '#008000', vietnamse: 'Thành công', status: NameOrderStatus.Success }
     case NameOrderStatus.Cancel:
-      return { color: '#FF0000', vietnamse: 'Hủy bỏ' }
+      return { color: '#FF0000', vietnamse: 'Hủy bỏ', status: NameOrderStatus.Cancel }
     case NameOrderStatus.Pending:
-      return { color: '#FFD700', vietnamse: 'Đang chờ' }
+      return { color: '#FFD700', vietnamse: 'Đang chờ', status: NameOrderStatus.Pending }
     case NameOrderStatus.Fail:
-      return { color: '#FF0000', vietnamse: 'Thất bại' }
+      return { color: '#FF0000', vietnamse: 'Thất bại', status: NameOrderStatus.Fail }
     default:
-      return { color: '#808080', vietnamse: 'Unkown' }
+      return { color: '#808080', vietnamse: 'Unkown', status: 'None' }
   }
 }
 
@@ -56,4 +57,9 @@ export type OrderDetail = {
 export type UpdateOrderBodyRequest = {
   orderId: string
   nameOrderStatus: NameOrderStatus
+}
+
+export type FindOrdersByUserBodyRequest = {
+  orderStatus?: NameOrderStatus
+  pageOptions: PageOptions
 }

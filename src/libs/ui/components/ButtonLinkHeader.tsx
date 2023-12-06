@@ -15,12 +15,14 @@ const style: StyleSxProps = {
     ':hover': {
       color: '#ac4a4a',
     },
+    textTransform: 'capitalize',
   },
   title: {
     width: '100%',
     fontSize: 14,
     paddingX: 2,
     fontWeight: 'bold',
+    textTransform: 'capitalize',
   },
 } as const
 
@@ -32,6 +34,7 @@ const ButtonLinkHeader = ({ children, to }: ButtonLinkHeaderProps) => (
     color="white"
     sx={style.link}
     underline="none"
+    textTransform="capitalize"
   >
     <Typography sx={style.title} variant="button">
       {children}

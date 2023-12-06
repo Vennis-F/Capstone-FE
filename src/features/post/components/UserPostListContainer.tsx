@@ -36,7 +36,7 @@ const UserPostListContainer = () => {
     fetchPosts()
   }, [])
 
-  console.log('[component=UserPostListContainer] posts length', posts.length)
+  console.log('[component=UserPostListContainer] posts length', posts.length, pageCount)
 
   return (
     <Container>
@@ -51,11 +51,13 @@ const UserPostListContainer = () => {
           <PostCardView post={post} key={post.id} />
         ))}
       </Grid>
-      <Box sx={{ display: 'flex', justifyContent: 'center', marginY: '40px' }}>
-        <Stack spacing={2}>
-          <Pagination count={pageCount} page={page} onChange={handleChange} color="secondary" />
-        </Stack>
-      </Box>
+      {pageCount > 1 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', marginY: '40px' }}>
+          <Stack spacing={2}>
+            <Pagination count={pageCount} page={page} onChange={handleChange} color="secondary" />
+          </Stack>
+        </Box>
+      )}
     </Container>
   )
 }

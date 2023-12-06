@@ -1,8 +1,8 @@
-import PostManageContainer from 'features/post/components/PostManageContainer'
+import ContestManageContainer from 'features/contest/components/ContestManageContainer'
 
 const StaffManageContestPage = () => (
   <>
-    <PostManageContainer />
+    <ContestManageContainer />
   </>
 )
 

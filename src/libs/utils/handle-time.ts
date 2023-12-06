@@ -9,3 +9,5 @@ export const secondsToMinutesString = (seconds: number): string => {
 
   return `${minutesString}:${secondsString}`
 }
+
+export const formatSecondToHour = (second: number) => Math.round((second / 60 / 60) * 10) / 10

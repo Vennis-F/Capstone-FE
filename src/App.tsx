@@ -1,3 +1,5 @@
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import React from 'react'
 import { Provider } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
@@ -12,8 +14,10 @@ const App = () => (
   <>
     <Provider store={store}>
       <Router history={history}>
-        <AppRoutes />
-        <ToastContainer />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <AppRoutes />
+          <ToastContainer />
+        </LocalizationProvider>
       </Router>
     </Provider>
   </>
