@@ -28,7 +28,7 @@ export const FormTextField = ({
     render={({ field: { onChange, value }, fieldState: { error } }) => (
       <TextField
         rows={rows}
-        multiline
+        multiline={rows > 1}
         helperText={error ? error.message : null}
         size={size}
         error={!!error}

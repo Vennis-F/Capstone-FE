@@ -1,4 +1,3 @@
-import { Typography } from '@material-ui/core'
 import StarIcon from '@mui/icons-material/Star'
 import {
   Divider,
@@ -10,13 +9,13 @@ import {
   Container,
   Grid,
   Button,
+  Typography,
 } from '@mui/material'
 import Image from 'material-ui-image'
 import { useEffect, useState } from 'react'
 import Carousel from 'react-material-ui-carousel'
 import { useNavigate } from 'react-router-dom'
 
-// import { sliderContestData } from 'features/courses/data/sliderContestData'
 import { getImage } from 'features/image/components/apis'
 import { OrderType } from 'types'
 

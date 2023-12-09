@@ -4,7 +4,7 @@ import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium'
 import { Button, Container, List, ListItem, ListItemText, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 
-import { downloadCertifcate, getListAchievements } from '../api'
+import { downloadCertifcate, getCertificate, getListAchievements } from '../api'
 import { ViewAchievementReponse } from '../types'
 
 const AchivementListContainer = () => {
@@ -54,7 +54,13 @@ const AchivementListContainer = () => {
               variant="outlined"
               startIcon={<LaptopIcon />}
               onClick={async () => {
-                // await getList()
+                const response = await getCertificate(achive.path)
+
+                const blob = new Blob([response], { type: 'application/pdf' })
+
+                const url = URL.createObjectURL(blob)
+
+                window.open(url, '_blank')
               }}
             >
               Xem trước
@@ -65,8 +71,21 @@ const AchivementListContainer = () => {
               variant="contained"
               endIcon={<DownloadIcon />}
               onClick={async () => {
-                console.log(achive.path)
-                await downloadCertifcate(achive.path)
+                try {
+                  const response = await downloadCertifcate(achive.path)
+
+                  const blob = new Blob([response], { type: 'application/pdf' })
+
+                  const url = window.URL.createObjectURL(blob)
+                  const link = document.createElement('a')
+                  link.href = url
+                  link.setAttribute('download', `${achive.courseName}-certificate.pdf`)
+                  document.body.appendChild(link)
+                  link.click()
+                  document.body.removeChild(link)
+                } catch (error) {
+                  console.error('Error downloading file:', error)
+                }
               }}
             >
               Tải xuống

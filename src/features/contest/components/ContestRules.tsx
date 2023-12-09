@@ -1,8 +1,7 @@
-import { Grid, Typography } from '@material-ui/core'
 import AddIcon from '@mui/icons-material/Add'
-import { Box, Container, Paper } from '@mui/material'
+import { Box, Container, Paper, Grid, Typography } from '@mui/material'
 import Image from 'material-ui-image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { createCustomerDrawing, updateCustomerDrawingImage } from 'features/customer-drawing/api'
 import CreateCustomerDrawingDialogForm from 'features/customer-drawing/components/CreateCustomerDrawingDialogForm'
@@ -23,6 +22,7 @@ type Props = {
 const ContestRules = ({ contest }: Props) => {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [timeLeft, setTimeLeft] = useState<string>(`0`)
 
   const handleJoinContest = async () => {
     const userRole = getUserRole()
@@ -32,9 +32,39 @@ const ContestRules = ({ contest }: Props) => {
     return null
   }
 
+  useEffect(() => {
+    const endDate = new Date(contest.expiredDate).getTime()
+
+    const timer = setInterval(() => {
+      const now = new Date().getTime()
+      const distance = endDate - now
+
+      if (distance <= 0) {
+        clearInterval(timer)
+        setTimeLeft(`0`)
+      } else {
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24))
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000)
+
+        // Hiển thị thời gian còn lại dưới dạng chuỗi
+        setTimeLeft(`${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`)
+      }
+    }, 1000)
+
+    return () => {
+      clearInterval(timer)
+    }
+  }, [])
+
   return (
     <>
       <Box width="100%" textAlign="right" marginY="20px">
+        <div>
+          <h2>Thời gian còn lại cho cuộc thi:</h2>
+          <p>{timeLeft}</p>
+        </div>
         <CustomButton
           onClick={handleJoinContest}
           sxCustom={{ width: '220px' }}

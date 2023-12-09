@@ -8,14 +8,11 @@ const api = makeApi(`${Env.API_BASE_URL}`)
 
 const ACHIVEMENT_BASE_URL = `/achievement`
 
-// export const getAchievementCertificate = (path: string): Promise<void> =>
-//   api.get(`${ACHIVEMENT_BASE_URL}?active=${active}`)
+export const getCertificate = (path: string): Promise<BlobPart> =>
+  api.get(`${ACHIVEMENT_BASE_URL}?path=${path}`, { responseType: 'blob' })
 
-export const downloadCertifcate = (path: string): Promise<void> =>
-  api.get(`${ACHIVEMENT_BASE_URL}/download?path=${path}`)
-
-// export const getCategoriesByAdmin = (): Promise<Category[]> =>
-//   api.get(`${ACHIVEMENT_BASE_URL}/admin`)
+export const downloadCertifcate = (path: string): Promise<BlobPart> =>
+  api.get(`${ACHIVEMENT_BASE_URL}/download?path=${path}`, { responseType: 'blob' })
 
 export const generateCertifcate = (courseId: string): Promise<void> =>
   api.post(`${ACHIVEMENT_BASE_URL}/generate?courseId=${courseId}`)
