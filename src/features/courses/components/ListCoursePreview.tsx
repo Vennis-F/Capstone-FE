@@ -25,15 +25,15 @@ import { getVideo } from 'libs/utils/handle-video'
 
 type Props = {
   chapterLectures: ChapterLecture[]
+  courseId: string
 }
 
-const ListCoursePreview = ({ chapterLectures }: Props) => {
+const ListCoursePreview = ({ chapterLectures, courseId }: Props) => {
   const [expanded, setExpanded] = useState(true)
   const [currChapterLecturePreview, setCurrChapterLecturePreview] = useState<ChapterLecture | null>(
     null,
   )
   const [open, setOpen] = useState(false)
-
   const handleChange = () => {
     setExpanded(!expanded)
   }
@@ -47,6 +47,8 @@ const ListCoursePreview = ({ chapterLectures }: Props) => {
     setOpen(true)
     setCurrChapterLecturePreview(chapterLecture)
   }
+
+  console.log(courseId)
 
   return (
     <>

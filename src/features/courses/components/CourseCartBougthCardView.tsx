@@ -234,60 +234,62 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
 
       <Divider />
 
-      <CardActions
-        sx={{
-          textAlign: 'center',
-          display: 'flex',
-          justifyContent: 'center',
-          flexDirection: 'column',
-        }}
-      >
-        <Button
-          sx={{ color: '#8b5cf6', fontWeight: '600', marginBottom: '10px' }}
-          size="small"
-          onClick={() => {
-            // if (!courseDetail.promotionCourseByStaffId) {
-            //   setShowInputCoupon(!showInputCoupon)
-            //   setCoupon('')
-            // } else toastWarn({ message: 'Khóa học đã được giảm giá!' })
-            // if (!courseDetail.promotionCourseByStaffId) {
-            setShowInputCoupon(!showInputCoupon)
-            setCoupon('')
-            // } else toastWarn({ message: 'Khóa học đã được giảm giá!' })
+      {!isOwned && (
+        <CardActions
+          sx={{
+            textAlign: 'center',
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column',
           }}
         >
-          Áp mã giảm giá
-        </Button>
-        {showInputCoupon && (
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <TextField
-              size="small"
-              placeholder="Nhập mã giảm giá"
-              value={coupon}
-              disabled={!activeInput}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setCoupon(event.target.value)
-              }}
-            />
-            <Button
-              sx={{
-                textTransform: 'capitalize',
-                backgroundColor: '#a78bfa',
-                color: 'white',
-                fontWeight: '600',
-                ':hover': {
-                  backgroundColor: '#b4a0ee',
-                },
-                marginLeft: '10px',
-              }}
-              disabled={!activeInput}
-              onClick={handleClickApplyCoupon}
-            >
-              Áp dụng
-            </Button>
-          </Box>
-        )}
-      </CardActions>
+          <Button
+            sx={{ color: '#8b5cf6', fontWeight: '600', marginBottom: '10px' }}
+            size="small"
+            onClick={() => {
+              // if (!courseDetail.promotionCourseByStaffId) {
+              //   setShowInputCoupon(!showInputCoupon)
+              //   setCoupon('')
+              // } else toastWarn({ message: 'Khóa học đã được giảm giá!' })
+              // if (!courseDetail.promotionCourseByStaffId) {
+              setShowInputCoupon(!showInputCoupon)
+              setCoupon('')
+              // } else toastWarn({ message: 'Khóa học đã được giảm giá!' })
+            }}
+          >
+            Áp mã giảm giá
+          </Button>
+          {showInputCoupon && (
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <TextField
+                size="small"
+                placeholder="Nhập mã giảm giá"
+                value={coupon}
+                disabled={!activeInput}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setCoupon(event.target.value)
+                }}
+              />
+              <Button
+                sx={{
+                  textTransform: 'capitalize',
+                  backgroundColor: '#a78bfa',
+                  color: 'white',
+                  fontWeight: '600',
+                  ':hover': {
+                    backgroundColor: '#b4a0ee',
+                  },
+                  marginLeft: '10px',
+                }}
+                disabled={!activeInput}
+                onClick={handleClickApplyCoupon}
+              >
+                Áp dụng
+              </Button>
+            </Box>
+          )}
+        </CardActions>
+      )}
     </Card>
   )
 }

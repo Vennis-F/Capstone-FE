@@ -1,4 +1,3 @@
-import { Avatar, Grid } from '@material-ui/core'
 import EventIcon from '@mui/icons-material/Event'
 import GrainIcon from '@mui/icons-material/Grain'
 import HomeIcon from '@mui/icons-material/Home'
@@ -14,6 +13,8 @@ import {
   CardContent,
   Stack,
   Pagination,
+  Avatar,
+  Grid,
 } from '@mui/material'
 import Breadcrumbs from '@mui/material/Breadcrumbs'
 import Link from '@mui/material/Link'
@@ -194,7 +195,7 @@ export const CouresDetailGuestContainer = ({ id }: CouresDetailGuestContainerPro
                 <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: '10px' }}>
                   Nội dung khóa học
                 </Typography>
-                <ListCoursePreview chapterLectures={chapterLectures} />
+                <ListCoursePreview courseId={courseDetail.id} chapterLectures={chapterLectures} />
               </Box>
             </Container>
             <Container maxWidth="lg" sx={{ marginTop: '20px' }}>

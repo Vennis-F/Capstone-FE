@@ -15,11 +15,11 @@ import { textFromHTMLCode } from 'libs/utils/handle-html-data'
 import { toastWarn } from 'libs/utils/handle-toast'
 
 import { updateContestThumbnailByStaff } from '../api'
-import { CreateContestFormInput } from '../types/form.type'
+import { EditContestFormInput } from '../types/form.type'
 
 export type Props = {
-  defaultValues?: CreateContestFormInput
-  onSubmitClick(data: CreateContestFormInput, reset: UseFormReset<CreateContestFormInput>): void
+  defaultValues?: EditContestFormInput
+  onSubmitClick(data: EditContestFormInput, reset: UseFormReset<EditContestFormInput>): void
   openDialog: boolean
   handleOpenDialog: () => void
   handleCloseDialog: () => void
@@ -39,7 +39,7 @@ const EditContestDialogForm = (props: Props) => {
     // resources: Yup.string().required('Không được để trống bài viét'),
   })
 
-  const methods = useForm<CreateContestFormInput>({
+  const methods = useForm<EditContestFormInput>({
     defaultValues,
     resolver: yupResolver(newValidationSchema),
   })
@@ -51,7 +51,7 @@ const EditContestDialogForm = (props: Props) => {
     formState: { isDirty, dirtyFields, isSubmitting }, // tự nhiêm làm bước này xong thì lại thành công vcl
   } = methods
 
-  const submitHandler = (data: CreateContestFormInput) => {
+  const submitHandler = (data: EditContestFormInput) => {
     console.log('[submit]', isDirty, dirtyFields, data)
     if (
       !isDirty ||

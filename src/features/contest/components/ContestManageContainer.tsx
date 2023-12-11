@@ -11,7 +11,7 @@ import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastSuccess } from 'libs/utils/handle-toast'
 import { OrderType, PageOptions } from 'types'
 
-import { createContestByStaff, getContestsByStaff } from '../api'
+import { createContestByStaff, definePromotionForWinner, getContestsByStaff } from '../api'
 import { Contest } from '../types'
 
 import CreateContestDialogForm from './CreateContestDialogForm'
@@ -80,6 +80,7 @@ const ContestManageContainer = () => {
             description: currentContest.description,
             startedDate: currentContest.startedDate,
             expiredDate: currentContest.expiredDate,
+            isVisible: currentContest.isVisible,
           }}
           otherValues={{
             url: currentContest.thumbnailUrl,
@@ -118,17 +119,44 @@ const ContestManageContainer = () => {
           prize: '',
           startedDate: '',
           expiredDate: '',
+          discountPercentFirst: 10,
+          effectiveDateFirst: '',
+          expiredDateFirst: '',
+          discountPercentSecond: 10,
+          effectiveDateSecond: '',
+          expiredDateSecond: '',
+          discountPercentThird: 10,
+          effectiveDateThird: '',
+          expiredDateThird: '',
+          isVisible: true,
         }}
         onSubmitClick={async (data, reset) => {
           setIsLoadingCreate(true)
           try {
-            await createContestByStaff({
+            const contest = await createContestByStaff({
               title: data.title,
               description: data.description,
               prize: data.prize,
               startedDate: data.startedDate,
               expiredDate: data.expiredDate,
+              isVisible: data.isVisible,
             })
+
+            await definePromotionForWinner(
+              {
+                discountPercentFirst: data.discountPercentFirst,
+                discountPercentSecond: data.discountPercentSecond,
+                discountPercentThird: data.discountPercentThird,
+                effectiveDateFirst: data.effectiveDateFirst,
+                effectiveDateSecond: data.effectiveDateSecond,
+                effectiveDateThird: data.effectiveDateThird,
+                expiredDateFirst: data.expiredDateFirst,
+                expiredDateSecond: data.expiredDateSecond,
+                expiredDateThird: data.expiredDateThird,
+              },
+              contest.id,
+            )
+
             reset()
             fetchContests()
             setIsOpenFormCreate(false)

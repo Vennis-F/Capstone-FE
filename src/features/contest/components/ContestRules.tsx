@@ -1,9 +1,14 @@
+/* eslint-disable  @typescript-eslint/indent */
 import AddIcon from '@mui/icons-material/Add'
 import { Box, Container, Paper, Grid, Typography } from '@mui/material'
 import Image from 'material-ui-image'
 import { useEffect, useState } from 'react'
 
-import { createCustomerDrawing, updateCustomerDrawingImage } from 'features/customer-drawing/api'
+import {
+  checkCustomerDrawingSubmitted,
+  createCustomerDrawing,
+  updateCustomerDrawingImage,
+} from 'features/customer-drawing/api'
 import CreateCustomerDrawingDialogForm from 'features/customer-drawing/components/CreateCustomerDrawingDialogForm'
 import { getImage } from 'features/image/components/apis'
 import CustomButton from 'libs/ui/components/CustomButton'
@@ -11,9 +16,12 @@ import { getStringMinuteHourDayMonthYear } from 'libs/utils/handle-date'
 import { renderHTML } from 'libs/utils/handle-html-data'
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastSuccess, toastWarn } from 'libs/utils/handle-toast'
-import { getUserRole } from 'libs/utils/handle-token'
+import { getAccessToken, getUserRole } from 'libs/utils/handle-token'
+import { UserRole } from 'types'
 
 import { Contest, ContestStatus } from '../types'
+
+import TimeLeft from './TimeLeft'
 
 type Props = {
   contest: Contest
@@ -22,7 +30,7 @@ type Props = {
 const ContestRules = ({ contest }: Props) => {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [timeLeft, setTimeLeft] = useState<string>(`0`)
+  const [isSubmit, setIsSubmit] = useState(false)
 
   const handleJoinContest = async () => {
     const userRole = getUserRole()
@@ -32,46 +40,50 @@ const ContestRules = ({ contest }: Props) => {
     return null
   }
 
+  const handleCustomerDrawingSubmit = async () => {
+    const isSubmitRes = await checkCustomerDrawingSubmitted(contest.id)
+    setIsSubmit(isSubmitRes)
+  }
+
   useEffect(() => {
-    const endDate = new Date(contest.expiredDate).getTime()
-
-    const timer = setInterval(() => {
-      const now = new Date().getTime()
-      const distance = endDate - now
-
-      if (distance <= 0) {
-        clearInterval(timer)
-        setTimeLeft(`0`)
-      } else {
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24))
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000)
-
-        // Hiển thị thời gian còn lại dưới dạng chuỗi
-        setTimeLeft(`${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`)
-      }
-    }, 1000)
-
-    return () => {
-      clearInterval(timer)
-    }
+    if (getAccessToken() && getUserRole() === UserRole.CUSTOMER) handleCustomerDrawingSubmit()
   }, [])
 
   return (
     <>
       <Box width="100%" textAlign="right" marginY="20px">
-        <div>
-          <h2>Thời gian còn lại cho cuộc thi:</h2>
-          <p>{timeLeft}</p>
-        </div>
-        <CustomButton
-          onClick={handleJoinContest}
-          sxCustom={{ width: '220px' }}
-          disable={contest.status !== ContestStatus.ACTIVE}
-        >
-          <AddIcon /> Tham gia cuộc thi
-        </CustomButton>
+        {contest.status === ContestStatus.ACTIVE && <TimeLeft contest={contest} />}
+        {(contest.status === ContestStatus.EXPIRED || contest.status === ContestStatus.PENDING) && (
+          <Typography
+            border="1px solid #c084fc"
+            width="240px"
+            fontWeight="bold"
+            color="#c084fc"
+            textAlign="center"
+            padding="10px 14px"
+          >
+            {contest.status === ContestStatus.PENDING
+              ? 'CUỘC THI CHƯA DIỄN RA'
+              : 'CUỘC THI ĐÃ KẾT THÚC'}
+          </Typography>
+        )}
+        {contest.status === ContestStatus.ACTIVE &&
+          getAccessToken() &&
+          getUserRole() === UserRole.CUSTOMER && (
+            <CustomButton
+              onClick={handleJoinContest}
+              sxCustom={{ width: '220px' }}
+              disable={isSubmit}
+            >
+              {!isSubmit ? (
+                <>
+                  <AddIcon /> Tham gia cuộc thi
+                </>
+              ) : (
+                'Bạn đã đăng tải bài thi'
+              )}
+            </CustomButton>
+          )}
       </Box>
 
       <Container
@@ -194,6 +206,7 @@ const ContestRules = ({ contest }: Props) => {
             await updateCustomerDrawingImage(customerDrawing.id, formData)
 
             toastSuccess({ message: 'Bạn đã tạo bài thi thành công!!!' })
+            handleCustomerDrawingSubmit()
             setOpen(false)
             reset()
           } catch (error) {

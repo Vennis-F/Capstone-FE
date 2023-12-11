@@ -12,7 +12,7 @@ import {
   getCustomerDrawingsByContest,
   getCustomerDrawingsByContestByStaff,
 } from '../api'
-import { CustomerDrawing, CustomerDrawingNotFilter } from '../types'
+import { CustomerDrawing, CustomerDrawingNotFilter, CustomerDrawingStatus } from '../types'
 
 interface Props {
   contestId: string
@@ -62,8 +62,8 @@ const TableCustomerDrawings = ({ contestId }: Props) => {
     {
       field: 'totalVotes',
       headerName: 'Số lượng vote',
-      width: 200,
-      valueGetter: (params: GridValueGetterParams) => new Date(params.row.votes.length),
+      width: 150,
+      valueGetter: (params: GridValueGetterParams) => params.row.votes.length,
     },
     {
       field: 'active',
@@ -73,9 +73,8 @@ const TableCustomerDrawings = ({ contestId }: Props) => {
       sortable: false,
     },
     {
-      field: 'approved',
-      headerName: 'Được thông qua?',
-      type: 'boolean',
+      field: 'status',
+      headerName: 'Trạng thái',
       width: 130,
       sortable: false,
     },
@@ -87,37 +86,46 @@ const TableCustomerDrawings = ({ contestId }: Props) => {
       width: 250,
       renderCell: (params: GridRenderCellParams) => (
         <div>
-          {/* <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            // onClick={() => onEditRow(params.row.id)} // Thay handleEdit bằng hàm xử lý sự kiện edit
-            sx={{ marginRight: '10px' }}
-          >
-            Thay đổi
-          </Button> */}
-          {!params.row.approved && (
-            <Button
-              variant="contained"
-              color="secondary"
-              size="small"
-              onClick={async () => {
-                await approveCustomerDrawingByStaff(params.row.id)
-                fetchCustomerDrawings()
-              }} // Thay handleEdit bằng hàm xử lý sự kiện edit
-              sx={{ marginRight: '10px' }}
-            >
-              Chấp nhận
-            </Button>
+          {params.row.status === CustomerDrawingStatus.PENDING && (
+            <>
+              <Button
+                variant="contained"
+                color="secondary"
+                size="small"
+                onClick={async () => {
+                  await approveCustomerDrawingByStaff(params.row.id, CustomerDrawingStatus.APPROVED)
+                  fetchCustomerDrawings()
+                }}
+                sx={{ marginRight: '10px' }}
+              >
+                Chấp nhận
+              </Button>
+              <Button
+                variant="contained"
+                color="warning"
+                size="small"
+                onClick={async () => {
+                  await approveCustomerDrawingByStaff(params.row.id, CustomerDrawingStatus.REJECTED)
+                  fetchCustomerDrawings()
+                }}
+                sx={{ marginRight: '10px' }}
+              >
+                Từ chối
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                size="small"
+                onClick={async () => {
+                  await approveCustomerDrawingByStaff(params.row.id, CustomerDrawingStatus.BANNED)
+                  fetchCustomerDrawings()
+                }}
+                sx={{ marginRight: '10px' }}
+              >
+                Ban
+              </Button>
+            </>
           )}
-          {/* <Button
-            variant="contained"
-            color="error"
-            size="small"
-            onClick={() => console.log(123)} // Thay handleDelete bằng hàm xử lý sự kiện delete
-          >
-            Delete
-          </Button> */}
         </div>
       ),
       sortable: false,

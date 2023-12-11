@@ -14,6 +14,8 @@ export type CustomerDrawing = {
   customerName: string
   contestName: string
   totalVotes: number
+  isVoted: boolean
+  isOwned: boolean
 }
 
 export type CreateCustomerDrawingBodyRequest = {
@@ -45,9 +47,16 @@ export type CustomerDrawingNotFilter = {
   imageUrl: string
   insertedDate: string
   updatedDate: string
-  approved: boolean
   active: boolean
+  status: string
   user: User
   votes: Vote[]
   totalVotes: number
+}
+
+export enum CustomerDrawingStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  BANNED = 'BANNED',
 }

@@ -1,13 +1,17 @@
-/* eslint-disable */
-import { Grid, Typography } from '@material-ui/core'
-import { Box, Container } from '@mui/material'
-import { getCustomerDrawingsByContest } from 'features/customer-drawing/api'
-import { CustomerDrawing, CustomerDrawingSortField } from 'features/customer-drawing/types'
+import { Box, Button, Container, Grid, Typography } from '@mui/material'
 import Image from 'material-ui-image'
 import React, { useEffect, useState } from 'react'
-import { OrderType } from 'types'
-import { Contest } from '../types'
+
+import { getCustomerDrawingsByContest } from 'features/customer-drawing/api'
+import { CustomerDrawing, CustomerDrawingSortField } from 'features/customer-drawing/types'
 import { getImage } from 'features/image/components/apis'
+import DialogBinaryQuestion from 'libs/ui/components/DialogBinaryQuestion'
+import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
+import { toastSuccess } from 'libs/utils/handle-toast'
+import { OrderType } from 'types'
+
+import { createVoteCustomerDrawing } from '../api'
+import { Contest } from '../types'
 
 type Props = {
   contest: Contest
@@ -15,6 +19,8 @@ type Props = {
 
 const ContestPaint = ({ contest }: Props) => {
   const [customerDrawings, setCustomerDrawings] = useState<CustomerDrawing[]>([])
+  const [loading, setLoading] = useState(false)
+  const [currCustomerDrawing, setCurrCustomerDrawing] = useState<CustomerDrawing | null>(null)
 
   const fetchCustomerDrawings = async () => {
     try {
@@ -40,7 +46,7 @@ const ContestPaint = ({ contest }: Props) => {
     <Container maxWidth="lg" style={{ backgroundColor: '#fff', paddingTop: 10 }}>
       <Grid container spacing={5}>
         {customerDrawings.map(customerDrawing => (
-          <Grid item xs={3}>
+          <Grid item xs={3} key={customerDrawing.id}>
             <Image
               src={getImage(customerDrawing.imageUrl)}
               style={{ height: '220px', width: '250px', padding: 0 }}
@@ -58,13 +64,43 @@ const ContestPaint = ({ contest }: Props) => {
               <Typography style={{ fontSize: 14, fontWeight: 'bold', color: 'inherit' }}>
                 {customerDrawing.title}
               </Typography>
-              <Typography style={{ color: '#666666', fontSize: 12 }}>
-                {customerDrawing.customerName}
+              <Typography style={{ fontSize: 14, fontWeight: 'bold', color: 'inherit' }}>
+                Số lượng vote: {customerDrawing.totalVotes}
               </Typography>
+              {!customerDrawing.isOwned && !customerDrawing.isVoted && (
+                <Button
+                  onClick={() => {
+                    setCurrCustomerDrawing(customerDrawing)
+                  }}
+                >
+                  Vote
+                </Button>
+              )}
             </Box>
           </Grid>
         ))}
       </Grid>
+      {currCustomerDrawing && (
+        <DialogBinaryQuestion
+          clickAcceptAction={async () => {
+            setLoading(true)
+            try {
+              await createVoteCustomerDrawing(currCustomerDrawing.id)
+              toastSuccess({ message: 'Vote bài vẽ thành công' })
+              setCurrCustomerDrawing(null)
+              fetchCustomerDrawings()
+            } catch (error) {
+              showErrorResponseSaga({ error, defaultMessage: 'Không thể vote cho bài vẽ này được' })
+            }
+            setLoading(false)
+          }}
+          clickCloseModal={() => setCurrCustomerDrawing(null)}
+          titleText="Vote bài vẽ"
+          open={Boolean(currCustomerDrawing)}
+          contentText="Bạn có chắc muốn vote cho bài vẽ này không?"
+          isLoading={loading}
+        />
+      )}
     </Container>
   )
 }

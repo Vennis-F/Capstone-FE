@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
-import { Box, Button, CircularProgress, Dialog, DialogTitle, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Dialog, DialogTitle, Grid, Typography } from '@mui/material'
 import Stack from '@mui/material/Stack'
 import React from 'react'
 import { UseFormReset, useForm } from 'react-hook-form'
@@ -8,6 +8,7 @@ import * as Yup from 'yup'
 import { MainColor } from 'libs/const/color'
 import FormDateField from 'libs/ui/form-components/FormDateField'
 import FormReactQuillField from 'libs/ui/form-components/FormReactQuillField'
+import FormSwitchField from 'libs/ui/form-components/FormSwitchField'
 import { FormTextField } from 'libs/ui/form-components/FormTextField'
 import { textFromHTMLCode } from 'libs/utils/handle-html-data'
 import { toastWarn } from 'libs/utils/handle-toast'
@@ -35,6 +36,24 @@ const CreateContestDialogForm = (props: Props) => {
     // prize: Yup.string().required('Không được để trống giải thưởng'),
     startedDate: Yup.string().required('Không được để trống ngày bắt đầu'),
     expiredDate: Yup.string().required('Không được để trống ngày kết thúc'),
+    effectiveDateFirst: Yup.string().required('Không được để trống ngày bắt đầu'),
+    expiredDateFirst: Yup.string().required('Không được để trống ngày kết thúc'),
+    effectiveDateSecond: Yup.string().required('Không được để trống ngày bắt đầu'),
+    expiredDateSecond: Yup.string().required('Không được để trống ngày kết thúc'),
+    effectiveDateThird: Yup.string().required('Không được để trống ngày bắt đầu'),
+    expiredDateThird: Yup.string().required('Không được để trống ngày kết thúc'),
+    discountPercentFirst: Yup.number()
+      .required('Không được để trống ngày kết thúc')
+      .min(1, 'Nhỏ nhất là 1')
+      .max(100, 'Lớn nhất là 100'),
+    discountPercentSecond: Yup.number()
+      .required('Không được để trống ngày kết thúc')
+      .min(1, 'Nhỏ nhất là 1')
+      .max(100, 'Lớn nhất là 100'),
+    discountPercentThird: Yup.number()
+      .required('Không được để trống ngày kết thúc')
+      .min(1, 'Nhỏ nhất là 1')
+      .max(100, 'Lớn nhất là 100'),
   })
 
   const methods = useForm<CreateContestFormInput>({
@@ -113,6 +132,87 @@ const CreateContestDialogForm = (props: Props) => {
             Ngày kết thúc
           </Typography>
           <FormDateField name="expiredDate" control={control} />
+        </Box>
+        <Box>
+          <Typography variant="h6" fontWeight="bold" fontSize="18px">
+            Giải nhất
+          </Typography>
+          <Grid container>
+            <Grid item xs={4} paddingX="20px">
+              <Typography color="GrayText" fontSize="14px">
+                Phần trăm giảm giá
+              </Typography>
+              <FormTextField type="number" name="discountPercentFirst" control={control} />
+            </Grid>
+            <Grid item xs={4} paddingX="20px">
+              <Typography color="GrayText" fontSize="14px">
+                Ngày bắt đầu
+              </Typography>
+              <FormDateField name="effectiveDateFirst" control={control} />
+            </Grid>
+            <Grid item xs={4} paddingX="20px">
+              <Typography color="GrayText" fontSize="14px">
+                Ngày kết thúc
+              </Typography>
+              <FormDateField name="expiredDateFirst" control={control} />
+            </Grid>
+          </Grid>
+        </Box>
+        <Box>
+          <Typography variant="h6" fontWeight="bold" fontSize="18px">
+            Giải hai
+          </Typography>
+          <Grid container>
+            <Grid item xs={4} paddingX="20px">
+              <Typography color="GrayText" fontSize="14px">
+                Phần trăm giảm giá
+              </Typography>
+              <FormTextField type="number" name="discountPercentSecond" control={control} />
+            </Grid>
+            <Grid item xs={4} paddingX="20px">
+              <Typography color="GrayText" fontSize="14px">
+                Ngày bắt đầu
+              </Typography>
+              <FormDateField name="effectiveDateSecond" control={control} />
+            </Grid>
+            <Grid item xs={4} paddingX="20px">
+              <Typography color="GrayText" fontSize="14px">
+                Ngày kết thúc
+              </Typography>
+              <FormDateField name="expiredDateSecond" control={control} />
+            </Grid>
+          </Grid>
+        </Box>
+        <Box>
+          <Typography variant="h6" fontWeight="bold" fontSize="18px">
+            Giải ba
+          </Typography>
+          <Grid container>
+            <Grid item xs={4} paddingX="20px">
+              <Typography color="GrayText" fontSize="14px">
+                Phần trăm giảm giá
+              </Typography>
+              <FormTextField type="number" name="discountPercentThird" control={control} />
+            </Grid>
+            <Grid item xs={4} paddingX="20px">
+              <Typography color="GrayText" fontSize="14px">
+                Ngày bắt đầu
+              </Typography>
+              <FormDateField name="effectiveDateThird" control={control} />
+            </Grid>
+            <Grid item xs={4} paddingX="20px">
+              <Typography color="GrayText" fontSize="14px">
+                Ngày kết thúc
+              </Typography>
+              <FormDateField name="expiredDateThird" control={control} />
+            </Grid>
+          </Grid>
+        </Box>
+        <Box sx={{ height: '90px' }}>
+          <Typography variant="h6" fontWeight="bold" fontSize="18px">
+            Phát hành
+          </Typography>
+          <FormSwitchField name="isVisible" control={control} />
         </Box>
         <Box sx={{ height: '20px' }} />
         <Button

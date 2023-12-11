@@ -8,9 +8,10 @@ import { useNavigate } from 'react-router-dom'
 import { NotFound } from 'components/Common'
 import { MainColor } from 'libs/const/color'
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
+import { toastSuccess } from 'libs/utils/handle-toast'
 
 import { getContestById } from '../api'
-import { Contest } from '../types'
+import { Contest, ContestStatus } from '../types'
 
 import TabsContestDetail from './TabsContestDetail'
 
@@ -33,6 +34,32 @@ const ContestDetailContainer = ({ contestId }: Props) => {
   useEffect(() => {
     handleGetContestDetail()
   }, [contestId])
+
+  useEffect(() => {
+    const checkExpiredDate = () => {
+      if (contest && contest.status === ContestStatus.ACTIVE) {
+        const now = new Date().getTime()
+        const expiredDate = new Date(contest.expiredDate).getTime()
+        console.log(contest.status)
+
+        if (now >= expiredDate && contest.status === ContestStatus.ACTIVE) {
+          toastSuccess({ message: 'Cuộc thi đã kết thúc' })
+          handleGetContestDetail()
+        }
+      }
+    }
+
+    let interval: NodeJS.Timer
+    if (contest && contest.status === ContestStatus.ACTIVE) {
+      interval = setInterval(checkExpiredDate, 1000)
+    }
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [contest?.expiredDate, contest?.status])
+
+  console.log('current status:', contest?.status)
 
   return contest ? (
     <Container maxWidth="lg" style={{ padding: '20px', borderRadius: '10px' }}>
@@ -65,7 +92,7 @@ const ContestDetailContainer = ({ contestId }: Props) => {
           color="text.primary"
         >
           <GrainIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-          {contestId}
+          {contest.title}
         </Typography>
       </Breadcrumbs>
       <Typography style={{ fontWeight: 'bold', marginBottom: '20px', fontSize: 30 }}>

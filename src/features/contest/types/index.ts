@@ -13,6 +13,7 @@ export type Contest = {
   status: ContestStatus
   staffName: string
   totalCustomerDrawing: number
+  isVisible: boolean
 }
 
 export type CreateContestBodyRequest = {
@@ -21,6 +22,7 @@ export type CreateContestBodyRequest = {
   prize: string
   startedDate: string
   expiredDate: string
+  isVisible: boolean
 }
 
 export enum ContestStatus {
@@ -45,4 +47,29 @@ export function mapStatusToVietnamese(status: ContestStatus): string {
     default:
       return 'Trạng thái không xác định'
   }
+}
+
+export type DefinePromotionForWinnerBodyRequest = {
+  discountPercentFirst: number
+  effectiveDateFirst: string
+  expiredDateFirst: string
+
+  discountPercentSecond: number
+  effectiveDateSecond: string
+  expiredDateSecond: string
+
+  discountPercentThird: number
+  effectiveDateThird: string
+  expiredDateThird: string
+}
+
+export type ViewWinner = {
+  id: string
+  position: number
+  active: boolean
+  winnerName: string
+  insertedDate: Date
+  imageUrl: string
+  title: string
+  description: string
 }

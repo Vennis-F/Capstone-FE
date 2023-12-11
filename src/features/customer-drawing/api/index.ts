@@ -7,18 +7,13 @@ import {
   CreateCustomerDrawingBodyRequest,
   CustomerDrawing,
   CustomerDrawingNotFilter,
+  CustomerDrawingStatus,
   FilterCustomerDrawingBodyRequest,
 } from '../types'
 
 const api = makeApi(`${Env.API_BASE_URL}`)
 
 const CUSTOMER_DRAWING_BASE_URL = `/customer-drawing`
-
-// export const getContestById = (id: string): Promise<Contest> =>
-//   api.get(`${CUSTOMER_DRAWING_BASE_URL}/${id}`)
-
-// export const getContestsByStaff = (): Promise<Contest[]> =>
-//   api.get(`${CUSTOMER_DRAWING_BASE_URL}/staff`)
 
 export const getCustomerDrawingsByContest = (
   contestId: string,
@@ -39,10 +34,21 @@ export const createCustomerDrawing = (
 export const updateCustomerDrawingImage = (customerDrawingId: string, body: any): Promise<void> =>
   api.put(`${CUSTOMER_DRAWING_BASE_URL}/image?customerDrawingId=${customerDrawingId}`, body)
 
-export const approveCustomerDrawingByStaff = (customerDrawingId: string): Promise<void> =>
-  api.patch(`${CUSTOMER_DRAWING_BASE_URL}/approve/${customerDrawingId}`)
+export const approveCustomerDrawingByStaff = (
+  customerDrawingId: string,
+  status: CustomerDrawingStatus,
+): Promise<void> =>
+  api.patch(`${CUSTOMER_DRAWING_BASE_URL}/approve/${customerDrawingId}?status=${status}`)
 
 export const getCustomerDrawingsByContestByStaff = (
   contestId: string,
 ): Promise<CustomerDrawingNotFilter[]> =>
   api.get(`${CUSTOMER_DRAWING_BASE_URL}/contest/staff?contestId=${contestId}`)
+
+export const getCustomerDrawingsInContestByCustomer = (
+  contestId: string,
+): Promise<CustomerDrawingNotFilter[]> =>
+  api.get(`${CUSTOMER_DRAWING_BASE_URL}/contest/customer?contestId=${contestId}`)
+
+export const checkCustomerDrawingSubmitted = (contestId: string): Promise<boolean> =>
+  api.get(`${CUSTOMER_DRAWING_BASE_URL}/submit/${contestId}`)

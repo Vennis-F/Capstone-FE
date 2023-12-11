@@ -3,7 +3,13 @@ import { Env } from 'config/Env'
 import makeApi from 'libs/core/configureAxios'
 import { PageResponse } from 'types'
 
-import { Contest, CreateContestBodyRequest, FindContestsFilterBodyRequest } from '../types'
+import {
+  Contest,
+  CreateContestBodyRequest,
+  DefinePromotionForWinnerBodyRequest,
+  FindContestsFilterBodyRequest,
+  ViewWinner,
+} from '../types'
 
 const api = makeApi(`${Env.API_BASE_URL}`)
 
@@ -17,8 +23,27 @@ export const findContestsFilter = (
   body: FindContestsFilterBodyRequest,
 ): Promise<PageResponse<Contest>> => api.post(`${CONTEST_BASE_URL}`, body)
 
-export const createContestByStaff = (body: CreateContestBodyRequest): Promise<void> =>
+export const createContestByStaff = (body: CreateContestBodyRequest): Promise<Contest> =>
   api.post(`${CONTEST_BASE_URL}/create`, body)
 
 export const updateContestThumbnailByStaff = (contestId: string, body: any): Promise<void> =>
   api.put(`${CONTEST_BASE_URL}/thumbnail?contestId=${contestId}`, body)
+
+// ----------------------------------------------------------------
+
+const WINNER_BASE_URL = `/winner`
+
+export const definePromotionForWinner = (
+  body: DefinePromotionForWinnerBodyRequest,
+  contestId: string,
+): Promise<void> => api.post(`${WINNER_BASE_URL}/${contestId}`, body)
+
+export const getWinners = (contestId: string): Promise<ViewWinner[]> =>
+  api.get(`${WINNER_BASE_URL}/contest/${contestId}`)
+
+// ----------------------------------------------------------------
+
+const VOTE_BASE_URL = `/vote`
+
+export const createVoteCustomerDrawing = (customerDrawingId: string): Promise<void> =>
+  api.post(`${VOTE_BASE_URL}/customer-drawing/${customerDrawingId}`)

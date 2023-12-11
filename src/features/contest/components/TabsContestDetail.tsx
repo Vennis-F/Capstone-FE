@@ -7,6 +7,7 @@ import CustomTabPanel from 'libs/ui/custom-components/CustomTabPanel'
 
 import { Contest } from '../types'
 
+import ContestCustomerPaints from './ContestCustomerPaints'
 import ContestLeaderboard from './ContestLeaderboard'
 import ContestPaint from './ContestPaint'
 import ContestRules from './ContestRules'
@@ -30,7 +31,7 @@ const TabsContestDetail = ({ contest }: Props) => {
         <Tabs value={value} onChange={handleChange}>
           <Tab label="Tổng quan" id="overview" />
           <Tab label="Bài vẽ" id="images" />
-          <Tab label="Hoạt động" id="activity" />
+          <Tab label="Bài vẽ của tôi" id="myDraws" />
           <Tab label="Bảng xếp hạng" id="leaderboard" />
         </Tabs>
       </Box>
@@ -40,12 +41,12 @@ const TabsContestDetail = ({ contest }: Props) => {
       <CustomTabPanel value={value} index={1}>
         <ContestPaint contest={contest} />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={3}>
-        <ContestLeaderboard />
+      <CustomTabPanel value={value} index={2}>
+        <ContestCustomerPaints contest={contest} />
       </CustomTabPanel>
-      {/* <CustomTabPanel value={value} index={2}>
-        Item Three
-      </CustomTabPanel> */}
+      <CustomTabPanel value={value} index={3}>
+        <ContestLeaderboard contest={contest} />
+      </CustomTabPanel>
     </Box>
   )
 }
