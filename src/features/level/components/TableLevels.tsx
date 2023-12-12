@@ -49,7 +49,7 @@ const TableLevels = ({ levels, onDeleteLevel }: Props) => {
             size="small"
             onClick={() => onDeleteLevel(params.row.id)} // Thay handleDelete bằng hàm xử lý sự kiện delete
           >
-            Delete
+            Xóa
           </Button>
         </div>
       ),

@@ -60,7 +60,7 @@ const TableCategories = ({ categories, onDeleteCategory }: Props) => {
             size="small"
             onClick={() => onDeleteCategory(params.row.id)} // Thay handleDelete bằng hàm xử lý sự kiện delete
           >
-            Delete
+            Xóa
           </Button>
         </div>
       ),

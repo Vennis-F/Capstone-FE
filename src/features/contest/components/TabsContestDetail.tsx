@@ -26,7 +26,9 @@ const TabsContestDetail = ({ contest }: Props) => {
   console.log(value, contest)
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{
+      width: '100%',
+    }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange}>
           <Tab label="Tổng quan" id="overview" />

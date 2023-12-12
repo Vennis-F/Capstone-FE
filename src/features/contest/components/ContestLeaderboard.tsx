@@ -24,7 +24,7 @@ const ContestLeaderboard = ({ contest }: Props) => {
   }, [contest])
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="md" style={{ height: "100vh", marginTop: "20px" }}>
       <Paper elevation={3} sx={{ paddingTop: 2, paddingBottom: 2 }}>
         <Typography
           style={{ fontWeight: 'bold', fontSize: 25, justifyContent: 'center', display: 'flex' }}

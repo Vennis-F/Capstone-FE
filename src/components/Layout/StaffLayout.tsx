@@ -12,7 +12,7 @@ import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn'
 import LogoutIcon from '@mui/icons-material/Logout'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import MenuIcon from '@mui/icons-material/Menu'
-import NotificationsIcon from '@mui/icons-material/Notifications'
+// import NotificationsIcon from '@mui/icons-material/Notifications'
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo'
 // import PaidIcon from '@mui/icons-material/Paid'
 import ReportIcon from '@mui/icons-material/Report'
@@ -78,7 +78,7 @@ const routesAdmin = [
     icon: <KeyboardReturnIcon />,
     title: 'Hoàn tiền',
   },
-  { path: '/admin/manage/staff', icon: <ManageAccountsIcon />, title: 'Người quản lý' },
+  { path: '/admin/manage/staff', icon: <ManageAccountsIcon />, title: 'Nhân viên' },
   { path: '/admin/manage/instructor', icon: <CastForEducationIcon />, title: 'Giảng viên' },
   { path: '/admin/manage/customer', icon: <FamilyRestroomIcon />, title: 'Khách hàng' },
 ]
@@ -131,7 +131,7 @@ const StaffLayout = () => {
           </IconButton>
           {/* <Typography sx={{ color: "rgb(99, 115, 129)", fontWeight: "600", '& .MuiListItemText-primary': { fontWeight: "bold" }, fontSize: "20px" }}>{currentRole}</Typography> */}
           <Stack direction="row" spacing={2}>
-            <NotificationsIcon sx={{ color: 'rgb(99, 115, 129)', fontSize: '35px' }} />
+            {/* <NotificationsIcon sx={{ color: 'rgb(99, 115, 129)', fontSize: '35px' }} /> */}
             <Avatar
               alt="Remy Sharp"
               src="https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_25.jpg"

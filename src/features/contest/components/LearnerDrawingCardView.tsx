@@ -6,7 +6,7 @@ import React from 'react'
 const LearnerDrawingCardView = () => {
   console.log(123)
   return (
-    <Grid container spacing={0} style={{ marginBottom: 70 }}>
+    <Grid container spacing={0} style={{ marginBottom: 50 }}>
       <Grid item xs={6}>
         <Image
           src={

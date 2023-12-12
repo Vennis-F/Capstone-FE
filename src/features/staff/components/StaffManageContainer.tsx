@@ -54,7 +54,7 @@ const StaffManageContainer = () => {
 
   return (
     <Container maxWidth="lg">
-      <TitleTypography title="Danh sách người quản lý" />
+      <TitleTypography title="Danh sách nhân viên" />
 
       <Box width="100%" textAlign="right" marginBottom="20px">
         <CustomButton
@@ -67,7 +67,7 @@ const StaffManageContainer = () => {
             padding: '10px 0px',
           }}
         >
-          <AddIcon /> Người quản lý mới
+          <AddIcon /> Nhân viên mới
         </CustomButton>
       </Box>
 
@@ -142,7 +142,7 @@ const StaffManageContainer = () => {
             setIsOpenFormCreate(false)
             toastSuccess({ message: 'Tạo bài đăng mới thành công' })
           } catch (error) {
-            showErrorResponseSaga({ defaultMessage: 'Không thể tạo người quản lý mới', error })
+            showErrorResponseSaga({ defaultMessage: 'Không thể tạo nhân viên mới', error })
           }
           setIsLoadingCreate(false)
         }}
@@ -157,7 +157,7 @@ const StaffManageContainer = () => {
 
       <DialogBinaryQuestion
         titleText="Ban khỏi nền tảng"
-        contentText="Bạn có chắc muốn ban người quản lý này khỏi nền tảng?"
+        contentText="Bạn có chắc muốn xóa nhân viên này khỏi nền tảng?"
         open={isOpenBan}
         clickAcceptAction={handleBanStaff}
         clickCloseModal={() => {

@@ -128,9 +128,6 @@ const HomePageContainer = () => {
             sx={{ fontWeight: '600', fontSize: '35px', marginBottom: '20px' }}
           >
             Thể loại
-            <Typography component="span" variant="inherit" sx={{ color: MainColor.RED_600 }}>
-              &nbsp;mới nhất
-            </Typography>
           </Typography>
           <Box>
             <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>

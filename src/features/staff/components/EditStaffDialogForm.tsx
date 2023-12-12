@@ -73,7 +73,7 @@ const EditStaffDialogForm = (props: Props) => {
       fullWidth={true}
     >
       <DialogTitle sx={{ textAlign: 'center', fontWeight: '600', fontSize: '30px' }}>
-        Thông tin cơ bản người quản lý
+        Thông tin cơ bản nhân viên
       </DialogTitle>
       <Stack sx={{ padding: '20px' }} direction="column" spacing={1} justifyContent="center">
         <Box sx={{ height: '60px' }}>

@@ -258,7 +258,7 @@ const HeaderLOL = () => {
               )}
               {currUserRole && currUserRole === UserRole.CUSTOMER && (
                 <ButtonLinkHeader to="/my-learning">
-                  <SchoolIcon />
+                  <SchoolIcon sx={{ marginTop: "5px" }} />
                 </ButtonLinkHeader>
               )}
               {!currUserRole && (
@@ -266,7 +266,7 @@ const HeaderLOL = () => {
               )}
               <ButtonLinkHeader to="/blog">Blog</ButtonLinkHeader>
               <ButtonLinkHeader to="/contest">
-                <Brush />
+                <Brush style={{ marginTop: '5px' }} />
               </ButtonLinkHeader>
               {!currUserRole && <ButtonLinkHeader to="/guest-login">Đăng nhập</ButtonLinkHeader>}
               {!currUserRole && <ButtonLinkHeader to="/guest-signup">Đăng ký</ButtonLinkHeader>}

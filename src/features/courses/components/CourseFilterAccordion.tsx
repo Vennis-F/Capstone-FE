@@ -1,4 +1,4 @@
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+// import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import {
   Accordion,
   AccordionSummary,
@@ -26,7 +26,7 @@ type Props = {
 const CourseFilterAccordion = ({ title, listData, checkedList, handleToggle }: Props) => (
   <Accordion expanded={true}>
     <AccordionSummary
-      expandIcon={<ExpandMoreIcon />}
+      // expandIcon={<ExpandMoreIcon />}
       aria-controls="panel1a-content"
       id="panel1a-header"
     >

@@ -26,7 +26,6 @@ import TimeLeft from './TimeLeft'
 type Props = {
   contest: Contest
 }
-
 const ContestRules = ({ contest }: Props) => {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -48,47 +47,49 @@ const ContestRules = ({ contest }: Props) => {
   useEffect(() => {
     if (getAccessToken() && getUserRole() === UserRole.CUSTOMER) handleCustomerDrawingSubmit()
   }, [])
-
   return (
     <>
-      <Box width="100%" textAlign="right" marginY="20px">
-        {contest.status === ContestStatus.ACTIVE && <TimeLeft contest={contest} />}
-        {(contest.status === ContestStatus.EXPIRED || contest.status === ContestStatus.PENDING) && (
-          <Typography
-            border="1px solid #c084fc"
-            width="240px"
-            fontWeight="bold"
-            color="#c084fc"
-            textAlign="center"
-            padding="10px 14px"
-          >
-            {contest.status === ContestStatus.PENDING
-              ? 'CUỘC THI CHƯA DIỄN RA'
-              : 'CUỘC THI ĐÃ KẾT THÚC'}
-          </Typography>
-        )}
-        {contest.status === ContestStatus.ACTIVE &&
-          getAccessToken() &&
-          getUserRole() === UserRole.CUSTOMER && (
-            <CustomButton
-              onClick={handleJoinContest}
-              sxCustom={{ width: '220px' }}
-              disable={isSubmit}
+      <Box width="100%" textAlign="right" marginY="20px" sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+        <Box sx={{ marginTop: "-20px", textAlign: "left" }}>
+          {contest.status === ContestStatus.ACTIVE && <TimeLeft contest={contest} />}
+          {(contest.status === ContestStatus.EXPIRED || contest.status === ContestStatus.PENDING) && (
+            <Typography
+              border="1px solid #c084fc"
+              width="240px"
+              fontWeight="bold"
+              color="#c084fc"
+              textAlign="center"
+              padding="10px 14px"
             >
-              {!isSubmit ? (
-                <>
-                  <AddIcon /> Tham gia cuộc thi
-                </>
-              ) : (
-                'Bạn đã đăng tải bài thi'
-              )}
-            </CustomButton>
+              {contest.status === ContestStatus.PENDING
+                ? 'CUỘC THI CHƯA DIỄN RA'
+                : 'CUỘC THI ĐÃ KẾT THÚC'}
+            </Typography>
           )}
+        </Box>
+        <Box>
+          {contest.status === ContestStatus.ACTIVE &&
+            getAccessToken() &&
+            getUserRole() === UserRole.CUSTOMER && (
+              <CustomButton
+                onClick={handleJoinContest}
+                sxCustom={{ width: '220px' }}
+                disable={isSubmit}
+              >
+                {!isSubmit ? (
+                  <>
+                    <AddIcon /> Tham gia cuộc thi
+                  </>
+                ) : (
+                  'Bạn đã đăng tải bài thi'
+                )}
+              </CustomButton>
+            )}
+        </Box>
       </Box>
-
       <Container
         maxWidth="lg"
-        style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px' }}
+        style={{ backgroundColor: '#F3F3F3', padding: '20px', borderRadius: '10px' }}
       >
         <Typography style={{ fontWeight: 'bold', marginBottom: '20px', fontSize: 30 }}>
           THỂ LỆ CUỘC THI
@@ -167,16 +168,6 @@ const ContestRules = ({ contest }: Props) => {
               </Typography>
             </Grid>
           </Grid>
-          <Grid container spacing={0} style={{ marginBottom: 10 }}>
-            <Grid item xs={3}>
-              <Typography>Trao giải thưởng :</Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography style={{ marginLeft: -50 }}>
-                11 giờ sáng Thứ tư, ngày 13 tháng 12 năm 2023
-              </Typography>
-            </Grid>
-          </Grid>
         </Paper>
         <Typography style={{ fontWeight: 'bold', marginBottom: 20, marginTop: 40, fontSize: 30 }}>
           GIẢI THƯỞNG
@@ -215,7 +206,7 @@ const ContestRules = ({ contest }: Props) => {
           setLoading(false)
         }}
         openDialog={open}
-        // otherValues={}
+      // otherValues={}
       />
     </>
   )

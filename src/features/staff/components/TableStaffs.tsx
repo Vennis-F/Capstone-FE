@@ -90,7 +90,7 @@ const TableStaffs = ({ staffs, onBanStaff, onEditRow }: Props) => {
                 onBanStaff(staffId)
               }} // Thay handleDelete bằng hàm xử lý sự kiện delete
             >
-              Ban
+              Xóa
             </Button>
           </div>
         )
