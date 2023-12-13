@@ -1,4 +1,4 @@
-import { Box, Container, Paper, TextField, Typography } from '@mui/material'
+import { Box, Button, Container, Paper, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
@@ -6,7 +6,7 @@ import CustomButton from 'libs/ui/components/CustomButton'
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastError, toastSuccess } from 'libs/utils/handle-toast'
 
-import { customerConfirm } from '../api'
+import { customerConfirm, resendUserOTP } from '../api'
 
 const ConfirmOTPContainer = () => {
   const navigate = useNavigate()
@@ -28,6 +28,17 @@ const ConfirmOTPContainer = () => {
         showErrorResponseSaga({ error, defaultMessage: 'OTP không hợp lệ' })
       }
     }
+  }
+
+  const handleResendOTP = async () => {
+    try {
+      if (!currentEmail) return toastError({ message: 'Không tìm thấy email' })
+      await resendUserOTP(currentEmail)
+      toastSuccess({ message: 'Gửi lại mã thành công! Vui lòng kiểm tra hộp thư email' })
+    } catch (error) {
+      toastError({ message: 'Không thể gửi lại mã OTP' })
+    }
+    return null
   }
 
   return (
@@ -56,6 +67,11 @@ const ConfirmOTPContainer = () => {
           />
         </Box>
         <CustomButton onClick={handleConfirmOTP}>Xác nhận</CustomButton>
+        <Box>
+          <Button onClick={handleResendOTP} sx={{ textTransform: 'capitalize', marginTop: '10px' }}>
+            Gửi lại mã
+          </Button>
+        </Box>
       </Paper>
     </Container>
   )

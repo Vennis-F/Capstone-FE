@@ -10,6 +10,7 @@ import {
   CourseFullInfor,
   UpdateCourseBodyRequest,
   CourseLearnStatus,
+  CourseStatus,
 } from '../types'
 
 const api = makeApi(`${Env.API_BASE_URL}`)
@@ -34,11 +35,14 @@ export const checkCourseIsOwnedByCourseId = (
 export const getCourseByCustomer = (status?: CourseLearnStatus): Promise<CourseFilterResponse[]> =>
   api.get(`${COURSE_BASE_URL}/order/user${status ? `?status=${status}` : ''}`)
 
-export const getCoursesByStaff = (): Promise<CourseFullInfor[]> =>
-  api.get(`${COURSE_BASE_URL}/staff/list`)
+export const getCoursesByStaff = (status?: CourseStatus): Promise<CourseFullInfor[]> =>
+  api.get(`${COURSE_BASE_URL}/staff/list${status ? `?status=${status}` : ''}`)
 
 export const checkCourseCreateValid = (courseId: string): Promise<{ msgErrors: string[] }> =>
   api.get(`${COURSE_BASE_URL}/instructor/create/valid/${courseId}`)
 
 export const updateCourseStatus = (body: UpdateCourseBodyRequest): Promise<void> =>
   api.patch(`${COURSE_BASE_URL}/status`, body)
+
+export const checkCourseAndUserValid = (courseId: string): Promise<{ status: boolean }> =>
+  api.get(`${COURSE_BASE_URL}/user/valid?courseId=${courseId}`)

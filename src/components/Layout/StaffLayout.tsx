@@ -1,11 +1,11 @@
 import AccessibilityIcon from '@mui/icons-material/Accessibility'
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
-// import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import BarChartIcon from '@mui/icons-material/BarChart'
 import BrushIcon from '@mui/icons-material/Brush'
 import CastForEducationIcon from '@mui/icons-material/CastForEducation'
 import CategoryIcon from '@mui/icons-material/Category'
 import ColorLensIcon from '@mui/icons-material/ColorLens'
+import DiscountIcon from '@mui/icons-material/Discount'
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom'
 import ImportContactsIcon from '@mui/icons-material/ImportContacts'
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn'
@@ -53,7 +53,7 @@ const routesInstructor = [
   { path: '/instructor/dashboard', icon: <BarChartIcon />, title: 'Thống kê' },
   { path: '/instructor/homepage', icon: <VideoSettingsIcon />, title: 'Khóa học' },
   { path: '/instructor/transaction', icon: <AccountBalanceIcon />, title: 'Thanh toán' },
-  { path: '/instructor/promotion', icon: <AccountBalanceIcon />, title: 'Mã giảm giá' },
+  { path: '/instructor/promotion', icon: <DiscountIcon />, title: 'Mã giảm giá' },
 ]
 
 const routesStaff = [

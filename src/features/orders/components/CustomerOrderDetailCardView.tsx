@@ -1,10 +1,10 @@
 import { Grid, Typography } from '@mui/material'
 import Image from 'material-ui-image'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { getImage } from 'features/image/components/apis'
-import { createRefundByCustomer } from 'features/refund/apis'
+import { checkRefund, createRefundByCustomer } from 'features/refund/apis'
 import CreateRefundDialogForm from 'features/refund/components/CreateRefundDialogForm'
 import { TransactionStatus } from 'features/transaction/types'
 import CustomButton from 'libs/ui/components/CustomButton'
@@ -24,13 +24,25 @@ const CustomerOrderDetailCardView = ({ orderDetail, order, handleGetOrder }: Pro
   const navigate = useNavigate()
   const [openForm, setOpenForm] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [showButtonRefund, setShowButtonRefund] = useState(false)
 
   const canRefund =
     order.orderStatus === NameOrderStatus.Success &&
     order.transaction.status === TransactionStatus.Success &&
     !orderDetail.refund
 
-  // console.log(order.orderStatus, order.transaction.status, !orderDetail.refund)
+  const handleCheckCanRefund = async () => {
+    // setShowButtonRefund()
+    try {
+      setShowButtonRefund(await checkRefund(orderDetail.id))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    handleCheckCanRefund()
+  }, [])
 
   return (
     <Grid
@@ -80,8 +92,12 @@ const CustomerOrderDetailCardView = ({ orderDetail, order, handleGetOrder }: Pro
           </Typography>
         )}
       </Grid>
-      <Grid item md={2} sx={{ textAlign: 'right', display: 'flex', flexDirection: 'column' }}>
-        {canRefund && (
+      <Grid
+        item
+        md={2}
+        sx={{ textAlign: 'right', display: 'flex', flexDirection: 'column', paddingLeft: '20px' }}
+      >
+        {canRefund && showButtonRefund && (
           <CustomButton
             onClick={() => {
               setOpenForm(true)

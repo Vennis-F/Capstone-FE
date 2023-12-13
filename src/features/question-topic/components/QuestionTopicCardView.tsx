@@ -1,5 +1,4 @@
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer'
-import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import { Avatar, Box, Grid, Paper, Typography } from '@mui/material'
 import React from 'react'
 
@@ -16,8 +15,6 @@ const QuestionTopicCardView = ({ questionTopic, onChangeQuestionTopic }: Props) 
   const userFullName = questionTopic.user
     ? `${questionTopic.user?.lastName} ${questionTopic.user?.middleName} ${questionTopic.user?.firstName} `
     : `${questionTopic.learner?.lastName} ${questionTopic.learner?.middleName} ${questionTopic.learner?.firstName} `
-
-  console.log(questionTopic.updatedDate, getStringDayMonthYear(questionTopic.updatedDate))
 
   return (
     <Paper
@@ -53,9 +50,6 @@ const QuestionTopicCardView = ({ questionTopic, onChangeQuestionTopic }: Props) 
           <Box>
             <Typography sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {questionTopic.totalLengthQuestionAnswers} <QuestionAnswerIcon />
-            </Typography>
-            <Typography sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {questionTopic.rating} <ThumbUpIcon />
             </Typography>
           </Box>
         </Grid>

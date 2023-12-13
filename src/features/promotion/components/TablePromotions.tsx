@@ -37,32 +37,25 @@ const TablePromotions = ({
     },
     { headerName: 'Mã', field: 'code', width: 120 },
     { headerName: 'Số lượng', field: 'amount', width: 120 },
-    {
-      field: 'active',
-      headerName: 'Hoạt động',
-      type: 'boolean',
-      width: 150,
-    },
+    // {
+    //   field: 'active',
+    //   headerName: 'Hoạt động',
+    //   type: 'boolean',
+    //   width: 150,
+    // },
     {
       field: '',
       headerName: 'Hành động',
       description: 'Xóa cấp độ',
-      width: 310,
+      width: 340,
       renderCell: (params: GridRenderCellParams) => (
         <div>
-          <Button
-            variant="contained"
-            color="error"
-            size="small"
-            onClick={() => onDeletePromotion(params.row.id)} // Thay handleDelete bằng hàm xử lý sự kiện delete
-          >
-            Xóa
-          </Button>
           <Button
             variant="contained"
             color="info"
             size="small"
             onClick={() => onUpdatePromotion(params.row)} // Thay handleDelete bằng hàm xử lý sự kiện delete
+            sx={{ marginRight: '10px' }}
           >
             Chỉnh sửa
           </Button>
@@ -71,8 +64,17 @@ const TablePromotions = ({
             color="secondary"
             size="small"
             onClick={() => onWatchPromotionCourses(params.row.id)} // Thay handleDelete bằng hàm xử lý sự kiện delete
+            sx={{ marginRight: '10px' }}
           >
-            Danh sách khóa học
+            Khóa học giảm
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            size="small"
+            onClick={() => onDeletePromotion(params.row.id)} // Thay handleDelete bằng hàm xử lý sự kiện delete
+          >
+            Xóa
           </Button>
         </div>
       ),

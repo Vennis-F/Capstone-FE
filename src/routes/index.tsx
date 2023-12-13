@@ -45,6 +45,7 @@ import StaffManageContestPage from 'pages/staff/StaffManageContestPage'
 import StaffManageCoursePage from 'pages/staff/StaffManageCoursePage'
 import StaffManagePostPage from 'pages/staff/StaffManagePostPage'
 import StaffManageReportsPage from 'pages/staff/StaffManageReportsPage'
+import TestPage from 'pages/TestPage'
 import { UserRole } from 'types'
 
 import { PrivateRoute } from '../components/Common/PrivateRoute'
@@ -58,6 +59,7 @@ const AppRoutes = () => (
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/test" element={<TestPage />} />
           <Route path="/guest-login" element={<GuestLoginPage />} />
           <Route path="/guest-signup" element={<GuestSingupPage />} />
           <Route path="/instructor/signup" element={<InstructorBasicsRegisterPage />} />
@@ -66,6 +68,7 @@ const AppRoutes = () => (
             path="/instructor/signup/certificate"
             element={<InstructorCertificateRegisterPage />}
           />
+
           <Route path="/confirm-otp" element={<ConfirmOTPPage />} />
           <Route path="/posts" element={<AboutPage />} />
           <Route path="/about" element={<AboutPage />} />

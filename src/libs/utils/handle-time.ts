@@ -1,4 +1,4 @@
-export const formatSecondToMinute = (second: number) => Math.floor(second / 60)
+export const formatSecondToMinute = (second: number) => Math.round((second / 60) * 10) / 10
 
 export const secondsToMinutesString = (seconds: number): string => {
   const minutes: number = Math.floor(seconds / 60)

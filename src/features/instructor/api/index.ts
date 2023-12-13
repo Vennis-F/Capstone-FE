@@ -6,6 +6,7 @@ import { UploadStatus } from 'types'
 
 import {
   BankListResponse,
+  CourseFilterByInstructorResponse,
   CreateCourseByInstructorBodyRequest,
   GetCoursesByInstructorBodyRequest,
   GetCoursesByInstructorResponse,
@@ -24,6 +25,12 @@ const INSTRUCTOR_BASE_URL = `/instructor`
 export const getCoursesByInstructorId = (
   body: GetCoursesByInstructorBodyRequest,
 ): Promise<GetCoursesByInstructorResponse> => api.post(`${INSTRUCTOR_BASE_URL}/course/own`, body)
+
+export const getCoursesCanApplyPromotionByInstructorId = (
+  body: GetCoursesByInstructorBodyRequest,
+  promotionId: string,
+): Promise<CourseFilterByInstructorResponse[]> =>
+  api.post(`${INSTRUCTOR_BASE_URL}/course/own/promotion/can-apply/${promotionId}`, body)
 
 export const createCourseByInstructor = (
   body: CreateCourseByInstructorBodyRequest,
@@ -62,3 +69,9 @@ export const getInstructorByIdByAdmin = (instructorId: string): Promise<Instruct
 export const updateInstructorStatusByAdmin = (
   body: UpdateStatusInstructorByAdminBodyRequest,
 ): Promise<void> => api.put(`${INSTRUCTOR_BASE_URL}/status/set`, body)
+
+export const removeCourseByInstructor = (courseId: string): Promise<void> =>
+  api.delete(`${INSTRUCTOR_BASE_URL}/course/${courseId}`)
+
+export const removeChapterLectureByInstructor = (chapterLectureId: string): Promise<void> =>
+  api.delete(`${INSTRUCTOR_BASE_URL}/chapter-lecture/${chapterLectureId}`)

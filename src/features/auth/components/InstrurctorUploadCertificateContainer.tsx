@@ -22,8 +22,25 @@ const InstrurctorUploadCertificateContainer = ({ email }: Props) => {
           padding: '30px',
         }}
       >
-        <Typography fontWeight="bold" color="GrayText" variant="h5" fontFamily="sans-serif">
+        <Typography
+          variant="h5"
+          sx={{
+            fontWeight: 'bold',
+            marginBottom: '10px',
+            fontFamily: 'sans-serif',
+            textAlign: 'center',
+          }}
+        >
           Chọn bằng cấp mà bạn muốn upload
+        </Typography>
+        <Typography
+          variant="caption"
+          component={'div'}
+          sx={{ fontFamily: 'sans-serif', marginBottom: '15px' }}
+        >
+          Để chúng tôi có thể đánh giá được năng lực của bạn, thông tin về bằng cấp là cần thiết.
+          Thông tin này sẽ giúp chúng tôi hiểu rõ hơn về khả năng và kiến thức của bạn. Vui lòng tải
+          lên bằng cấp của bạn dưới định dạng file PDF để hoàn tất quá trình đánh giá năng lực.
         </Typography>
         <UploadFile
           onUploadFile={async file => {

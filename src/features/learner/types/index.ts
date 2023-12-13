@@ -11,11 +11,11 @@ export type UpdateLearnerBodyRequest = {
   firstName: string
   lastName: string
   middleName: string
+  userName: string
 }
 
 export type ChangePasswordLearnerBodyRequest = {
   learnerId: string
-  currentPassword: string
   newPassword: string
   confirmNewPassword: string
 }

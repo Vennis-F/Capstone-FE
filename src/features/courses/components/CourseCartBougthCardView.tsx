@@ -5,6 +5,7 @@ import {
   SmartphoneOutlined,
 } from '@material-ui/icons'
 import {
+  Autocomplete,
   Box,
   Button,
   Card,
@@ -12,6 +13,7 @@ import {
   CardContent,
   CardMedia,
   Divider,
+  Grid,
   TextField,
   Typography,
 } from '@mui/material'
@@ -20,12 +22,17 @@ import { useNavigate } from 'react-router-dom'
 
 import { useCartService } from 'features/cart/hooks'
 import { getImage } from 'features/image/components/apis'
-import { checkPromotionCourseCanApplyByCode } from 'features/promotion/api'
+import {
+  checkPromotionCourseCanApplyByCode,
+  findPromotionCoursesCanViewByCourseId,
+} from 'features/promotion/api'
 import { PromotionCourse } from 'features/promotion/types'
 import CustomButton from 'libs/ui/components/CustomButton'
 import { calcPriceDiscount, formatCurrency } from 'libs/utils/handle-price'
+import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastError, toastSuccess, toastWarn } from 'libs/utils/handle-toast'
-import { getAccessToken } from 'libs/utils/handle-token'
+import { getAccessToken, getUserRole } from 'libs/utils/handle-token'
+import { UserRole } from 'types'
 
 import { formatSecondToHour } from '../../../libs/utils/handle-time'
 import { checkCourseIsOwnedByCourseId } from '../api'
@@ -37,7 +44,8 @@ interface Props {
 
 const CourseCartBougthCardView = ({ courseDetail }: Props) => {
   const navigate = useNavigate()
-  const [coupon, setCoupon] = useState('')
+  const [value, setValue] = useState<PromotionCourse | null>(null)
+  const [inputValue, setInputValue] = useState('')
   const [showInputCoupon, setShowInputCoupon] = useState(false)
   const [activeInput, setActiveInput] = useState(true)
   const { createCartItem } = useCartService()
@@ -48,10 +56,13 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
   const [promotionCourseApply, setPromotionCourseApply] = useState<PromotionCourse | null>(null)
   const [isOwned, setIsOwned] = useState(false)
   const [isRefund, setIsRefund] = useState(false)
+  const [promotionCouresView, setPromotionCouresView] = useState<PromotionCourse[]>([])
 
   const handleAddCartItem = () => {
     const token = getAccessToken()
     if (token) {
+      if (getUserRole() !== UserRole.CUSTOMER)
+        return toastError({ message: 'Bạn không được phép làm hành động này' })
       createCartItem({
         promotionCourseId: currPromotionCourseId,
         courseId: courseDetail.id,
@@ -59,27 +70,40 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
     } else {
       toastWarn({ message: 'Hãy đăng nhập trước khi thêm vào giỏ hàng' })
     }
+    return null
   }
 
   const handleClickApplyCoupon = async () => {
-    if (!coupon) return toastError({ message: 'Vui lòng nhập mã khuyến mãi' })
+    if (!value && !inputValue)
+      return toastError({ message: 'Vui lòng nhập hoặc chọn mã khuyến mãi' })
 
     setActiveInput(false)
-    const { promotionCourse } = await checkPromotionCourseCanApplyByCode(courseDetail.id, coupon)
 
-    if (promotionCourse) {
-      setCoupon('')
-      setShowInputCoupon(false)
-      setCurrPromotionCourseId(promotionCourse.id)
-      setPromotionCourseApply(promotionCourse)
-      toastSuccess({
-        message: `Áp mã giảm giá thành công! Bạn được giảm ${promotionCourse.promotion.discountPercent}%`,
-      })
-    } else {
+    try {
+      const { promotionCourse } = await checkPromotionCourseCanApplyByCode(
+        courseDetail.id,
+        value ? value.promotion.code : inputValue,
+      )
+
+      if (promotionCourse) {
+        setValue(null)
+        setInputValue('')
+        setShowInputCoupon(false)
+        setCurrPromotionCourseId(promotionCourse.id)
+        setPromotionCourseApply(promotionCourse)
+        toastSuccess({
+          message: `Áp mã giảm giá thành công! Bạn được giảm ${promotionCourse.promotion.discountPercent}%`,
+        })
+      } else {
+        setActiveInput(true)
+        toastError({ message: 'Không thể áp dụng mã giảm giá' })
+      }
+    } catch (error) {
+      showErrorResponseSaga({ defaultMessage: 'Không thể áp dụng mã giảm giá', error })
       setActiveInput(true)
-      toastError({ message: 'Không thể áp dụng mã giảm giá' })
     }
-    return true
+
+    return null
   }
 
   const handleCheckCourseIsOwned = async () => {
@@ -87,6 +111,15 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
     setIsOwned(response.status)
     setIsRefund(response.isRefund)
   }
+
+  const handleGetPromotionCoursesView = async () => {
+    const promotionCoursesView = await findPromotionCoursesCanViewByCourseId(courseDetail.id)
+    setPromotionCouresView(promotionCoursesView)
+  }
+
+  useEffect(() => {
+    handleGetPromotionCoursesView()
+  }, [courseDetail])
 
   const handleNavigateChapterLecture = () => {
     if (isRefund)
@@ -102,6 +135,10 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
 
   return (
     <Card sx={{ width: '100%', position: 'absolute', top: 0, right: 0 }}>
+      <div>{`value: ${value !== null ? `'${value.id}'` : 'null'}`}</div>
+      <div>{`inputValue: '${inputValue}'`}</div>
+      <br />
+      <Box marginTop="20px" />
       <CardMedia
         sx={{ height: 200 }}
         image={getImage(courseDetail.thumbnailUrl)}
@@ -234,7 +271,7 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
 
       <Divider />
 
-      {!isOwned && (
+      {!isOwned && getAccessToken() && getUserRole() === UserRole.CUSTOMER && (
         <CardActions
           sx={{
             textAlign: 'center',
@@ -253,40 +290,58 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
               // } else toastWarn({ message: 'Khóa học đã được giảm giá!' })
               // if (!courseDetail.promotionCourseByStaffId) {
               setShowInputCoupon(!showInputCoupon)
-              setCoupon('')
+              setValue(null)
+              setInputValue('')
               // } else toastWarn({ message: 'Khóa học đã được giảm giá!' })
             }}
           >
             Áp mã giảm giá
           </Button>
           {showInputCoupon && (
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <TextField
-                size="small"
-                placeholder="Nhập mã giảm giá"
-                value={coupon}
-                disabled={!activeInput}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  setCoupon(event.target.value)
-                }}
-              />
-              <Button
-                sx={{
-                  textTransform: 'capitalize',
-                  backgroundColor: '#a78bfa',
-                  color: 'white',
-                  fontWeight: '600',
-                  ':hover': {
-                    backgroundColor: '#b4a0ee',
-                  },
-                  marginLeft: '10px',
-                }}
-                disabled={!activeInput}
-                onClick={handleClickApplyCoupon}
-              >
-                Áp dụng
-              </Button>
-            </Box>
+            <Grid container>
+              <Grid item xs={8}>
+                <Autocomplete
+                  freeSolo // Cho phép nhập mã giảm giá tự do
+                  inputValue={inputValue}
+                  onInputChange={(event, newInputValue) => {
+                    setInputValue(newInputValue)
+                  }}
+                  options={promotionCouresView}
+                  getOptionLabel={option =>
+                    `Giảm ${option.promotion.discountPercent}% (${
+                      option.promotion.amount - option.used
+                    } lượt) ${option.isFull ? '- Cuộc thi' : ''}`
+                  }
+                  value={value}
+                  onChange={(event, newValue) => {
+                    setValue(newValue as PromotionCourse)
+                  }}
+                  renderInput={params => (
+                    <TextField {...params} placeholder="Chọn hoặc nhập mã giảm giá" size="small" />
+                  )}
+                  disabled={!activeInput}
+                  sx={{ width: '100%' }}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Button
+                  sx={{
+                    textTransform: 'capitalize',
+                    backgroundColor: '#a78bfa',
+                    color: 'white',
+                    fontWeight: '600',
+                    ':hover': {
+                      backgroundColor: '#b4a0ee',
+                    },
+                    marginLeft: '10px',
+                  }}
+                  disabled={!activeInput}
+                  onClick={handleClickApplyCoupon}
+                >
+                  Áp dụng
+                </Button>
+              </Grid>
+            </Grid>
           )}
         </CardActions>
       )}

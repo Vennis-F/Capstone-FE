@@ -30,9 +30,16 @@ interface Props {
   otherAction?: () => void
   url?: string | null
   isEditable: boolean
+  handleGetCourse: () => Promise<void>
 }
 
-const InstructorEditCourseThumbnail = ({ otherAction, courseId, url, isEditable }: Props) => {
+const InstructorEditCourseThumbnail = ({
+  otherAction,
+  courseId,
+  url,
+  isEditable,
+  handleGetCourse,
+}: Props) => {
   const [previewImage, setPreviewImage] = useState<string | undefined>(undefined)
   const [previewFile, setPreviewFile] = useState<File | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -47,6 +54,7 @@ const InstructorEditCourseThumbnail = ({ otherAction, courseId, url, isEditable 
         if (otherAction) otherAction()
         setPreviewFile(null)
         toastSuccess({ message: 'Thay đổi ảnh đại diện thành công' })
+        handleGetCourse()
       } catch (error) {
         console.error('Error uploading avatar', error)
       }
@@ -113,6 +121,7 @@ const InstructorEditCourseThumbnail = ({ otherAction, courseId, url, isEditable 
 
   return (
     <LayoutBodyContainer
+      isPadding={true}
       title="Hình ảnh khóa học"
       introduction={
         <>

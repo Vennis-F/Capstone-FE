@@ -72,21 +72,15 @@ const ChapterLectureLearnContainer = ({ courseId }: Props) => {
     setOpen(false)
   }
 
-  const handleGetChapterLectureStudy = async () => {
-    const currChapterLecturesRes = await getChapterLectureOfLearnerStudy(courseId)
-    setChapterLectures(currChapterLecturesRes.sort((a, b) => a.index - b.index))
-  }
+  const handleGeneratePdf = async (newChapterLectures: ChapterLectureFilter[]) => {
+    let totalCompleteds = 0
+    newChapterLectures.forEach(chapterLecture => {
+      if (chapterLecture.isCompleted) totalCompleteds += 1
+    })
 
-  const handleSaveCompleteChapterLecture = async (chapterLectureId: string) => {
-    await saveUserLectureCompleted(chapterLectureId)
-    handleGetChapterLectureStudy()
-  }
-
-  const handleGeneratePdf = async () => {
-    console.log(chapterLectures[chapterLectures.length - 1].id, currChapterLecture?.id)
-    if (chapterLectures[chapterLectures.length - 1].id === currChapterLecture?.id) {
+    if (newChapterLectures.length === totalCompleteds) {
       try {
-        generateCertifcate(courseId)
+        await generateCertifcate(courseId)
         toastSuccess({ message: 'Chúc mừng bạn đã hoàn thành khóa học, bạn đã được nhận bằng cấp' })
       } catch (error) {
         showErrorResponseSaga({ error, defaultMessage: 'Không tạo bằng cấp được' })
@@ -94,9 +88,30 @@ const ChapterLectureLearnContainer = ({ courseId }: Props) => {
     }
   }
 
+  const handleGetChapterLectureStudy = async (isGenerate: boolean) => {
+    if (!isGenerate) {
+      const currChapterLecturesRes = await getChapterLectureOfLearnerStudy(courseId)
+      setChapterLectures(currChapterLecturesRes.sort((a, b) => a.index - b.index))
+    } else {
+      const currChapterLecturesRes = await getChapterLectureOfLearnerStudy(courseId)
+      await handleGeneratePdf(currChapterLecturesRes)
+      setChapterLectures(currChapterLecturesRes.sort((a, b) => a.index - b.index))
+    }
+  }
+
+  const handleSaveCompleteChapterLecture = async (chapterLectureId: string) => {
+    const chapterLecture = chapterLectures.find(
+      chapterLecturee => chapterLecturee.id === chapterLectureId,
+    ) as ChapterLectureFilter
+
+    if (!chapterLecture.isCompleted) {
+      await saveUserLectureCompleted(chapterLectureId)
+      handleGetChapterLectureStudy(true)
+    }
+  }
+
   useEffect(() => {
-    console.log(searchParams)
-    handleGetChapterLectureStudy()
+    handleGetChapterLectureStudy(false)
   }, [])
 
   useEffect(() => {
@@ -107,6 +122,7 @@ const ChapterLectureLearnContainer = ({ courseId }: Props) => {
 
   useEffect(() => {
     if (currChapterLecture) {
+      console.log(searchParams)
       setSearchParams({ chapterLectureId: currChapterLecture.id })
     }
   }, [currChapterLecture, setSearchParams])
@@ -119,7 +135,6 @@ const ChapterLectureLearnContainer = ({ courseId }: Props) => {
             videoURL={!currChapterLecture ? '' : getVideo(currChapterLecture.video)}
             handleSaveCompleteChapterLecture={handleSaveCompleteChapterLecture}
             chapterLectureId={currChapterLecture?.id}
-            handleGeneratePdf={handleGeneratePdf}
           />
         </Box>
 
@@ -197,13 +212,6 @@ const ChapterLectureLearnContainer = ({ courseId }: Props) => {
                       sx={{ color: '#78716c' }}
                     />
                   )}
-                  {/* <LocalFloristOutlined fontSize="large" />
-                  <SpaOutlinedIcon fontSize="medium" sx={{ color: '#78716c' }} /> */}
-                  {/* <Checkbox
-                    disabled
-                    checked={chapterLecture.isCompleted}
-                    sx={{ padding: 0, marginRight: '12px' }}
-                  /> */}
                   <ListItemText
                     sx={{ marginLeft: '8px' }}
                     primary={`Bài ${chapterLecture.index}: ${chapterLecture.title}`}

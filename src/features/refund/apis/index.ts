@@ -25,3 +25,6 @@ export const getRefundById = (refundId: string): Promise<RefundFilterResponse> =
 
 export const approveRefundByAdmin = (refundId: string): Promise<void> =>
   api.get(`${REFUND_BASE_URL}/approve/${refundId}`)
+
+export const checkRefund = (orderDetailId: string): Promise<boolean> =>
+  api.get(`${REFUND_BASE_URL}/isRefund/${orderDetailId}`)

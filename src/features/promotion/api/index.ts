@@ -3,7 +3,6 @@ import { Env } from 'config/Env'
 import makeApi from 'libs/core/configureAxios'
 
 import {
-  CheckPromotionCourseApplyRequest,
   CreatePromotionBodyRequest,
   CreatePromotionCourseBodyRequest,
   Promotion,
@@ -35,21 +34,11 @@ export const findPromotions = (): Promise<Promotion[]> => api.get(`${PROMOTION_B
 
 // ----------------------------------------
 
-export const checkPromotionCourseCanApplyById = (
-  promotionCourseId: string,
-): Promise<{ promotionCourse: PromotionCourse }> =>
-  api.post(`${PROMOTION_COURSE_BASE_URL}/apply/view?promotionCourseId=${promotionCourseId}`)
-
 export const checkPromotionCourseCanApplyByCode = (
   courseId: string,
   code: string,
 ): Promise<{ promotionCourse: PromotionCourse }> =>
-  api.post(`${PROMOTION_COURSE_BASE_URL}/apply/not-view?code=${code}&courseId=${courseId}`)
-
-export const checkPromotionCourseApply = (
-  body: CheckPromotionCourseApplyRequest,
-): Promise<{ promotionCourse: PromotionCourse }> =>
-  api.post(`${PROMOTION_COURSE_BASE_URL}/apply`, body)
+  api.post(`${PROMOTION_COURSE_BASE_URL}/apply/code?code=${code}&courseId=${courseId}`)
 
 export const createPromotionCourse = (body: CreatePromotionCourseBodyRequest): Promise<void> =>
   api.post(`${PROMOTION_COURSE_BASE_URL}`, body)

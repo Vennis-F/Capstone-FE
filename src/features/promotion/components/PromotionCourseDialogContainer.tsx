@@ -2,7 +2,7 @@
 import { Autocomplete, Dialog, DialogContent, DialogTitle, Grid, TextField } from '@mui/material'
 import { useEffect, useState } from 'react'
 
-import { getCoursesByInstructorId } from 'features/instructor/api'
+import { getCoursesCanApplyPromotionByInstructorId } from 'features/instructor/api'
 import {
   CourseFilterByInstructorResponse,
   GetCoursesByInstructorBodyRequest,
@@ -14,6 +14,8 @@ import { createPromotionCourse, findPromotionCoursesByPromotionId } from '../api
 import { PromotionCourse } from '../types'
 
 import TablePromotionCourses from './TablePromotionCourse'
+import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
+import { CourseStatus } from 'features/courses/types'
 
 export type Props = {
   openDialog: boolean
@@ -32,6 +34,7 @@ const PromotionCourseDialogContainer = (props: Props) => {
     setPromotionCourses(promotionCoursesRes)
 
     const bodyRequest: GetCoursesByInstructorBodyRequest = {
+      courseStatus: CourseStatus.APPROVED,
       pageOptions: {
         order: OrderType.DESC,
         page: 1,
@@ -39,20 +42,30 @@ const PromotionCourseDialogContainer = (props: Props) => {
       },
     }
 
-    const responses = await getCoursesByInstructorId(bodyRequest)
-    const courseNotSelected = responses.data.filter(course =>
-      promotionCoursesRes.every(promotionCourse => promotionCourse.course.id !== course.id),
+    const responses = await getCoursesCanApplyPromotionByInstructorId(
+      bodyRequest,
+      props.promotionId,
     )
-    setCourses(courseNotSelected)
+    // const courseNotSelected = responses.data.filter(course =>
+    //   promotionCoursesRes.every(promotionCourse => promotionCourse.course.id !== course.id),
+    // )
+    setCourses(responses)
   }
 
   const hanldeCreatePromotionCourses = async () => {
     for (let index = 0; index < selectCourses.length; index++) {
-      await createPromotionCourse({
-        courseId: selectCourses[index].id,
-        isView: false,
-        promotionId: props.promotionId,
-      })
+      try {
+        await createPromotionCourse({
+          courseId: selectCourses[index].id,
+          isView: false,
+          promotionId: props.promotionId,
+        })
+      } catch (error) {
+        showErrorResponseSaga({
+          error,
+          defaultMessage: `Không áp dụng mã giảm giá cho khóa học ${selectCourses[index].title}`,
+        })
+      }
     }
     setSelectCourses([])
     handlePrepare()
@@ -72,7 +85,7 @@ const PromotionCourseDialogContainer = (props: Props) => {
       fullWidth={true}
     >
       <DialogTitle sx={{ textAlign: 'center', fontWeight: '600', fontSize: '30px' }}>
-        Tạo mã giảm giá mới
+        Chọn khóa học được giảm giá
       </DialogTitle>
       <DialogContent>
         <Grid container marginY="20px" alignItems="center">

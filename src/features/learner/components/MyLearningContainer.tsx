@@ -31,6 +31,7 @@ export const MyLearningContainer = () => {
   const [courseLearnStatus, setCourseLearnStatus] = useState<CourseLearnStatus | undefined>(
     undefined,
   )
+
   const handleChangeStatus = (event: SelectChangeEvent) => {
     setCourseLearnStatus(event.target.value as CourseLearnStatus)
   }
@@ -85,6 +86,7 @@ export const MyLearningContainer = () => {
             </Select>
           </FormControl>
         </Box>
+
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 9, md: 9 }}>
             {courses.map(learningCourse => (

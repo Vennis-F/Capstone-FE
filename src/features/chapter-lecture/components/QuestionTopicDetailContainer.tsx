@@ -11,9 +11,13 @@ import QuestionAnswersContainer from './QuestionAnswersContainer'
 
 type Props = {
   questionTopic: QuestionTopicFilterResponse
+  handleSearchFilterQuestionTopics: () => Promise<void>
 }
 
-const QuestionTopicDetailContainer = ({ questionTopic }: Props) => {
+const QuestionTopicDetailContainer = ({
+  questionTopic,
+  handleSearchFilterQuestionTopics,
+}: Props) => {
   const userFullName = questionTopic.user
     ? `${questionTopic.user?.lastName} ${questionTopic.user?.middleName} ${questionTopic.user?.firstName} `
     : `${questionTopic.learner?.lastName} ${questionTopic.learner?.middleName} ${questionTopic.learner?.firstName} `
@@ -54,13 +58,17 @@ const QuestionTopicDetailContainer = ({ questionTopic }: Props) => {
           <Grid item>
             <Box>
               <Typography sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                1 <QuestionAnswerIcon />
+                {questionTopic.totalLengthQuestionAnswers} <QuestionAnswerIcon />
               </Typography>
             </Box>
           </Grid>
         </Grid>
       </Paper>
-      <QuestionAnswersContainer questionTopicId={questionTopic.id} />
+
+      <QuestionAnswersContainer
+        questionTopicId={questionTopic.id}
+        handleSearchFilterQuestionTopics={handleSearchFilterQuestionTopics}
+      />
     </>
   )
 }

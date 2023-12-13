@@ -1,5 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
-import { Box, Button, Dialog, DialogTitle, Paper, Avatar, CircularProgress } from '@mui/material'
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogTitle,
+  Paper,
+  Avatar,
+  CircularProgress,
+  Grid,
+} from '@mui/material'
 import Stack from '@mui/material/Stack'
 import React from 'react'
 import { UseFormReset, useForm } from 'react-hook-form'
@@ -7,6 +16,7 @@ import * as Yup from 'yup'
 
 import { MainColor } from 'libs/const/color'
 import { FormTextField } from 'libs/ui/form-components/FormTextField'
+import { toastWarn } from 'libs/utils/handle-toast'
 import { StyleSxProps } from 'types'
 
 import { CreateChapterLectureFormInput } from '../types/form.type'
@@ -37,6 +47,7 @@ export type Props = {
   handleOpenDialog: () => void
   handleCloseDialog: () => void
   isLoading: boolean
+  type: 'create' | 'update'
 }
 
 export const CreateChapterLectureDialogForm = (props: Props) => {
@@ -62,16 +73,27 @@ export const CreateChapterLectureDialogForm = (props: Props) => {
     resolver: yupResolver(newValidationSchema),
   })
 
-  const { control, reset, handleSubmit } = methods
+  const {
+    control,
+    reset,
+    handleSubmit,
+    formState: { isDirty },
+  } = methods
 
   const submitHandler = (data: CreateChapterLectureFormInput) => {
-    onSubmitClick(data, reset)
+    if (props.type === 'update') {
+      if (!isDirty) {
+        toastWarn({ message: 'Cập nhật dữ liệu trước khi tiến hành cập nhật!' })
+      } else {
+        onSubmitClick(data, reset)
+      }
+    } else onSubmitClick(data, reset)
   }
 
   return (
     <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md" fullWidth={true}>
       <DialogTitle sx={{ textAlign: 'center', fontWeight: '600', fontSize: '30px' }}>
-        Tạo bài giảng mới
+        {props.type === 'create' ? 'Tạo bài giảng mới' : 'Cập nhật bài giảng'}
       </DialogTitle>
 
       <Paper
@@ -110,16 +132,51 @@ export const CreateChapterLectureDialogForm = (props: Props) => {
           </Stack>
         </Stack>
       </Paper>
-      <Box sx={{ textAlign: 'right', marginBottom: '20px', marginRight: '60px' }}>
-        <Button
-          onClick={handleSubmit(submitHandler)}
-          variant={'contained'}
-          size="large"
-          sx={style.btnSubmit}
-          disabled={isLoading}
-        >
-          {!isLoading ? 'Tạo bài giảng' : <CircularProgress size="26px" />}
-        </Button>
+      <Box
+        sx={{
+          marginBottom: '20px',
+          marginRight: '60px',
+        }}
+      >
+        <Grid container width="100%" justifyContent="flex-end">
+          {props.type === 'update' && (
+            <Grid item>
+              <Button
+                onClick={() => reset()}
+                variant={'outlined'}
+                size="large"
+                sx={{
+                  marginRight: '20px',
+                  width: '140px',
+                  borderColor: MainColor.RED_500,
+                  color: MainColor.RED_500,
+                  fontWeight: '600',
+                  '&:hover': {
+                    borderColor: MainColor.RED_500,
+                    color: MainColor.RED_500,
+                  },
+                }}
+              >
+                {'Đặt lại'}
+              </Button>
+            </Grid>
+          )}
+          <Grid item>
+            <Button
+              onClick={handleSubmit(submitHandler)}
+              variant={'contained'}
+              size="large"
+              sx={style.btnSubmit}
+              disabled={isLoading}
+            >
+              {!isLoading ? (
+                `${props.type === 'create' ? 'Tạo mới' : 'Cập nhật'}`
+              ) : (
+                <CircularProgress size="26px" />
+              )}
+            </Button>
+          </Grid>
+        </Grid>
       </Box>
     </Dialog>
   )

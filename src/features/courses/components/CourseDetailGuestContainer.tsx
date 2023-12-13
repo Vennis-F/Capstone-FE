@@ -250,16 +250,18 @@ export const CouresDetailGuestContainer = ({ id }: CouresDetailGuestContainerPro
                     </Grid>
                   ))}
                 </Grid>
-                <Box sx={{ display: 'flex', justifyContent: 'center', marginY: '40px' }}>
-                  <Stack spacing={2}>
-                    <Pagination
-                      count={pageCount}
-                      page={page}
-                      onChange={handleChange}
-                      color="secondary"
-                    />
-                  </Stack>
-                </Box>
+                {pageCount > 1 && (
+                  <Box sx={{ display: 'flex', justifyContent: 'center', marginY: '40px' }}>
+                    <Stack spacing={2}>
+                      <Pagination
+                        count={pageCount}
+                        page={page}
+                        onChange={handleChange}
+                        color="secondary"
+                      />
+                    </Stack>
+                  </Box>
+                )}
               </Box>
             </Container>
           </Container>

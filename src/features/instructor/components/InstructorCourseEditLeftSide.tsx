@@ -9,6 +9,7 @@ import {
   FormControl,
   FormControlLabel,
   Grid,
+  Paper,
   Radio,
   RadioGroup,
   TextField,
@@ -94,7 +95,7 @@ const InstructorCourseEditLeftSide = ({ currentType, course, handleGetCourse }: 
   const isCheckApproval = getUserRole() === UserRole.STAFF && course.status === CourseStatus.PENDING
 
   return (
-    <>
+    <Paper elevation={2} sx={{ padding: '20px 20px' }}>
       <FormControl sx={{ marginBottom: '15px' }}>
         <Typography sx={{ fontSize: '16px', fontWeight: 'bold', color: 'black' }}>
           Tạo nội dung khóa học
@@ -201,7 +202,7 @@ const InstructorCourseEditLeftSide = ({ currentType, course, handleGetCourse }: 
           <Button onClick={() => handleApprovalOrReject(CourseStatus.REJECTED)}>Chấp nhận</Button>
         </DialogActions>
       </Dialog>
-    </>
+    </Paper>
   )
 }
 

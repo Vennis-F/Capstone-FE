@@ -1,3 +1,4 @@
+import { Box, Pagination, Stack } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { UseFormReset } from 'react-hook-form'
 
@@ -15,24 +16,32 @@ import { QuestionAnswerCreateForm } from './QuestionAnswerCreateForm'
 
 type Props = {
   questionTopicId: string
+  handleSearchFilterQuestionTopics: () => Promise<void>
 }
 
-const QuestionAnswersContainer = ({ questionTopicId }: Props) => {
+const QuestionAnswersContainer = ({ questionTopicId, handleSearchFilterQuestionTopics }: Props) => {
   const [questionAnswers, setQuestionAnswers] = useState<QuestionAnswerFilterResponse[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [page, setPage] = useState(1)
+  const [pageCount, setPageCount] = useState(0)
+
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value)
+  }
 
   const handleGetQuestionAnswers = async () => {
-    const { data } = await searchFilterQuestionAnswer({
+    const { data, meta } = await searchFilterQuestionAnswer({
       questionTopicId,
       active: true,
       sortField: SortFieldSearchFilterQuestionTopic.UPDATED_DATE,
       pageOptions: {
         order: OrderType.DESC,
-        page: 1,
+        page,
         take: 5,
       },
     })
     setQuestionAnswers(data)
+    setPageCount(meta.pageCount)
   }
 
   const handleCreateQuestionAnswer = async (
@@ -48,6 +57,7 @@ const QuestionAnswersContainer = ({ questionTopicId }: Props) => {
       toastSuccess({ message: 'Thêm câu trả lời mới thành công' })
       reset()
       handleGetQuestionAnswers()
+      handleSearchFilterQuestionTopics()
     } catch (error) {
       console.log('component=QuestionAnswersContainer', error)
       toastError({ message: 'Không thể thêm câu trả lời' })
@@ -58,7 +68,7 @@ const QuestionAnswersContainer = ({ questionTopicId }: Props) => {
 
   useEffect(() => {
     handleGetQuestionAnswers()
-  }, [questionTopicId])
+  }, [questionTopicId, page])
 
   return (
     <>
@@ -66,6 +76,13 @@ const QuestionAnswersContainer = ({ questionTopicId }: Props) => {
       {questionAnswers.map(questionAnswer => (
         <QuestionAnswerCardView key={questionAnswer.id} questionAnswer={questionAnswer} />
       ))}
+      {pageCount > 1 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+          <Stack spacing={2}>
+            <Pagination count={pageCount} page={page} onChange={handleChange} color="secondary" />
+          </Stack>
+        </Box>
+      )}
     </>
   )
 }

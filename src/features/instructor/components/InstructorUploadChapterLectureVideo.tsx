@@ -2,7 +2,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import UploadIcon from '@mui/icons-material/Upload'
 import { Button, Typography, Box, LinearProgress, CircularProgress } from '@mui/material'
 import { AxiosRequestConfig } from 'axios'
-import React, { useState, ChangeEvent } from 'react'
+import React, { useState, ChangeEvent, useEffect } from 'react'
 
 import { uploadChapterLectureVideo } from 'features/chapter-lecture/api'
 import { ChapterLecture } from 'features/chapter-lecture/types'
@@ -11,9 +11,15 @@ import { toastError, toastSuccess } from 'libs/utils/handle-toast'
 
 interface Props {
   chapterLecture: ChapterLecture
+  handleCloseEditVideo: () => void
+  showButtonReturn: boolean
 }
 
-const InstructorUploadChapterLectureVideo = ({ chapterLecture }: Props) => {
+const InstructorUploadChapterLectureVideo = ({
+  showButtonReturn,
+  chapterLecture,
+  handleCloseEditVideo,
+}: Props) => {
   const [isLoading, setIsLoading] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [uploadProgress, setUploadProgress] = useState<number>(0)
@@ -41,6 +47,7 @@ const InstructorUploadChapterLectureVideo = ({ chapterLecture }: Props) => {
       try {
         await uploadChapterLectureVideo(chapterLecture.id, formData, config)
         toastSuccess({ message: 'Thêm video khóa học thành công' })
+        handleCloseEditVideo()
       } catch (error) {
         console.error('Error uploading video', error)
       }
@@ -49,6 +56,15 @@ const InstructorUploadChapterLectureVideo = ({ chapterLecture }: Props) => {
     }
     setIsLoading(false)
   }
+
+  useEffect(() => {
+    console.log('clear')
+    return () => {
+      setIsLoading(false)
+      setSelectedFile(null)
+      setUploadProgress(0)
+    }
+  }, [])
 
   return (
     <Box display="flex" flexDirection="column" alignItems="flex-start">
@@ -72,7 +88,13 @@ const InstructorUploadChapterLectureVideo = ({ chapterLecture }: Props) => {
       </Box>
       <Box mt={2}>
         <label htmlFor={`upload-video-${chapterLecture.id}`}>
-          <Button variant="contained" color="primary" component="span" startIcon={<UploadIcon />}>
+          <Button
+            disabled={isLoading}
+            variant="contained"
+            color="primary"
+            component="span"
+            startIcon={<UploadIcon />}
+          >
             Chọn video
           </Button>
         </label>
@@ -91,6 +113,11 @@ const InstructorUploadChapterLectureVideo = ({ chapterLecture }: Props) => {
           {!isLoading ? 'Cập nhật' : <CircularProgress size="26px" />}
         </Button>
       </Box>
+      {showButtonReturn && (
+        <Button disabled={isLoading} onClick={handleCloseEditVideo}>
+          Trở về
+        </Button>
+      )}
     </Box>
   )
 }

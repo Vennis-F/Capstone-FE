@@ -60,13 +60,13 @@ export const GuestSignupForm = (props: Props) => {
   return (
     <Stack sx={{ pt: 0 }} direction="column" spacing={1} justifyContent="center">
       <Box sx={{ height: '60px' }}>
-        <FormTextField name="firstName" label={'Tên'} control={control} />
-      </Box>
-      <Box sx={{ height: '60px' }}>
         <FormTextField name="lastName" label={'Họ'} control={control} />
       </Box>
       <Box sx={{ height: '60px' }}>
         <FormTextField name="middleName" label={'Tên đệm'} control={control} />
+      </Box>
+      <Box sx={{ height: '60px' }}>
+        <FormTextField name="firstName" label={'Tên'} control={control} />
       </Box>
       <Box sx={{ height: '60px' }}>
         <FormTextField name="phoneNumber" label={'Số điện thoại'} control={control} />

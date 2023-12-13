@@ -3,14 +3,23 @@ import React from 'react'
 import { Droppable } from 'react-beautiful-dnd'
 
 import { ChapterLecture } from 'features/chapter-lecture/types'
+import { CourseStatus } from 'features/courses/types'
 
 import DraggableListItem from './DraggableListItem'
 
 interface Props {
   chapterLectures: ChapterLecture[]
+  handleGetChapterLecturesByCourseId: () => Promise<void>
+  isEditable: boolean
+  courseStatus: CourseStatus
 }
 
-const DroppableList = ({ chapterLectures }: Props) => (
+const DroppableList = ({
+  chapterLectures,
+  handleGetChapterLecturesByCourseId,
+  isEditable,
+  courseStatus,
+}: Props) => (
   <Droppable droppableId="droppable" direction="vertical">
     {provided => (
       <List ref={provided.innerRef} {...provided.droppableProps}>
@@ -19,6 +28,9 @@ const DroppableList = ({ chapterLectures }: Props) => (
             key={chapterLecture.id}
             chapterLecture={chapterLecture}
             index={index}
+            handleGetChapterLecturesByCourseId={handleGetChapterLecturesByCourseId}
+            isEditable={isEditable}
+            courseStatus={courseStatus}
           />
         ))}
         {provided.placeholder}

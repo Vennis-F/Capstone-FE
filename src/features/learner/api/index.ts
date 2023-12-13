@@ -5,6 +5,7 @@ import makeApi from 'libs/core/configureAxios'
 import { PageMetaResponse } from 'types'
 
 import {
+  ChangePasswordLearnerBodyRequest,
   CreateLearnerBodyRequest,
   CreateLearnerCourseBodyRequest,
   LearnerFilterResponse,
@@ -24,7 +25,7 @@ export const createLearner = (body: CreateLearnerBodyRequest): Promise<void> =>
 export const updateLearner = (body: UpdateLearnerBodyRequest): Promise<void> =>
   api.put(`${LEARNER_BASE_URL}`, body)
 
-export const changePasswordLearner = (body: UpdateLearnerBodyRequest): Promise<void> =>
+export const changePasswordLearner = (body: ChangePasswordLearnerBodyRequest): Promise<void> =>
   api.put(`${LEARNER_BASE_URL}/passowrd/change`, body)
 
 export const getLearnersByUser = (): Promise<LearnerFilterResponse[]> =>
@@ -34,6 +35,12 @@ export const getCourseForLearnerSearchByUser = (
   search: string,
 ): Promise<{ data: CourseLearnerFilterResponse[]; meta: PageMetaResponse }> =>
   api.post(`${LEARNER_BASE_URL}/course/user?search=${search}`)
+
+export const getCourseForLearnerSearchByLearnerIdFromCustomer = (
+  search: string,
+  learnerId: string,
+): Promise<{ data: CourseLearnerFilterResponse[]; meta: PageMetaResponse }> =>
+  api.post(`${LEARNER_BASE_URL}/course/user/${learnerId}?search=${search}`)
 
 // ----------------------------------------------------------------
 

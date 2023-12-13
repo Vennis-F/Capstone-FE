@@ -24,7 +24,6 @@ const InstructorCourseEditContainer = ({ courseId, type }: Props) => {
   const [course, setCourse] = useState<CourseFullInfor | null>(null)
 
   const handleGetCourse = async () => {
-    // console.log('---------')
     const courseRes = await getCourseById(courseId)
     setCourse(courseRes)
   }
@@ -36,10 +35,12 @@ const InstructorCourseEditContainer = ({ courseId, type }: Props) => {
   const renderRightSideComponent = () => {
     if (!course) return null
 
+    // Only for instructor
     const isEditable =
       getUserRole() === UserRole.INSTRUCTOR &&
-      course.status !== CourseStatus.PENDING &&
-      course.status !== CourseStatus.BANNED
+      (course.status === CourseStatus.CREATED ||
+        course.status === CourseStatus.APPROVED ||
+        course.status === CourseStatus.REJECTED)
 
     switch (type) {
       case TypeInstructorEditCourseParams.CURRICULUMN:
@@ -52,6 +53,7 @@ const InstructorCourseEditContainer = ({ courseId, type }: Props) => {
             courseId={courseId}
             url={course?.thumbnailUrl}
             isEditable={isEditable}
+            handleGetCourse={handleGetCourse}
           />
         )
       case TypeInstructorEditCourseParams.PRICING:
@@ -60,6 +62,7 @@ const InstructorCourseEditContainer = ({ courseId, type }: Props) => {
             courseId={courseId}
             price={course?.price}
             isEditable={isEditable}
+            handleGetCourse={handleGetCourse}
           />
         )
       // case TypeInstructorEditCourseParams.PROMOTION:

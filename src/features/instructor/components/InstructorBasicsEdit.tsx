@@ -42,6 +42,7 @@ const InstructorBasicsEdit = ({ currentCourse, isEditable }: Props) => {
 
   return (
     <LayoutBodyContainer
+      isPadding={true}
       title="Trang chủ khóa học"
       introduction="Trang đích khóa học của bạn rất quan trọng cho sự thành công của bạn trên nền tảng của
     chúng tôi. Nếu làm đúng, nó cũng có thể giúp bạn có được khả năng hiển thị trên các công

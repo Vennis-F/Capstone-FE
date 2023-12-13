@@ -1,15 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button } from '@mui/material'
-import {
-  DataGrid,
-  GridColDef,
-  GridPaginationModel,
-  GridRenderCellParams,
-  GridSortModel,
-  GridValueGetterParams,
-} from '@mui/x-data-grid'
+import { DataGrid, GridColDef, GridRenderCellParams, GridValueGetterParams } from '@mui/x-data-grid'
 import RenderImage from 'material-ui-image'
-import { useState } from 'react'
 
 import { getImage } from 'features/image/components/apis'
 import { formatFullName } from 'libs/utils/handle-name'
@@ -20,29 +12,21 @@ interface Props {
   instructors: InstructorFilterResponse[]
   onApproveOrRejectInstructor: (InstructorId: string, status: InstructorStatus) => void
   onEditRow: (id: string) => void
-  onPaymentInstructor: (instructorId: string) => void
 }
 
-const TableInstructors = ({
+const TableInstructorsPending = ({
   instructors,
   onEditRow,
   onApproveOrRejectInstructor,
-  onPaymentInstructor,
 }: Props) => {
   const columns: GridColDef[] = [
-    // { field: 'id', headerName: 'ID', width: 70, sortable: false, filterable: false },
     {
       field: 'fullName',
       headerName: 'Họ và tên',
-      width: 230,
+      width: 180,
       valueGetter: (params: GridValueGetterParams) => formatFullName(params.row),
     },
-    // {
-    //   field: 'email',
-    //   headerName: 'Email',
-    //   width: 130,
-    // },
-    { field: 'email', headerName: 'Email', width: 160 },
+    { field: 'email', headerName: 'Email', width: 250 },
     // {
     //   field: 'avatar',
     //   headerName: 'Ảnh đại diện',
@@ -77,7 +61,7 @@ const TableInstructors = ({
     {
       field: 'action1',
       headerName: 'Hành động',
-      description: 'Cập nhật hoặc ẩn Instructor',
+      description: 'Xem chi tiết',
       width: 120,
       renderCell: (params: GridRenderCellParams) => {
         const InstructorId = params.row.id
@@ -85,7 +69,7 @@ const TableInstructors = ({
           <div>
             <Button
               variant="contained"
-              color="primary"
+              color="info"
               size="small"
               onClick={() => onEditRow(params.row.id)} // Thay handleEdit bằng hàm xử lý sự kiện edit
               sx={{ marginRight: '10px' }}
@@ -110,7 +94,7 @@ const TableInstructors = ({
             {params.row.status === InstructorStatus.Pending && (
               <Button
                 variant="contained"
-                color="primary"
+                color="secondary"
                 size="small"
                 onClick={() =>
                   onApproveOrRejectInstructor(params.row.id, InstructorStatus.Approved)
@@ -122,39 +106,13 @@ const TableInstructors = ({
             )}
             <Button
               variant="contained"
-              color="primary"
+              color="error"
               size="small"
               onClick={() => onApproveOrRejectInstructor(params.row.id, InstructorStatus.Reject)} // Thay handleEdit bằng hàm xử lý sự kiện edit
               sx={{ marginRight: '10px' }}
             >
-              Loại bỏ
+              Từ chối
             </Button>
-          </div>
-        )
-      },
-      sortable: false,
-      filterable: false,
-    },
-    {
-      field: 'action3',
-      headerName: 'Thanh toán',
-      description: 'Thanh toán cho giảng viên',
-      width: 140,
-      renderCell: (params: GridRenderCellParams) => {
-        const instructorId = params.row.id
-        return (
-          <div>
-            {/* {params.row.status === InstructorStatus.Pending && ( */}
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={() => onPaymentInstructor(instructorId)} // Thay handleEdit bằng hàm xử lý sự kiện edit
-              sx={{ marginRight: '10px' }}
-            >
-              Thanh toán
-            </Button>
-            {/* )} */}
           </div>
         )
       },
@@ -174,20 +132,10 @@ const TableInstructors = ({
           },
         }}
         pageSizeOptions={[10, 15]}
-        // checkboxSelection
-        // sortModel={[
-        //   {
-        //     field: 'age',
-        //     sort: 'asc', // Default sorting order for the 'age' column
-        //   },
-        // ]}
-        // onSortModelChange={model => handleSortModelChange(model)}
-        // onPaginationModelChange={model => handelPaginationModelChange(model)}
-        // onFilterModelChange={model => console.log(model)}
         density="comfortable"
       />
     </div>
   )
 }
 
-export default TableInstructors
+export default TableInstructorsPending

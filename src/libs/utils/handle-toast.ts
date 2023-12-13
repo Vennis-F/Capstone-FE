@@ -22,8 +22,8 @@ export const toastError = (data: {
 
 export const toastWarn = (data: { message: string }) => {
   toast.warn(data.message, {
-    // position: 'top-right',
-    position: 'top-center',
+    position: 'top-right',
+    // position: 'top-center',
     autoClose: 5000,
     hideProgressBar: false,
     closeOnClick: true,
@@ -36,8 +36,8 @@ export const toastWarn = (data: { message: string }) => {
 
 export const toastSuccess = (data: { message: string }) => {
   toast.success(data.message, {
-    // position: 'top-right',
-    position: 'top-center',
+    position: 'top-right',
+    // position: 'top-center',
     autoClose: 5000,
     hideProgressBar: false,
     closeOnClick: true,

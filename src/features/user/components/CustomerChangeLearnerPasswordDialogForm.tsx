@@ -5,7 +5,7 @@ import React from 'react'
 import { UseFormReset, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
-import { UpdateLearnerFormInput } from 'features/learner/types/form.type'
+import { ChangePasswordLearnerFormInput } from 'features/learner/types/form.type'
 import { MainColor } from 'libs/const/color'
 import { FormTextField } from 'libs/ui/form-components/FormTextField'
 import { StyleSxProps } from 'types'
@@ -27,46 +27,59 @@ const style: StyleSxProps = {
 } as const
 
 export type Props = {
-  defaultValues?: UpdateLearnerFormInput
+  defaultValues?: ChangePasswordLearnerFormInput
   openDialog: boolean
   isLoading: boolean
-  onSubmitClick(data: UpdateLearnerFormInput, reset: UseFormReset<UpdateLearnerFormInput>): void
+  onSubmitClick(
+    data: ChangePasswordLearnerFormInput,
+    reset: UseFormReset<ChangePasswordLearnerFormInput>,
+  ): void
   handleCloseDialog: () => void
 }
 
-export const CustomerEditLearnerDialogForm = (props: Props) => {
-  const { openDialog, handleCloseDialog, isLoading, defaultValues, onSubmitClick } = props
+export const CustomerChangeLearnerPasswordDialogForm = (props: Props) => {
+  const {
+    openDialog,
+    handleCloseDialog,
+    isLoading,
+    defaultValues = {
+      newPassword: '',
+      confirmNewPassword: '',
+    },
+    onSubmitClick,
+  } = props
 
   const newValidationSchema = Yup.object().shape({
-    firstName: Yup.string().required('Không được để trống tên'),
-    lastName: Yup.string().required('Không được để trống họ'),
-    middleName: Yup.string().required('Không được để trống tên đệm'),
-    userName: Yup.string().required('Không được để trống tên đăng nhập'),
+    newPassword: Yup.string()
+      .required('Không được để trống Mật khẩu')
+      .min(5, 'Mật khẩu không có độ dài nhỏ nhất là 5')
+      .max(32, 'Mật khẩu có độ dài tối đa là 32'),
+    confirmNewPassword: Yup.string()
+      .required('Không được để trống xác nhận mật khẩu mới')
+      .oneOf(
+        [Yup.ref('newPassword'), null],
+        'Mật khẩu mới và xác nhận mật khẩu mới phải giống nhau',
+      ),
   })
 
-  const methods = useForm<UpdateLearnerFormInput>({
+  const methods = useForm<ChangePasswordLearnerFormInput>({
     defaultValues,
     resolver: yupResolver(newValidationSchema),
   })
 
   const { control, reset, handleSubmit } = methods
 
-  const submitHandler = (data: UpdateLearnerFormInput) => {
-    onSubmitClick(data, reset)
+  const submitHandler = (data: ChangePasswordLearnerFormInput) => {
+    if (onSubmitClick) onSubmitClick(data, reset)
   }
 
   return (
     <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md" fullWidth={true}>
       <DialogTitle sx={{ textAlign: 'center', fontWeight: '600', fontSize: '30px' }}>
-        Thay đổi thông tin hồ sơ cho bé
+        Thay đổi mật khẩu tài khoản của bé
       </DialogTitle>
 
-      <Paper
-        square={false}
-        variant="outlined"
-        sx={{ margin: '20px 60px', padding: '40px' }}
-        // elevation={20}
-      >
+      <Paper square={false} variant="outlined" sx={{ margin: '20px 60px', padding: '40px' }}>
         <Stack direction="row" spacing={2}>
           <Box
             sx={{ width: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
@@ -82,45 +95,28 @@ export const CustomerEditLearnerDialogForm = (props: Props) => {
             spacing={1}
             justifyContent="center"
           >
-            <Box sx={style.formInput}>
+            <Box sx={{ height: '60px' }}>
               <FormTextField
-                name="userName"
-                label={'Tên đăng nhập'}
+                name="newPassword"
+                label={'Mật khẩu mới'}
                 control={control}
                 size="small"
+                type="password"
               />
             </Box>
-            <Box sx={style.formInput}>
-              <FormTextField name="firstName" label={'Tên'} control={control} size="small" />
-            </Box>
-            <Box sx={style.formInput}>
-              <FormTextField name="middleName" label={'Tên đệm'} control={control} size="small" />
-            </Box>
-            <Box sx={style.formInput}>
-              <FormTextField name="lastName" label={'Họ'} control={control} size="small" />
+            <Box sx={{ height: '60px' }}>
+              <FormTextField
+                name="confirmNewPassword"
+                label={'Xác nhận mật khẩu mới'}
+                control={control}
+                size="small"
+                type="password"
+              />
             </Box>
           </Stack>
         </Stack>
       </Paper>
       <Box sx={{ textAlign: 'right', marginBottom: '20px', marginRight: '60px' }}>
-        <Button
-          onClick={() => reset()}
-          variant={'outlined'}
-          size="large"
-          sx={{
-            color: MainColor.RED_500,
-            borderColor: MainColor.RED_500,
-            fontWeight: 'bolder',
-            width: '130px',
-            '&:hover': {
-              color: MainColor.RED_500,
-              borderColor: MainColor.RED_500,
-            },
-            marginRight: '10px',
-          }}
-        >
-          {'Đặt lại'}
-        </Button>
         <Button
           onClick={handleSubmit(submitHandler)}
           variant={'contained'}
@@ -128,11 +124,11 @@ export const CustomerEditLearnerDialogForm = (props: Props) => {
           sx={style.btnSubmit}
           disabled={isLoading}
         >
-          {!isLoading ? 'Cập nhật' : <CircularProgress size="26px" />}
+          {!isLoading ? 'Đổi mật khẩu' : <CircularProgress size="26px" />}
         </Button>
       </Box>
     </Dialog>
   )
 }
 
-export default CustomerEditLearnerDialogForm
+export default CustomerChangeLearnerPasswordDialogForm

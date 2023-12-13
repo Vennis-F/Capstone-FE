@@ -69,6 +69,7 @@ export type CourseFilterResponse = {
   thumbnailUrl: string
   active: boolean
   completedPercent: number | null
+  isCertified: boolean
 }
 
 export type CourseLearnerFilterResponse = CourseFilterResponse

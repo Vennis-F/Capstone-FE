@@ -74,7 +74,7 @@ const UpdatePromotionDialogForm = (props: Props) => {
       fullWidth={true}
     >
       <DialogTitle sx={{ textAlign: 'center', fontWeight: '600', fontSize: '30px' }}>
-        Tạo mã giảm giá mới
+        Cập nhật mã giảm giá
       </DialogTitle>
       <Stack sx={{ padding: '20px' }} direction="column" spacing={1} justifyContent="center">
         <Box sx={{ height: '90px' }}>
@@ -87,7 +87,13 @@ const UpdatePromotionDialogForm = (props: Props) => {
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
             Phần trăm giảm giá
           </Typography>
-          <FormTextField name="discountPercent" type="number" control={control} size="small" />
+          <FormTextField
+            name="discountPercent"
+            type="number"
+            control={control}
+            size="small"
+            disable
+          />
         </Box>
         <Box sx={{ height: '90px' }}>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
@@ -111,16 +117,16 @@ const UpdatePromotionDialogForm = (props: Props) => {
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
             Ngày bắt đầu
           </Typography>
-          <FormDateField name="effectiveDate" control={control} />
+          <FormDateField name="effectiveDate" control={control} disable />
         </Box>
         <Box sx={{ height: '90px' }}>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
             Ngày kết thúc
           </Typography>
-          <FormDateField name="expiredDate" control={control} />
+          <FormDateField name="expiredDate" control={control} disable />
         </Box>
         <Grid container>
-          <Grid item>
+          <Grid item sx={{ marginRight: '15px' }}>
             <Button
               onClick={() => reset()}
               variant={'outlined'}
@@ -155,7 +161,7 @@ const UpdatePromotionDialogForm = (props: Props) => {
               }}
               disabled={props.isLoading}
             >
-              {!props.isLoading ? 'Tạo mới' : <CircularProgress size="26px" />}
+              {!props.isLoading ? 'Cập nhật' : <CircularProgress size="26px" />}
             </Button>
           </Grid>
         </Grid>

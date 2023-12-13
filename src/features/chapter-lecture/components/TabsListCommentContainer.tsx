@@ -39,22 +39,19 @@ const TabsListCommentContainer = () => {
   )
   const chapterLectureId = searchParams.get('chapterLectureId')
   const [isCurrent, setIsCurrent] = useState<'true' | 'false'>('true')
-  const [sortField, setSortField] = useState<SortFieldSearchFilterQuestionTopic>(
-    SortFieldSearchFilterQuestionTopic.UPDATED_DATE,
-  )
+  const [orderType, setOrderType] = useState<OrderType>(OrderType.DESC)
   const [page, setPage] = useState(1)
   const [pageCount, setPageCount] = useState(0)
   const [reRender, setReRender] = useState(false)
-  // const
 
   const handleSearchFilterQuestionTopics = async () => {
     const responses = await searchFilterQuestionTopic({
       courseId: courseId as string,
       chapterLectureId: isCurrent === 'true' ? (chapterLectureId as string) : undefined,
       active: true,
-      sortField,
+      sortField: SortFieldSearchFilterQuestionTopic.UPDATED_DATE,
       pageOptions: {
-        order: OrderType.DESC,
+        order: orderType,
         take: 5,
         page,
       },
@@ -98,22 +95,18 @@ const TabsListCommentContainer = () => {
 
   useEffect(() => {
     if (chapterLectureId) {
-      console.log('helo ae')
       setPage(1)
       setPageCount(0)
       setIsCurrent('true')
       setCurrQuestionTopic(null)
-      setSortField(SortFieldSearchFilterQuestionTopic.UPDATED_DATE)
+      setOrderType(OrderType.DESC)
       setReRender(!reRender)
-      // handleSearchFilterQuestionTopics()
     }
   }, [chapterLectureId])
 
   useEffect(() => {
     handleSearchFilterQuestionTopics()
-  }, [page, isCurrent, sortField, reRender])
-
-  console.log('[component=TabsListCommentContainer]', chapterLectureId, page, isCurrent, sortField)
+  }, [page, isCurrent, orderType, reRender])
 
   return (
     <Container maxWidth="md">
@@ -152,23 +145,19 @@ const TabsListCommentContainer = () => {
           </Grid>
           <Grid item xs={6} marginLeft="14px">
             <FormControl fullWidth sx={{ backgroundColor: 'white' }}>
-              <InputLabel id="label-sort">Sắp xếp theo:</InputLabel>
+              <InputLabel id="label-order">Sắp xếp theo:</InputLabel>
               <Select
-                labelId="label-sort"
-                id="select-sort"
+                labelId="label-order"
+                id="select-order"
                 onChange={e => {
-                  setSortField(e.target.value as SortFieldSearchFilterQuestionTopic)
+                  setOrderType(e.target.value as OrderType)
                   setPage(1)
                 }}
-                label="sort"
-                value={sortField}
+                label="order"
+                value={orderType}
               >
-                <MenuItem value={SortFieldSearchFilterQuestionTopic.UPDATED_DATE}>
-                  {'Sắp xếp theo thứ tự gần đây nhất'}
-                </MenuItem>
-                <MenuItem value={SortFieldSearchFilterQuestionTopic.RATING}>
-                  {'Sắp xếp theo thứ tự nhiều người tán thành nhất'}
-                </MenuItem>
+                <MenuItem value={OrderType.DESC}>{'Sắp xếp theo thứ tự gần đây nhất'}</MenuItem>
+                <MenuItem value={OrderType.ASC}>{'Sắp xếp theo thứ tự cũ nhất'}</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -178,10 +167,13 @@ const TabsListCommentContainer = () => {
       {!currQuestionTopic ? (
         <>{renderListOrCreateQuestionTopic}</>
       ) : (
-        <QuestionTopicDetailContainer questionTopic={currQuestionTopic} />
+        <QuestionTopicDetailContainer
+          questionTopic={currQuestionTopic}
+          handleSearchFilterQuestionTopics={handleSearchFilterQuestionTopics}
+        />
       )}
 
-      {questionTopics.length > 0 && !currQuestionTopic && !isAddQuestionTopic && (
+      {pageCount > 1 && !currQuestionTopic && !isAddQuestionTopic && (
         <Box sx={{ display: 'flex', justifyContent: 'center', marginY: '40px' }}>
           <Stack spacing={2}>
             <Pagination

@@ -45,6 +45,7 @@ const InstructorPromotionEdit = () => {
       <Container maxWidth="xl" sx={{ marginBottom: '50px' }}>
         <LayoutBodyContainer
           title="Mã giảm giá"
+          isPadding={true}
           introduction={
             <>
               <Typography color="black" fontWeight="bold">
@@ -91,12 +92,12 @@ const InstructorPromotionEdit = () => {
       <CreatePromotionDialogForm
         defaultValues={{
           title: '',
-          amount: 0,
+          amount: 1,
           code: '',
           discountPercent: 10,
-          effectiveDate: '',
-          expiredDate: '',
-          note: '',
+          effectiveDate: new Date().toUTCString(),
+          expiredDate: new Date().toUTCString(),
+          note: 'Mã giảm giá',
         }}
         isLoading={isLoading}
         openDialog={openCreatePromotion}
@@ -121,9 +122,7 @@ const InstructorPromotionEdit = () => {
             handleGetPromotions()
             toastSuccess({ message: 'Tạo mã giảm giá thành công' })
           } catch (error) {
-            toastError({
-              message: 'Tạo mã giảm giá thất bại',
-            })
+            showErrorResponseSaga({ error, defaultMessage: 'Tạo mã giảm giá thất bại' })
             console.log(error)
           }
           setIsLoading(false)

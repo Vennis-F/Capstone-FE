@@ -1,5 +1,7 @@
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded'
+import ArticleIcon from '@mui/icons-material/Article'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import PasswordIcon from '@mui/icons-material/Password'
 import {
   Paper,
   Typography,
@@ -19,8 +21,12 @@ import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastSuccess } from 'libs/utils/handle-toast'
 import { StyleSxProps } from 'types'
 
+import { changePasswordLearner } from '../../learner/api/index'
+
 import { CustomerAddLearnerDialogForm } from './CustomerAddLearnerDialogForm'
+import CustomerChangeLearnerPasswordDialogForm from './CustomerChangeLearnerPasswordDialogForm'
 import CustomerEditLearnerDialogForm from './CustomerEditLearnerDialogForm'
+import { LearnerProgressDialog } from './LearnerProgressDialog'
 
 const style: StyleSxProps = {
   container: {
@@ -47,6 +53,12 @@ const CustomerManagerLearnersContainer = () => {
   const [currLearnerEdit, setCurrentLearnerEdit] = useState<LearnerFilterResponse | null>(null)
   const [isLoadingEdit, setIsLoadingEdit] = useState(false)
 
+  const [currLearnerEditPassword, setCurrentLearnerEditPassword] =
+    useState<LearnerFilterResponse | null>(null)
+  const [isLoadingEditPassword, setIsLoadingEditPassword] = useState(false)
+
+  const [currProgressLearnerId, setCurrProgressLearner] = useState<string | null>()
+
   const handleClickOpen = () => {
     setOpenAddLearnerDialog(true)
   }
@@ -59,6 +71,7 @@ const CustomerManagerLearnersContainer = () => {
     const learnersFilterResponse = await getLearnersByUser()
     setLearners(learnersFilterResponse)
   }
+
   useEffect(() => {
     handleGetLearners()
   }, [])
@@ -73,15 +86,34 @@ const CustomerManagerLearnersContainer = () => {
           <div key={learner.id}>
             <ListItem
               secondaryAction={
-                <IconButton
-                  edge="end"
-                  onClick={() => {
-                    setCurrentLearnerEdit(learner)
-                    setOpenEditLearnerDialog(true)
-                  }}
-                >
-                  <ChevronRightIcon />
-                </IconButton>
+                <>
+                  <IconButton
+                    edge="start"
+                    onClick={() => {
+                      setCurrProgressLearner(learner.id)
+                    }}
+                    sx={{ marginRight: '14px' }}
+                  >
+                    <ArticleIcon />
+                  </IconButton>
+                  <IconButton
+                    edge="start"
+                    onClick={() => {
+                      setCurrentLearnerEditPassword(learner)
+                    }}
+                  >
+                    <PasswordIcon />
+                  </IconButton>
+                  <IconButton
+                    edge="end"
+                    onClick={() => {
+                      setCurrentLearnerEdit(learner)
+                      setOpenEditLearnerDialog(true)
+                    }}
+                  >
+                    <ChevronRightIcon />
+                  </IconButton>
+                </>
               }
             >
               <ListItemAvatar>
@@ -132,6 +164,16 @@ const CustomerManagerLearnersContainer = () => {
         isLoading={isLoading}
       />
 
+      {currProgressLearnerId && (
+        <LearnerProgressDialog
+          handleCloseDialog={() => {
+            setCurrProgressLearner(null)
+          }}
+          learnerId={currProgressLearnerId}
+          openDialog={Boolean(currProgressLearnerId)}
+        />
+      )}
+
       {currLearnerEdit && (
         <CustomerEditLearnerDialogForm
           openDialog={openEditLearnerDialog}
@@ -141,7 +183,6 @@ const CustomerManagerLearnersContainer = () => {
             setCurrentLearnerEdit(null)
           }}
           isLoading={isLoadingEdit}
-          userName={currLearnerEdit.userName}
           onSubmitClick={async data => {
             setIsLoadingEdit(true)
             try {
@@ -150,6 +191,7 @@ const CustomerManagerLearnersContainer = () => {
                 firstName: data.firstName,
                 lastName: data.lastName,
                 middleName: data.middleName,
+                userName: data.userName,
               })
               toastSuccess({ message: 'Cập nhật tài khoản cho bé thành công' })
               setOpenEditLearnerDialog(false)
@@ -168,6 +210,41 @@ const CustomerManagerLearnersContainer = () => {
             firstName: currLearnerEdit.firstName,
             lastName: currLearnerEdit.lastName,
             middleName: currLearnerEdit.middleName,
+            userName: currLearnerEdit.userName,
+          }}
+        />
+      )}
+
+      {currLearnerEditPassword && (
+        <CustomerChangeLearnerPasswordDialogForm
+          openDialog={Boolean(currLearnerEditPassword)}
+          handleCloseDialog={() => {
+            setCurrentLearnerEditPassword(null)
+          }}
+          isLoading={isLoadingEditPassword}
+          onSubmitClick={async data => {
+            setIsLoadingEditPassword(true)
+            try {
+              await changePasswordLearner({
+                learnerId: currLearnerEditPassword.id,
+                newPassword: data.newPassword,
+                confirmNewPassword: data.confirmNewPassword,
+              })
+              toastSuccess({ message: 'Thay đổi mật khẩu tài khoản của bé thành công' })
+              setCurrentLearnerEditPassword(null)
+              handleGetLearners()
+            } catch (error) {
+              showErrorResponseSaga({
+                error,
+                defaultMessage: 'Cập nhật tài khoản cho bé không thành công',
+              })
+              console.log(error)
+            }
+            setIsLoadingEditPassword(false)
+          }}
+          defaultValues={{
+            newPassword: '',
+            confirmNewPassword: '',
           }}
         />
       )}

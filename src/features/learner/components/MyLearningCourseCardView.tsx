@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import FlagIcon from '@mui/icons-material/Flag'
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium'
 import {
   Card,
   CardActionArea,
@@ -18,6 +19,8 @@ import {
   Button,
   DialogContent,
   TextField,
+  IconButton,
+  Grid,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -90,11 +93,33 @@ export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
           </CardActionArea>
           <CardActions>
             <Box sx={{ width: '100%' }}>
-              <LinearProgress
-                variant="determinate"
-                value={completePercent === null ? 0 : completePercent}
-                color="secondary"
-              />
+              <Grid container sx={{ width: '100%' }} alignItems="center">
+                <Grid item xs={11}>
+                  <LinearProgress
+                    variant="determinate"
+                    value={completePercent === null ? 0 : completePercent}
+                    color="secondary"
+                  />
+                </Grid>
+                <Grid item xs={1}>
+                  <IconButton
+                    disabled={!learningCourse.isCertified}
+                    sx={{
+                      textDecoration: 'none',
+                      cursor: 'pointer',
+                      color: 'red',
+                      fontSize: '18px',
+                      padding: 0,
+                      paddingLeft: '5px',
+                    }}
+                    onClick={() => navigate('/user/achivements')}
+                  >
+                    <Box>
+                      <WorkspacePremiumIcon />
+                    </Box>
+                  </IconButton>
+                </Grid>
+              </Grid>
               <Box
                 sx={{
                   display: 'flex',
@@ -146,6 +171,7 @@ export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
           </CardActions>
         </Card>
       </Paper>
+
       <Dialog
         open={open}
         onClose={() => {
@@ -215,6 +241,7 @@ export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
           </Button>
         </DialogActions>
       </Dialog>
+
       <Dialog
         open={openReport}
         onClose={() => {

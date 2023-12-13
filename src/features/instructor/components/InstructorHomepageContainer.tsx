@@ -138,7 +138,7 @@ const InstructorHomepageContainer = () => {
                 label="course-status"
                 value={courseStatus}
               >
-                <MenuItem value={undefined}>{'None'}</MenuItem>
+                <MenuItem value={undefined}>{'Tất cả'}</MenuItem>
                 {Object.values(CourseStatus).map(currCourseStatus => {
                   const statusInfor = courseStatusInfors.find(
                     ({ status }) => status === currCourseStatus,
@@ -174,13 +174,19 @@ const InstructorHomepageContainer = () => {
           </Grid>
         </Grid>
         {courses.map(course => (
-          <InstructorCourseCardView key={course.id} course={course} />
+          <InstructorCourseCardView
+            key={course.id}
+            course={course}
+            handleGetCourseByInstructor={handleGetCourseByInstructor}
+          />
         ))}
-        <Box sx={{ display: 'flex', justifyContent: 'center', marginY: '40px' }}>
-          <Stack spacing={2}>
-            <Pagination count={pageCount} page={page} onChange={handleChange} color="secondary" />
-          </Stack>
-        </Box>
+        {pageCount > 1 && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', marginY: '40px' }}>
+            <Stack spacing={2}>
+              <Pagination count={pageCount} page={page} onChange={handleChange} color="secondary" />
+            </Stack>
+          </Box>
+        )}
       </Container>
 
       <CreateCourseDialogForm
@@ -204,6 +210,7 @@ const InstructorHomepageContainer = () => {
               levelId: data.levelId,
             })
             toastSuccess({ message: 'Tạo khóa học thành công' })
+            handleGetCourseByInstructor()
             reset()
             setOpenCreateForm(false)
           } catch (error) {

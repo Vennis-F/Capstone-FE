@@ -1,92 +1,86 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import AddIcon from '@mui/icons-material/Add'
-import { Box, Container, Paper } from '@mui/material'
+import { Box, Container, Tab, Tabs } from '@mui/material'
 import { useEffect, useState } from 'react'
 
-import CustomButton from 'libs/ui/components/CustomButton'
-import TitleTypography from 'libs/ui/components/TitleTypography'
-import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
-import { toastSuccess } from 'libs/utils/handle-toast'
-import { OrderType, PageOptions } from 'types'
+import LayoutBodyContainer from 'components/Layout/LayoutBodyContainer'
+import CustomTabPanel from 'libs/ui/custom-components/CustomTabPanel'
 
 import { getCoursesByStaff } from '../api'
-import { CourseFullInfor } from '../types/index'
+import { CourseFullInfor, CourseStatus } from '../types/index'
 
 import TableCourses from './TableCourses'
 
 const CourseManageContainer = () => {
   const [courses, setCourses] = useState<CourseFullInfor[]>([])
-  const [currentCourse, setCurrentCourse] = useState<CourseFullInfor | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [isOpenForm, setIsOpenForm] = useState(false)
-  const [isLoadingCreate, setIsLoadingCreate] = useState(false)
-  const [isOpenFormCreate, setIsOpenFormCreate] = useState(false)
+  const [value, setValue] = useState(0)
 
-  const fetchCourses = async () => {
+  const fetchCourses = async (newValue: number) => {
+    let status
     try {
-      const res = await getCoursesByStaff()
+      switch (newValue) {
+        case 0:
+          status = CourseStatus.APPROVED
+          break
+        case 1:
+          status = CourseStatus.PENDING
+          break
+        case 2:
+          status = CourseStatus.REJECTED
+          break
+        case 3:
+          status = CourseStatus.BANNED
+          break
+        case 4:
+          status = undefined
+          break
+        default:
+          status = undefined
+          break
+      }
+
+      const res = await getCoursesByStaff(status)
       setCourses(res)
     } catch (error) {
       console.error('Error fetching courses:', error)
     }
   }
 
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue)
+    fetchCourses(newValue)
+  }
+
   useEffect(() => {
-    fetchCourses()
+    fetchCourses(0)
   }, [])
 
   return (
     <Container maxWidth="xl">
-      <TitleTypography title="Khóa học" />
-      <Paper elevation={10}>
+      <LayoutBodyContainer title="Khóa học" isPadding={true}>
+        <Box sx={{ width: '100%' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={value} onChange={handleChange}>
+              <Tab label="Được thông qua" id="approved" />
+              <Tab label="Chờ phê duyệt" id="pending" />
+              <Tab label="Từ chối" id="rejected" />
+              <Tab label="Ban" id="banned" />
+              <Tab label="Tất cả" id="all" />
+            </Tabs>
+          </Box>
+          <CustomTabPanel value={value} index={0}></CustomTabPanel>
+          <CustomTabPanel value={value} index={1}></CustomTabPanel>
+          <CustomTabPanel value={value} index={2}></CustomTabPanel>
+          <CustomTabPanel value={value} index={3}></CustomTabPanel>
+          <CustomTabPanel value={value} index={4}></CustomTabPanel>
+        </Box>
         <TableCourses
           courses={courses}
           onEditRow={courseId => {
             console.log(courseId)
-            // const post = posts.find(currPost => currPost.id === postId) as PostFilterResponse
-            // setCurrentPost(post)
-            // setIsOpenForm(true)
           }}
+          value={value}
+          fetchCourses={fetchCourses}
         />
-      </Paper>
-      {/* {currentPost && (
-        <EditPostDialogForm
-          defaultValues={{
-            title: currentPost.title,
-            active: currentPost.active,
-            description: currentPost.description,
-            resources: currentPost.resources,
-          }}
-          otherValues={{
-            url: currentPost.thumbnail,
-            postId: currentPost.id,
-          }}
-          onSubmitClick={async data => {
-            setIsLoading(true)
-            try {
-              await updatePostByStaff({
-                postId: currentPost.id,
-                active: data.active,
-                description: data.description,
-                resources: data.resources,
-                title: data.title,
-              })
-              fetchPosts()
-              setCurrentPost(null)
-              setIsOpenForm(false)
-              toastSuccess({ message: 'Cập nhật bài đăng thành công' })
-            } catch (error) {
-              showErrorResponseSaga({ defaultMessage: 'Không thể cập nhật bài đăng', error })
-            }
-            setIsLoading(false)
-          }}
-          openDialog={isOpenForm}
-          isLoading={isLoading}
-          handleOpenDialog={() => setIsOpenForm(true)}
-          handleCloseDialog={() => setIsOpenForm(false)}
-        />
-      )}
-      */}
+      </LayoutBodyContainer>
     </Container>
   )
 }

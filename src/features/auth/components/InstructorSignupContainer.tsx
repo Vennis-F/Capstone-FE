@@ -72,11 +72,21 @@ const InstructorSignupContainer = () => {
           Đã có tài khoản? Đăng nhập
         </Link>
       </Box> */}
-      <Paper elevation={3} sx={{ textAlign: "center" }}>
+      <Paper elevation={3} sx={{ textAlign: 'center' }}>
         <Grid container spacing={0}>
           <Grid item xs={6} sx={{}}>
-            <Typography sx={{ fontWeight: "bold", marginBottom: "20px", marginTop: "20px", fontSize: "25px", color: MainColor.RED_450 }}>Đăng ký giảng viên</Typography>
-            <Paper sx={{ paddingX: '100px', border: 0 }}>
+            <Typography
+              sx={{
+                fontWeight: 'bold',
+                marginBottom: '20px',
+                marginTop: '20px',
+                fontSize: '25px',
+                color: MainColor.RED_450,
+              }}
+            >
+              Đăng ký giảng viên
+            </Typography>
+            <Box sx={{ paddingX: '100px', border: 0 }}>
               <GuestSignupForm
                 onSubmitClick={async data => {
                   setIsLoading(true)
@@ -94,7 +104,7 @@ const InstructorSignupContainer = () => {
                 }}
                 isLoading={isLoading}
               />
-            </Paper>
+            </Box>
             <Box
               sx={{
                 display: 'flex',
@@ -105,13 +115,17 @@ const InstructorSignupContainer = () => {
               }}
             >
               <Link
-                sx={{ color: 'black', fontSize: '14px', cursor: 'pointer', marginBottom: '20px', textDecoration: "none" }}
+                sx={{
+                  color: 'black',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  marginBottom: '20px',
+                  textDecoration: 'none',
+                }}
                 onClick={() => navigate('/guest-login')}
               >
                 Đã có tài khoản?
-                <span style={{ textDecoration: "underline", fontWeight: "bold" }}>
-                  Đăng nhập
-                </span>
+                <span style={{ textDecoration: 'underline', fontWeight: 'bold' }}>Đăng nhập</span>
               </Link>
             </Box>
           </Grid>

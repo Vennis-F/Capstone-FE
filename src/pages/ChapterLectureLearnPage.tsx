@@ -1,9 +1,13 @@
 import { Paper, Typography } from '@mui/material'
 import { StepType, TourProvider } from '@reactour/tour'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
+import { NotFound } from 'components/Common'
 import ChapterLectureLearnContainer from 'features/chapter-lecture/components/ChapterLectureLearnContainer'
+import { checkCourseAndUserValid } from 'features/courses/api'
+import BackdropCustom from 'libs/ui/custom-components/BackdropCustom'
+import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 
 const steps: StepType[] = [
   {
@@ -79,11 +83,42 @@ const steps: StepType[] = [
 
 const ChapterLectureLearnPage = () => {
   const { courseId } = useParams()
+  const [loading, setLoading] = useState(false)
+  const [isAllow, setIsAllow] = useState(false)
+
+  const handleCheckUserValidAccess = async () => {
+    setLoading(true)
+
+    try {
+      const { status } = await checkCourseAndUserValid(courseId as string)
+      setLoading(false)
+      setIsAllow(status)
+    } catch (error) {
+      showErrorResponseSaga({
+        error,
+        defaultMessage: 'Không truy cập được vào khóa học',
+        errorStatusMessages: [{ message: 'Bạn không được phép truy cập trang này', status: 403 }],
+      })
+      setLoading(false)
+      setIsAllow(false)
+    }
+  }
+
+  useEffect(() => {
+    handleCheckUserValidAccess()
+  }, [])
 
   return (
-    <TourProvider steps={steps}>
-      <ChapterLectureLearnContainer courseId={courseId as string} />
-    </TourProvider>
+    <>
+      <BackdropCustom open={loading} />
+      {!loading && isAllow ? (
+        <TourProvider steps={steps}>
+          <ChapterLectureLearnContainer courseId={courseId as string} />
+        </TourProvider>
+      ) : (
+        <NotFound />
+      )}
+    </>
   )
 }
 

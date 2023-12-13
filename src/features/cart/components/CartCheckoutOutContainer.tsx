@@ -1,13 +1,15 @@
 import { Box, CircularProgress, Container, Grid, Typography } from '@mui/material'
 import Image from 'material-ui-image'
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { createOrder } from 'features/orders/api'
 import { createPaymentURL } from 'features/payment/api'
 import CustomButton from 'libs/ui/components/CustomButton'
 import TitleTypography from 'libs/ui/components/TitleTypography'
+import { toastError } from 'libs/utils/handle-toast'
 
-import { getCartTotalPrice } from '../api'
+import { checkCartIsValid, getCartTotalPrice } from '../api'
 import { useCartService } from '../hooks'
 import { CartTotalPrice } from '../types'
 
@@ -16,6 +18,7 @@ import TotalPriceCartCardView from './TotalPriceCartCardView'
 
 const CartCheckoutOutContainer = () => {
   const { cart, fetchCart } = useCartService()
+  const navigate = useNavigate()
   const [cartPrice, setCartPrice] = useState<CartTotalPrice>({
     totalPrice: 0,
     totalPriceAfterPromotion: 0,
@@ -28,8 +31,28 @@ const CartCheckoutOutContainer = () => {
     setCartPrice(response)
   }
 
+  const handleCheckCartValid = async () => {
+    try {
+      const errorsResponse = await checkCartIsValid()
+      if (errorsResponse.length === 0) return true
+
+      errorsResponse.forEach(error => {
+        toastError({ message: error })
+      })
+      navigate('/cart')
+      return false
+    } catch (error) {
+      console.log('[error in CartContainer]', error)
+      toastError({ message: 'Không thể thanh toán đơn hàng' })
+      navigate('/cart')
+      return false
+    }
+  }
+
   const handleCompleteCheckout = async () => {
     setIsLoading(true)
+    if (!(await handleCheckCartValid())) return
+
     try {
       const order = await createOrder()
       const paymentURL = await createPaymentURL({

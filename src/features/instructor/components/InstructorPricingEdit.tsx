@@ -9,14 +9,20 @@ import { updatePriceCourseByInstructor } from '../api'
 
 import EditPricingCourseForm from './EditPricingCourseForm'
 
-type Props = { courseId: string; price?: number | null; isEditable: boolean }
+type Props = {
+  courseId: string
+  price?: number | null
+  isEditable: boolean
+  handleGetCourse: () => Promise<void>
+}
 
-const InstructorPricingEdit = ({ courseId, price, isEditable }: Props) => {
+const InstructorPricingEdit = ({ courseId, price, isEditable, handleGetCourse }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
 
   return (
     <LayoutBodyContainer
       title="Định giá"
+      isPadding={true}
       introduction={
         <>
           <Typography color="black" fontWeight="bold">
@@ -40,6 +46,7 @@ const InstructorPricingEdit = ({ courseId, price, isEditable }: Props) => {
               await updatePriceCourseByInstructor({ courseId, price: data.price })
               toastSuccess({ message: 'Cập nhật giá tiền thành công' })
               reset({ price: data.price })
+              handleGetCourse()
             } catch (error) {
               showErrorResponseSaga({ defaultMessage: 'Không thể cập nhật giá tiền', error })
             }

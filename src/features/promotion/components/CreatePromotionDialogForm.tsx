@@ -31,7 +31,7 @@ const CreatePromotionDialogForm = (props: Props) => {
       .required('Không được để trống giảm giá phần trăm')
       .min(10, 'Chiết khấu nhỏ nhất là 10%')
       .max(50, 'Chiết khấu tối đa là 50%'),
-    note: Yup.string(),
+    note: Yup.string().required('Không được để trống ghi chú'),
     // .required('Không được để trống tiêu đề')
     // .max(100, 'Tiêu đề không được quá 100 ký tự'),
     code: Yup.string()

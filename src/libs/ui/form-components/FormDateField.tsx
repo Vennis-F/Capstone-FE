@@ -12,7 +12,7 @@ export interface FormInputProps {
   disable?: boolean
 }
 
-export const FormDateField = ({
+const FormDateField = ({
   size = 'small',
   name,
   control,
@@ -23,10 +23,12 @@ export const FormDateField = ({
     name={name}
     control={control}
     render={({ field: { onChange, value }, fieldState: { error } }) => {
-      // Chuyển đổi giá trị ngày giờ từ string sang múi giờ Việt Nam
       const vietnamTime = value
         ? moment.tz(value, 'Asia/Ho_Chi_Minh').format('YYYY-MM-DDTHH:mm')
         : ''
+
+      // Tính toán giá trị minDate là ngày hiện tại
+      const minDate = moment().format('YYYY-MM-DDTHH:mm')
 
       return (
         <TextField
@@ -34,7 +36,6 @@ export const FormDateField = ({
           size={size}
           error={!!error}
           onChange={e => {
-            // Chuyển đổi giá trị ngược lại sang múi giờ UTC để lưu vào state của React-hook-form
             const utcTime = e.target.value
               ? moment.tz(e.target.value, 'Asia/Ho_Chi_Minh').utc().format()
               : ''
@@ -46,6 +47,7 @@ export const FormDateField = ({
           variant="outlined"
           type="datetime-local"
           disabled={disable}
+          inputProps={{ min: minDate }} // Giá trị tối thiểu cho ngày giờ
           sx={{
             '& .MuiInputBase-input.Mui-disabled': {
               WebkitTextFillColor: 'black',
