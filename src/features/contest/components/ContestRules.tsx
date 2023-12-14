@@ -49,10 +49,16 @@ const ContestRules = ({ contest }: Props) => {
   }, [])
   return (
     <>
-      <Box width="100%" textAlign="right" marginY="20px" sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-        <Box sx={{ marginTop: "-20px", textAlign: "left" }}>
+      <Box
+        width="100%"
+        textAlign="right"
+        marginY="20px"
+        sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
+      >
+        <Box sx={{ marginTop: '-20px', textAlign: 'left' }}>
           {contest.status === ContestStatus.ACTIVE && <TimeLeft contest={contest} />}
-          {(contest.status === ContestStatus.EXPIRED || contest.status === ContestStatus.PENDING) && (
+          {(contest.status === ContestStatus.EXPIRED ||
+            contest.status === ContestStatus.PENDING) && (
             <Typography
               border="1px solid #c084fc"
               width="240px"
@@ -87,6 +93,7 @@ const ContestRules = ({ contest }: Props) => {
             )}
         </Box>
       </Box>
+
       <Container
         maxWidth="lg"
         style={{ backgroundColor: '#F3F3F3', padding: '20px', borderRadius: '10px' }}
@@ -206,7 +213,7 @@ const ContestRules = ({ contest }: Props) => {
           setLoading(false)
         }}
         openDialog={open}
-      // otherValues={}
+        // otherValues={}
       />
     </>
   )

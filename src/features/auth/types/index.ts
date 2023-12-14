@@ -16,6 +16,7 @@ export type UserInfor = {
   email?: string
   username?: string
   role: UserRole
+  fullName: string
 }
 
 export type Token = {

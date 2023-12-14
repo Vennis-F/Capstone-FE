@@ -3,6 +3,7 @@ import { Avatar, Box, Grid, Paper, Typography } from '@mui/material'
 import React from 'react'
 
 import { getStringDayMonthYear } from 'libs/utils/handle-date'
+import { UserRole } from 'types'
 
 import { QuestionTopicFilterResponse } from '../types'
 
@@ -37,7 +38,12 @@ const QuestionTopicCardView = ({ questionTopic, onChangeQuestionTopic }: Props) 
           </Avatar>
         </Grid>
         <Grid justifyContent="left" item xs zeroMinWidth>
-          {userFullName}
+          <Typography>
+            {userFullName}{' '}
+            <Typography component="span" fontWeight="bold">
+              {questionTopic.user?.role?.name === UserRole.INSTRUCTOR && ' - Giảng viên'}
+            </Typography>
+          </Typography>
           <h5 style={{ margin: 0, textAlign: 'left' }}>{questionTopic.title}</h5>
           <Box style={{ textAlign: 'left', color: '#702AD8', marginBottom: '10px' }}>
             {`Bài giảng số ${questionTopic.chapterLecture.index} - `}

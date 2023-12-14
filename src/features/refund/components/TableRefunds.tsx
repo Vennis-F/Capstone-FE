@@ -18,7 +18,7 @@ const TableRefundsInAdmin = ({ refunds, onEditRow }: Props) => {
     {
       field: 'fullName',
       headerName: 'Tên người yêu cầu',
-      width: 200,
+      width: 180,
       valueGetter: (params: GridValueGetterParams) =>
         `${params.row.lastName} ${params.row.middleName} ${params.row.firstName}`,
     },
@@ -51,19 +51,21 @@ const TableRefundsInAdmin = ({ refunds, onEditRow }: Props) => {
       field: '',
       headerName: 'Hành động',
       description: 'Hoàn tiền',
-      width: 160,
+      width: 140,
       renderCell: (params: GridRenderCellParams) => (
         <div>
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            onClick={() => onEditRow(params.row.id)} // Thay handleEdit bằng hàm xử lý sự kiện edit
-            sx={{ marginRight: '10px' }}
-            disabled={params.row.isApproved}
-          >
-            Đã hoàn tiền
-          </Button>
+          {!params.row.isApproved && (
+            <Button
+              variant="contained"
+              color="success"
+              size="small"
+              onClick={() => onEditRow(params.row.id)} // Thay handleEdit bằng hàm xử lý sự kiện edit
+              sx={{ marginRight: '10px' }}
+              disabled={params.row.isApproved}
+            >
+              Đã hoàn tiền
+            </Button>
+          )}
         </div>
       ),
       sortable: false,

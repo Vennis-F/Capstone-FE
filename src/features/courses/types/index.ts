@@ -70,6 +70,8 @@ export type CourseFilterResponse = {
   active: boolean
   completedPercent: number | null
   isCertified: boolean
+  ratedStar: number | null
+  feedbackDescription: string | null
 }
 
 export type CourseLearnerFilterResponse = CourseFilterResponse

@@ -2,7 +2,6 @@ import { Box, Container, Tab, Tabs } from '@mui/material'
 import { useEffect, useState } from 'react'
 
 import LayoutBodyContainer from 'components/Layout/LayoutBodyContainer'
-import CustomTabPanel from 'libs/ui/custom-components/CustomTabPanel'
 
 import { getCoursesByStaff } from '../api'
 import { CourseFullInfor, CourseStatus } from '../types/index'
@@ -66,11 +65,6 @@ const CourseManageContainer = () => {
               <Tab label="Tất cả" id="all" />
             </Tabs>
           </Box>
-          <CustomTabPanel value={value} index={0}></CustomTabPanel>
-          <CustomTabPanel value={value} index={1}></CustomTabPanel>
-          <CustomTabPanel value={value} index={2}></CustomTabPanel>
-          <CustomTabPanel value={value} index={3}></CustomTabPanel>
-          <CustomTabPanel value={value} index={4}></CustomTabPanel>
         </Box>
         <TableCourses
           courses={courses}

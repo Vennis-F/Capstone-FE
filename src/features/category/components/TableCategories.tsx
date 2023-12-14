@@ -11,6 +11,7 @@ import {
 import RenderImage from 'material-ui-image'
 import { useState, useCallback } from 'react'
 
+import { getImage } from 'features/image/components/apis'
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastError, toastSuccess } from 'libs/utils/handle-toast'
 
@@ -20,25 +21,34 @@ import { Category } from '../types'
 interface Props {
   categories: Category[]
   onDeleteCategory: (id: string) => void
+  onEdit: (category: Category) => void
 }
 
-const TableCategories = ({ categories, onDeleteCategory }: Props) => {
+const TableCategories = ({ categories, onDeleteCategory, onEdit }: Props) => {
   const columns: GridColDef[] = [
     // { field: 'id', headerName: 'ID', width: 130, sortable: false, filterable: false },
-    { field: 'name', headerName: 'Tên thể loại', width: 300, editable: true },
+    { field: 'name', headerName: 'Tên thể loại', width: 220, editable: true },
+    {
+      field: 'thumbnailUrl',
+      headerName: 'Hình ảnh',
+      width: 130,
+      renderCell: (params: GridRenderCellParams) => (
+        <RenderImage
+          src={getImage(params.row.thumbnailUrl)}
+          alt="Preview"
+          style={{ height: '48px', width: '144px', padding: 0 }}
+          imageStyle={{ height: '48px', width: '144px' }}
+        />
+      ),
+      sortable: false,
+      filterable: false,
+    },
     { field: 'totalCourses', headerName: 'Số lượng khóa học', type: 'number', width: 150 },
     {
       field: 'active',
       headerName: 'Hoạt động',
       type: 'boolean',
       width: 250,
-    },
-    {
-      field: 'insertedDate',
-      headerName: 'Ngày tạo',
-      type: 'date',
-      width: 150,
-      valueGetter: (params: GridValueGetterParams) => new Date(params.row.insertedDate),
     },
     {
       field: 'updatedDate',
@@ -51,9 +61,18 @@ const TableCategories = ({ categories, onDeleteCategory }: Props) => {
       field: '',
       headerName: 'Hành động',
       description: 'Xóa thể loại',
-      width: 100,
+      width: 180,
       renderCell: (params: GridRenderCellParams) => (
         <div>
+          <Button
+            variant="contained"
+            color="secondary"
+            size="small"
+            sx={{ marginRight: '10px' }}
+            onClick={() => onEdit(params.row)} // Thay handleDelete bằng hàm xử lý sự kiện delete
+          >
+            Đối ảnh
+          </Button>
           <Button
             variant="contained"
             color="error"

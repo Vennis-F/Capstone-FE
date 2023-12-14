@@ -1,14 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import AddIcon from '@mui/icons-material/Add'
-import { Box, Container, Paper } from '@mui/material'
+import { Box, Container, Tab, Tabs } from '@mui/material'
 import { useEffect, useState } from 'react'
 
-import CustomButton from 'libs/ui/components/CustomButton'
+import LayoutBodyContainer from 'components/Layout/LayoutBodyContainer'
 import DialogBinaryQuestion from 'libs/ui/components/DialogBinaryQuestion'
-import TitleTypography from 'libs/ui/components/TitleTypography'
-import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastError, toastSuccess } from 'libs/utils/handle-toast'
-import { OrderType, PageOptions } from 'types'
 
 import { approveRefundByAdmin, getRefundsByAdmin } from '../apis'
 import { RefundFilterResponse } from '../types'
@@ -20,24 +15,55 @@ const RefundsManageContainer = () => {
   const [currentRefund, setCurrentRefund] = useState<RefundFilterResponse | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+  const [value, setValue] = useState(0)
 
-  const fetchRefunds = async () => {
+  const fetchRefunds = async (newValue: number) => {
+    let status: 'approved' | 'not-approved' | undefined
     try {
-      const fetchedRefundsRes = await getRefundsByAdmin()
+      switch (newValue) {
+        case 0:
+          status = undefined
+          break
+        case 1:
+          status = 'not-approved'
+          break
+        case 2:
+          status = 'approved'
+          break
+        default:
+          status = undefined
+          break
+      }
+
+      const fetchedRefundsRes = await getRefundsByAdmin(status)
       setRefunds(fetchedRefundsRes)
     } catch (error) {
       console.error('Error fetching refunds:', error)
     }
   }
 
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue)
+    fetchRefunds(newValue)
+  }
+
   useEffect(() => {
-    fetchRefunds()
+    fetchRefunds(value)
   }, [])
 
   return (
     <Container maxWidth="xl">
-      <TitleTypography title="Danh sách yêu cầu hoàn tiền" />
-      <Paper elevation={10}>
+      <LayoutBodyContainer title="Danh sách yêu cầu hoàn tiền">
+        <Box sx={{ width: '100%' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={value} onChange={handleChange}>
+              <Tab label="Tất cả" id="all" />
+              <Tab label="Chờ hoàn tiền" id="not-approved" />
+              <Tab label="Đã hoàn tiền" id="approved" />
+            </Tabs>
+          </Box>
+        </Box>
+
         <TableRefundsInAdmin
           refunds={refunds}
           onEditRow={refundId => {
@@ -48,7 +74,7 @@ const RefundsManageContainer = () => {
             setIsOpen(true)
           }}
         />
-      </Paper>
+      </LayoutBodyContainer>
 
       {currentRefund && (
         <DialogBinaryQuestion
@@ -66,7 +92,7 @@ const RefundsManageContainer = () => {
               await approveRefundByAdmin(currentRefund.id)
               setIsOpen(false)
               setCurrentRefund(null)
-              fetchRefunds()
+              fetchRefunds(value)
               toastSuccess({ message: 'Hoàn tiền cho khách hàng thành công' })
             } catch (error) {
               toastError({ message: 'Không thể hoàn tiền cho khách hàng' })

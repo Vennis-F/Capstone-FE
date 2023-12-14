@@ -23,6 +23,9 @@ export const updatePostByStaff = (body: UpdatePostBodyRequest): Promise<void> =>
 export const updatePostThumbnailByStaff = (postId: string, body: any): Promise<void> =>
   api.post(`${POST_BASE_URL}/thumbnail/upload?postId=${postId}`, body)
 
+export const deletePostByStaff = (postId: string): Promise<void> =>
+  api.delete(`${POST_BASE_URL}/${postId}`)
+
 export const getPostById = (postId: string): Promise<PostFilterResponse> =>
   api.get(`${POST_BASE_URL}/${postId}`)
 

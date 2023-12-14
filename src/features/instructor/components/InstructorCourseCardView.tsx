@@ -54,7 +54,7 @@ const InstructorCourseCardView = ({ course, handleGetCourseByInstructor }: Props
                 alt="Ảnh đại diện"
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={4}>
               <Typography
                 component="div"
                 variant="h6"
@@ -116,7 +116,20 @@ const InstructorCourseCardView = ({ course, handleGetCourseByInstructor }: Props
                   )
                 }
               >
-                Chỉnh sửa
+                Chi tiết
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button
+                variant="contained"
+                color="info"
+                sx={{
+                  width: '140px',
+                  fontWeight: 'bold',
+                }}
+                onClick={() => navigate(`/course/${course.id}/chapter-lecture`)}
+              >
+                Xem trước
               </Button>
             </Grid>
           </Grid>

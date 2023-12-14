@@ -1,10 +1,13 @@
-import { Container, Grid } from '@mui/material'
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
+import { Box, Breadcrumbs, Container, Grid, Link } from '@mui/material'
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { getCourseById } from 'features/courses/api'
 import { CourseFullInfor, CourseStatus } from 'features/courses/types'
+import { MainColor } from 'libs/const/color'
 import BackdropCustom from 'libs/ui/custom-components/BackdropCustom'
-import { getUserRole } from 'libs/utils/handle-token'
+import { getUserRole, getUserRoleOrNull } from 'libs/utils/handle-token'
 import { UserRole } from 'types'
 import { TypeInstructorEditCourseParams } from 'types/params.enum'
 
@@ -13,7 +16,6 @@ import InstructorCourseEditLeftSide from './InstructorCourseEditLeftSide'
 import InstructorCurriculumEdit from './InstructorCurriculumEdit'
 import InstructorEditCourseThumbnail from './InstructorEditCourseThumbnail'
 import InstructorPricingEdit from './InstructorPricingEdit'
-// import InstructorPromotionEdit from './InstructorPromotionEdit'
 
 type Props = {
   courseId: string
@@ -21,6 +23,7 @@ type Props = {
 }
 
 const InstructorCourseEditContainer = ({ courseId, type }: Props) => {
+  const navigate = useNavigate()
   const [course, setCourse] = useState<CourseFullInfor | null>(null)
 
   const handleGetCourse = async () => {
@@ -65,8 +68,6 @@ const InstructorCourseEditContainer = ({ courseId, type }: Props) => {
             handleGetCourse={handleGetCourse}
           />
         )
-      // case TypeInstructorEditCourseParams.PROMOTION:
-      //   return <InstructorPromotionEdit courseId={courseId} isEditable={isEditable} />
       default:
         return <InstructorCurriculumEdit course={course} isEditable={isEditable} />
     }
@@ -76,18 +77,40 @@ const InstructorCourseEditContainer = ({ courseId, type }: Props) => {
     <Container maxWidth="lg">
       <BackdropCustom open={course === null} />
       {course && (
-        <Grid container spacing={2}>
-          <Grid item xs={3}>
-            <InstructorCourseEditLeftSide
-              currentType={type}
-              course={course}
-              handleGetCourse={handleGetCourse}
-            />
+        <>
+          {getUserRoleOrNull() === UserRole.INSTRUCTOR && (
+            <Box display="flex">
+              <Breadcrumbs sx={{ marginBottom: '10px' }}>
+                <Link
+                  underline="hover"
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    color: MainColor.YELLOW_500,
+                    cursor: 'pointer',
+                  }}
+                  color="inherit"
+                  onClick={() => navigate('/instructor/homepage')}
+                >
+                  <KeyboardBackspaceIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+                  Quay trở lại danh sách khóa học
+                </Link>
+              </Breadcrumbs>
+            </Box>
+          )}
+          <Grid container spacing={2}>
+            <Grid item xs={3}>
+              <InstructorCourseEditLeftSide
+                currentType={type}
+                course={course}
+                handleGetCourse={handleGetCourse}
+              />
+            </Grid>
+            <Grid item xs={9}>
+              {renderRightSideComponent()}
+            </Grid>
           </Grid>
-          <Grid item xs={9}>
-            {renderRightSideComponent()}
-          </Grid>
-        </Grid>
+        </>
       )}
     </Container>
   )

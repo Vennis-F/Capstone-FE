@@ -28,7 +28,7 @@ const TableStaffs = ({ staffs, onBanStaff, onEditRow }: Props) => {
     {
       field: 'fullName',
       headerName: 'Họ và tên',
-      width: 200,
+      width: 250,
       valueGetter: (params: GridValueGetterParams) => formatFullName(params.row),
     },
     // {
@@ -74,7 +74,7 @@ const TableStaffs = ({ staffs, onBanStaff, onEditRow }: Props) => {
           <div>
             <Button
               variant="contained"
-              color="primary"
+              color="info"
               size="small"
               onClick={() => onEditRow(params.row.id)} // Thay handleEdit bằng hàm xử lý sự kiện edit
               sx={{ marginRight: '10px' }}

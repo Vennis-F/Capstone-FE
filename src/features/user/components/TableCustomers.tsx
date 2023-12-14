@@ -28,7 +28,7 @@ const TableCustomers = ({ customers }: Props) => {
     {
       field: 'fullName',
       headerName: 'Họ và tên',
-      width: 200,
+      width: 250,
       valueGetter: (params: GridValueGetterParams) => formatFullName(params.row),
     },
     // {
@@ -36,12 +36,12 @@ const TableCustomers = ({ customers }: Props) => {
     //   headerName: 'Email',
     //   width: 130,
     // },
-    { field: 'userName', headerName: 'Tên đăng nhập', width: 160 },
-    { field: 'email', headerName: 'Email', width: 160 },
+    { field: 'email', headerName: 'Email', width: 250 },
+    { field: 'userName', headerName: 'Tên đăng nhập', width: 200 },
     {
       field: 'avatar',
       headerName: 'Ảnh đại diện',
-      width: 130,
+      width: 150,
       renderCell: (params: GridRenderCellParams) => (
         <RenderImage
           src={getImage(params.row.avatar)}
@@ -56,7 +56,7 @@ const TableCustomers = ({ customers }: Props) => {
     {
       field: 'phoneNumber',
       headerName: 'Số điện thoại',
-      width: 130,
+      width: 150,
     },
     {
       field: 'active',
@@ -64,41 +64,41 @@ const TableCustomers = ({ customers }: Props) => {
       type: 'boolean',
       width: 130,
     },
-    {
-      field: '',
-      headerName: 'Hành động',
-      description: 'Cập nhật hoặc ẩn Customer',
-      width: 160,
-      renderCell: (params: GridRenderCellParams) => {
-        const CustomerId = params.row.id
-        return (
-          <div>
-            {/* <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={() => onEditRow(params.row.id)} // Thay handleEdit bằng hàm xử lý sự kiện edit
-              sx={{ marginRight: '10px' }}
-            >
-              Chi tiết
-            </Button> */}
-            {/* <Button
-              variant="contained"
-              color="error"
-              size="small"
-              disabled={!params.row.active}
-              onClick={() => {
-                onBanCustomer(CustomerId)
-              }} // Thay handleDelete bằng hàm xử lý sự kiện delete
-            >
-              Ban
-            </Button> */}
-          </div>
-        )
-      },
-      sortable: false,
-      filterable: false,
-    },
+    // {
+    //   field: '',
+    //   headerName: 'Hành động',
+    //   description: 'Cập nhật hoặc ẩn Customer',
+    //   width: 160,
+    //   renderCell: (params: GridRenderCellParams) => {
+    //     const CustomerId = params.row.id
+    //     return (
+    //       <div>
+    //         <Button
+    //           variant="contained"
+    //           color="primary"
+    //           size="small"
+    //           onClick={() => onEditRow(params.row.id)} // Thay handleEdit bằng hàm xử lý sự kiện edit
+    //           sx={{ marginRight: '10px' }}
+    //         >
+    //           Chi tiết
+    //         </Button>
+    //         <Button
+    //           variant="contained"
+    //           color="error"
+    //           size="small"
+    //           disabled={!params.row.active}
+    //           onClick={() => {
+    //             onBanCustomer(CustomerId)
+    //           }} // Thay handleDelete bằng hàm xử lý sự kiện delete
+    //         >
+    //           Ban
+    //         </Button>
+    //       </div>
+    //     )
+    //   },
+    //   sortable: false,
+    //   filterable: false,
+    // },
   ]
 
   return (

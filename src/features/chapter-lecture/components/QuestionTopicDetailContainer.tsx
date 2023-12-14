@@ -4,6 +4,7 @@ import DOMPurify from 'dompurify'
 import Parser from 'html-react-parser'
 
 import { getStringDayMonthYear } from 'libs/utils/handle-date'
+import { UserRole } from 'types'
 
 import { QuestionTopicFilterResponse } from '../../question-topic/types/index'
 
@@ -43,7 +44,16 @@ const QuestionTopicDetailContainer = ({
             </Avatar>
           </Grid>
           <Grid justifyContent="left" item xs zeroMinWidth overflow="hidden">
-            <h4 style={{ margin: 0, textAlign: 'left' }}>{questionTopic.title}</h4>
+            <h4 style={{ margin: 0, textAlign: 'left' }}>
+              {questionTopic.title}
+              {questionTopic.user?.role?.name === UserRole.INSTRUCTOR && (
+                <span
+                  style={{ color: 'gray', fontWeight: 'bold', fontSize: '16px', marginLeft: '4px' }}
+                >
+                  - Giảng viên
+                </span>
+              )}
+            </h4>
             <p style={{ textAlign: 'left', color: '#702AD8', fontSize: '12px', marginTop: '0px' }}>
               <span style={{ margin: 0, textAlign: 'left', textDecoration: 'underline' }}>
                 {userFullName}

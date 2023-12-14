@@ -1,10 +1,10 @@
 import AddIcon from '@mui/icons-material/Add'
-import { Box, Container, Paper } from '@mui/material'
+import { Box, Container } from '@mui/material'
 import { useEffect, useState } from 'react'
 
+import LayoutBodyContainer from 'components/Layout/LayoutBodyContainer'
 import CustomButton from 'libs/ui/components/CustomButton'
 import DialogBinaryQuestion from 'libs/ui/components/DialogBinaryQuestion'
-import TitleTypography from 'libs/ui/components/TitleTypography'
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastSuccess } from 'libs/utils/handle-toast'
 
@@ -36,22 +36,21 @@ const LevelManageContainer = () => {
 
   return (
     <Container maxWidth="lg">
-      <TitleTypography title="Cấp độ" />
-      <Box width="100%" textAlign="right" marginBottom="20px">
-        <CustomButton
-          onClick={() => {
-            setIsOpenFormCreate(true)
-          }}
-          sxCustom={{
-            width: '140px',
-            textTransform: 'capitalize',
-            padding: '10px 0px',
-          }}
-        >
-          <AddIcon /> Cấp độ mới
-        </CustomButton>
-      </Box>
-      <Paper elevation={10}>
+      <LayoutBodyContainer title="Cấp độ" isPadding={true}>
+        <Box width="100%" textAlign="right" marginBottom="20px">
+          <CustomButton
+            onClick={() => {
+              setIsOpenFormCreate(true)
+            }}
+            sxCustom={{
+              width: '140px',
+              textTransform: 'capitalize',
+              padding: '10px 0px',
+            }}
+          >
+            <AddIcon /> Cấp độ mới
+          </CustomButton>
+        </Box>
         <TableLevels
           levels={levels}
           onDeleteLevel={id => {
@@ -59,7 +58,7 @@ const LevelManageContainer = () => {
             setCurrentLevelId(id)
           }}
         />
-      </Paper>
+      </LayoutBodyContainer>
       {currentLevelId && (
         <DialogBinaryQuestion
           titleText="Bạn có chắc muốn xóa cấp độ này không"

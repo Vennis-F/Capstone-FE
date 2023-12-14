@@ -51,9 +51,18 @@ const InstructorPromotionEdit = () => {
               <Typography color="black" fontWeight="bold">
                 Đặt mã giảm giá cho khóa học của bạn
               </Typography>
-              Vui lòng chọn đơn vị tiền tệ và mức giá cho khóa học của bạn. Nếu bạn muốn cung cấp
-              miễn phí khóa học của mình thì khóa học đó phải có tổng thời lượng video dưới 2 giờ.
-              Ngoài ra, các khóa học có bài kiểm tra thực hành không thể miễn phí.
+              <Typography>
+                1. Mỗi khóa học chỉ có thể tham gia vào một chương trình giảm giá trong một khoảng
+                thời gian cụ thể.
+              </Typography>
+              <Typography>
+                2. Khóa học đã được thêm vào một chương trình giảm giá không thể được thêm vào
+                chương trình giảm giá khác có thời gian diễn ra trùng lặp.
+              </Typography>
+              <Typography>
+                3. Các chương trình giảm giá sẽ được áp dụng trong phạm vi từ 10% đến 50% giảm giá
+                cho giá gốc của khóa học.
+              </Typography>
             </>
           }
         >

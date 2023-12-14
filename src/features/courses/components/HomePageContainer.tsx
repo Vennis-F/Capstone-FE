@@ -14,7 +14,7 @@ import { getAccessToken } from 'libs/utils/handle-token'
 import { OrderType } from 'types'
 
 import { getCoursesBySearch } from '../api'
-import { categoryThumbnail } from '../data/categoryThumbnail'
+// import { categoryThumbnail } from '../data/categoryThumbnail'
 import { ExpectFromCourses } from '../data/ExpectFromCourses'
 import { reviewsData } from '../data/reviewsData'
 import { Course, GetCoursesBySearchRequest, SortFieldCourse } from '../types'
@@ -98,8 +98,6 @@ const HomePageContainer = () => {
                 height: 600,
                 width: 400,
                 borderRadius: '10px',
-                // maxHeight: { xs: 233, md: 167 },
-                // maxWidth: { xs: 350, md: 250 },
               }}
               alt="The house from the offer."
               src="https://plus.unsplash.com/premium_photo-1678812165206-688656de3b73?auto=format&fit=crop&q=80&w=1974&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -136,10 +134,10 @@ const HomePageContainer = () => {
                   <CategoryBeautyCardView
                     key={category.id}
                     category={category}
-                    thumbnailUrl={
-                      categoryThumbnail[category.name] ||
-                      'https://images.unsplash.com/photo-1474511320723-9a56873867b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80'
-                    }
+                    // thumbnailUrl={
+                    //   categoryThumbnail[category.name] ||
+                    //   'https://images.unsplash.com/photo-1474511320723-9a56873867b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80'
+                    // }
                   />
                 </Grid>
               ))}

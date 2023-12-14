@@ -13,8 +13,10 @@ export const createRefundByCustomer = (
   body: CreateRefundBodyRequest,
 ): Promise<void> => api.post(`${REFUND_BASE_URL}/create?orderDetailId=${orderDetailId}`, body)
 
-export const getRefundsByAdmin = (): Promise<RefundFilterResponse[]> =>
-  api.get(`${REFUND_BASE_URL}`)
+export const getRefundsByAdmin = (
+  status?: 'approved' | 'not-approved',
+): Promise<RefundFilterResponse[]> =>
+  api.get(`${REFUND_BASE_URL}${status ? `?status=${status}` : ''}`)
 
 export const getRefundsCustomerByCustomerId = (
   customerId: string,

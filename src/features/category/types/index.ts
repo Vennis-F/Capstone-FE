@@ -5,6 +5,7 @@ export type Category = {
   insertedDate: string
   updatedDate: string
   totalCourses: number
+  thumbnailUrl: string
 }
 
 export type CreateCategoryBodyRequest = {

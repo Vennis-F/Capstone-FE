@@ -32,34 +32,6 @@ const CourseReportManageContainer = () => {
       <Paper elevation={10}>
         <TableCourseReport courseReports={courseReports} />
       </Paper>
-      {/* <CreatePostDialogForm
-        defaultValues={{
-          title: '',
-          description: '',
-          resources: '',
-        }}
-        onSubmitClick={async (data, reset) => {
-          setIsLoadingCreate(true)
-          try {
-            await createPostByStaff({
-              title: data.title,
-              description: data.description,
-              resources: data.resources,
-            })
-            reset()
-            fetchPosts()
-            setIsOpenFormCreate(false)
-            toastSuccess({ message: 'Tạo bài đăng mới thành công' })
-          } catch (error) {
-            showErrorResponseSaga({ defaultMessage: 'Không thể tạo bài đăng mới', error })
-          }
-          setIsLoadingCreate(false)
-        }}
-        openDialog={isOpenFormCreate}
-        isLoading={isLoadingCreate}
-        handleOpenDialog={() => setIsOpenFormCreate(true)}
-        handleCloseDialog={() => setIsOpenFormCreate(false)}
-      /> */}
     </Container>
   )
 }

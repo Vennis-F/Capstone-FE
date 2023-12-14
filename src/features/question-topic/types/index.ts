@@ -2,7 +2,7 @@ import { ChapterLectureFilter } from 'features/chapter-lecture/types'
 import { LearnerFilterResponse } from 'features/learner/types'
 import { PageMetaResponse, PageOptions } from 'types'
 
-import { UserFilterResponse } from '../../user/types/index'
+import { UserWithRole } from '../../user/types/index'
 
 export type CreateQuestionTopicBodyRequest = {
   title: string
@@ -18,7 +18,7 @@ export type QuestionTopicFilterResponse = {
   rating: number
   active: boolean
   chapterLecture: ChapterLectureFilter
-  user: UserFilterResponse | null
+  user: UserWithRole | null
   learner: LearnerFilterResponse | null
   totalLengthQuestionAnswers: number
 }
@@ -63,7 +63,7 @@ export type QuestionAnswerFilterResponse = {
   updatedDate: string
   active: boolean
   questionTopic: QuestionTopicFilterResponse
-  user: UserFilterResponse | null
+  user: UserWithRole | null
   learner: LearnerFilterResponse | null
 }
 

@@ -76,14 +76,25 @@ const AppRoutes = () => (
           <Route path="/blog/detail/:id" element={<BlogDetailPage />} />
           <Route path="/list-course" element={<ListCoursePage />} />
           <Route path="/detail-course/:courseId" element={<DetailCoursePage />} />
-          {/* <Route path="/course/chapter-lecture/id" element={<ChapterLectureLearnPage />} /> */}
-          <Route path="/course/:courseId/chapter-lecture" element={<ChapterLectureLearnPage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/cart/checkout" element={<CartCheckoutPage />} />
-          <Route path="/payment/check" element={<CheckPaymentPage />} />
-          <Route path="/user/:type" element={<CustomerProfilePage />} />
           <Route path="/contest" element={<ContestHomePage />} />
           <Route path="/contest/detail/:id" element={<ContestDetailPage />} />
+          <Route path="/user/:type" element={<CustomerProfilePage />} />
+
+          <Route
+            path="/"
+            element={
+              <PrivateRoute roles={[UserRole.CUSTOMER, UserRole.LEARNER, UserRole.INSTRUCTOR]} />
+            }
+          >
+            <Route path="/course/:courseId/chapter-lecture" element={<ChapterLectureLearnPage />} />
+          </Route>
+
+          <Route path="/" element={<PrivateRoute roles={[UserRole.CUSTOMER]} />}>
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/cart/checkout" element={<CartCheckoutPage />} />
+            <Route path="/payment/check" element={<CheckPaymentPage />} />
+          </Route>
+
           <Route
             path="/my-learning"
             element={<PrivateRoute roles={[UserRole.CUSTOMER, UserRole.LEARNER]} />}

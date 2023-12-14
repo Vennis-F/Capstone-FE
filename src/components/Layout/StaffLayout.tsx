@@ -29,6 +29,7 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
+  Typography,
 } from '@mui/material'
 import Avatar from '@mui/material/Avatar'
 import Stack from '@mui/material/Stack'
@@ -38,8 +39,8 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 // import Footer from 'components/Footer/Footer'
 import useAuthService from 'features/auth/hook/useAuthService'
 import { toastSuccess } from 'libs/utils/handle-toast'
-import { getUserRole } from 'libs/utils/handle-token'
-import { UserRole } from 'types'
+import { getUserInforOrNull, getUserRole } from 'libs/utils/handle-token'
+import { UserRole, userRoleInfor } from 'types'
 
 import { Drawer, DrawerHeader } from './DrawerCustom'
 
@@ -91,6 +92,7 @@ const StaffLayout = () => {
   const [currentRole, setCurrentRole] = useState<UserRole | null>(null)
   const [currentRoutes, setCurrentRoutes] = useState<Route[]>([])
   const [currPathName, setCurrentPathName] = useState('')
+  const userInfor = getUserInforOrNull()
 
   useEffect(() => {
     setCurrentPathName(location.pathname)
@@ -129,9 +131,15 @@ const StaffLayout = () => {
           >
             <MenuIcon />
           </IconButton>
-          {/* <Typography sx={{ color: "rgb(99, 115, 129)", fontWeight: "600", '& .MuiListItemText-primary': { fontWeight: "bold" }, fontSize: "20px" }}>{currentRole}</Typography> */}
-          <Stack direction="row" spacing={2}>
-            {/* <NotificationsIcon sx={{ color: 'rgb(99, 115, 129)', fontSize: '35px' }} /> */}
+          <Stack direction="row" spacing={2} alignItems="center">
+            {userInfor && (
+              <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '18px' }}>
+                <Typography component="span" variant="inherit" color="GrayText">
+                  {userRoleInfor(userInfor.role)}
+                </Typography>{' '}
+                {userInfor.fullName}
+              </Typography>
+            )}
             <Avatar
               alt="Remy Sharp"
               src="https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_25.jpg"
@@ -160,10 +168,8 @@ const StaffLayout = () => {
                 sx={{
                   display: 'block',
                   padding: '0 !important',
-                  // borderLeft: currPathName === path ? '4px solid rgb(0, 167, 111)' : undefined,
                   backgroundColor: currPathName === path ? ' rgb(216,245,232)' : '#FFFFFF',
                   borderRadius: 2,
-                  // paddingX: "5px"
                 }}
               >
                 <ListItemButton
@@ -248,13 +254,11 @@ const StaffLayout = () => {
             <Box
               sx={{
                 pt: '114px',
-                // pb: '50px',
               }}
             >
               <Outlet />
             </Box>
           </main>
-          {/* {location.pathname !== `/instructor/course/create` && <Footer />} */}
         </Box>
       </main>
     </>

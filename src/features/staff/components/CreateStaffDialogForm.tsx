@@ -84,38 +84,37 @@ const CreateStaffDialogForm = (props: Props) => {
           </Typography>
           <FormTextField name="firstName" control={control} size="small" />
         </Box>
-        <Box sx={{ height: '60px', marginBottom: '25px' }}>
+        <Box sx={{ height: '85px', marginBottom: '25px' }}>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
             Tên đệm
           </Typography>
           <FormTextField name="middleName" control={control} size="small" />
         </Box>
-        <Box sx={{ height: '60px', marginBottom: '25px' }}>
+        <Box sx={{ height: '85px', marginBottom: '25px' }}>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
             Tên
           </Typography>
           <FormTextField name="lastName" control={control} size="small" />
         </Box>
-        <Box sx={{ height: '60px', marginBottom: '25px' }}>
+        <Box sx={{ height: '85px', marginBottom: '25px' }}>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
             Tên đăng nhập
           </Typography>
           <FormTextField name="userName" control={control} size="small" />
         </Box>
-        <Box sx={{ height: '60px', marginBottom: '25px' }}>
+        <Box sx={{ height: '85px', marginBottom: '25px' }}>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
             Mật khẩu
           </Typography>
           <FormTextField name="password" type="password" control={control} size="small" />
         </Box>
-        <Box sx={{ height: '60px' }}>
+        <Box sx={{ height: '85px' }}>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
             Số điện thoại
           </Typography>
           <FormTextField name="phoneNumber" control={control} size="small" />
         </Box>
-        <Box sx={{ height: '20px' }} />
-        <Box sx={{ height: '60px' }} />
+        <Box sx={{ height: '15px' }} />
         <Button
           onClick={handleSubmit(submitHandler)}
           variant={'contained'}

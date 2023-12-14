@@ -19,3 +19,9 @@ export const getUserRoleOrNull = () => {
   if (!accessToken) return null
   return decodeToken(accessToken).role
 }
+
+export const getUserInforOrNull = () => {
+  const accessToken = getAccessToken()
+  if (!accessToken) return null
+  return decodeToken(accessToken)
+}

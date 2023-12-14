@@ -3,6 +3,7 @@ import AddIcon from '@mui/icons-material/Add'
 import { Box, Container, Paper } from '@mui/material'
 import { useEffect, useState } from 'react'
 
+import LayoutBodyContainer from 'components/Layout/LayoutBodyContainer'
 import CustomButton from 'libs/ui/components/CustomButton'
 import DialogBinaryQuestion from 'libs/ui/components/DialogBinaryQuestion'
 import TitleTypography from 'libs/ui/components/TitleTypography'
@@ -54,24 +55,22 @@ const StaffManageContainer = () => {
 
   return (
     <Container maxWidth="lg">
-      <TitleTypography title="Danh sách nhân viên" />
+      <LayoutBodyContainer title="Danh sách nhân viên" isPadding>
+        <Box width="100%" textAlign="right" marginBottom="20px">
+          <CustomButton
+            onClick={() => {
+              setIsOpenFormCreate(true)
+            }}
+            sxCustom={{
+              width: '180px',
+              textTransform: 'capitalize',
+              padding: '10px 0px',
+            }}
+          >
+            <AddIcon /> Nhân viên mới
+          </CustomButton>
+        </Box>
 
-      <Box width="100%" textAlign="right" marginBottom="20px">
-        <CustomButton
-          onClick={() => {
-            setIsOpenFormCreate(true)
-          }}
-          sxCustom={{
-            width: '180px',
-            textTransform: 'capitalize',
-            padding: '10px 0px',
-          }}
-        >
-          <AddIcon /> Nhân viên mới
-        </CustomButton>
-      </Box>
-
-      <Paper elevation={10}>
         <TableStaffs
           staffs={staffs}
           onEditRow={staffId => {
@@ -84,7 +83,7 @@ const StaffManageContainer = () => {
             setCurrBanStaffId(staffId)
           }}
         />
-      </Paper>
+      </LayoutBodyContainer>
 
       {currentStaff && (
         <EditStaffDialogForm

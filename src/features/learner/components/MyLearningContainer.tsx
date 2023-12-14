@@ -91,7 +91,10 @@ export const MyLearningContainer = () => {
           <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 9, md: 9 }}>
             {courses.map(learningCourse => (
               <Grid item xs={2} sm={3} md={3} key={learningCourse.id}>
-                <MyLearningCourseCardView learningCourse={learningCourse} />
+                <MyLearningCourseCardView
+                  learningCourse={learningCourse}
+                  handleGetCourses={getCourses}
+                />
               </Grid>
             ))}
           </Grid>

@@ -14,10 +14,9 @@ const QuestionAnswerCardView = ({ questionAnswer }: Props) => {
   const userFullName = questionAnswer.user
     ? `${questionAnswer.user?.lastName} ${questionAnswer.user?.middleName} ${questionAnswer.user?.firstName} `
     : `${questionAnswer.learner?.lastName} ${questionAnswer.learner?.middleName} ${questionAnswer.learner?.firstName} `
+
   const teacherFullName =
-    questionAnswer.user && questionAnswer.user.role === UserRole.INSTRUCTOR
-      ? ' - Giáo viên'
-      : undefined
+    questionAnswer.user?.role?.name === UserRole.INSTRUCTOR ? ' - Giảng viên' : undefined
 
   return (
     <Paper
@@ -41,14 +40,25 @@ const QuestionAnswerCardView = ({ questionAnswer }: Props) => {
           </Avatar>
         </Grid>
         <Grid justifyContent="left" item xs zeroMinWidth overflow="hidden">
-          <p style={{ textAlign: 'left', color: '#702AD8', fontSize: '12px', marginTop: '0px' }}>
+          <p
+            style={{
+              textAlign: 'left',
+              color: '#702AD8',
+              fontSize: '12px',
+              marginTop: '0px',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
             <span style={{ margin: 0, textAlign: 'left', textDecoration: 'underline' }}>
               {userFullName}
             </span>
-            <span style={{ color: 'gray' }}>{`${getStringDayMonthYear(
+            <span style={{ color: 'gray', marginLeft: '10px' }}>{`${getStringDayMonthYear(
               questionAnswer.updatedDate,
             )}`}</span>
-            <span style={{ color: 'gray', fontWeight: 'bold', fontSize: '18px' }}>
+            <span
+              style={{ color: 'gray', fontWeight: 'bold', fontSize: '18px', marginLeft: '10px' }}
+            >
               {teacherFullName}
             </span>
           </p>

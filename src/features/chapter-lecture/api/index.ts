@@ -33,6 +33,11 @@ export const getChapterLectureOfLearnerStudy = (
 ): Promise<ChapterLectureFilter[]> =>
   api.get(`${CHAPTER_LECTURE_BASE_URL}/courses/learner/study?courseId=${courseId}`)
 
+export const getChapterLectureOfInstructorStudy = (
+  courseId: string,
+): Promise<ChapterLectureFilter[]> =>
+  api.get(`${CHAPTER_LECTURE_BASE_URL}/courses/instructor/study?courseId=${courseId}`)
+
 export const saveUserLectureCompleted = (
   chapterLectureId: string,
 ): Promise<ChapterLectureFilter[]> =>

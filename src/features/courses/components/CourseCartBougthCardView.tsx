@@ -117,7 +117,7 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
   }
 
   useEffect(() => {
-    handleGetPromotionCoursesView()
+    if (getAccessToken() && getUserRole() === UserRole.CUSTOMER) handleGetPromotionCoursesView()
   }, [courseDetail])
 
   const handleNavigateChapterLecture = () => {

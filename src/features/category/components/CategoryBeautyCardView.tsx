@@ -2,14 +2,16 @@ import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/m
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { getImage } from 'features/image/components/apis'
+
 import { Category } from '../types'
 
 type Props = {
   category: Category
-  thumbnailUrl: string
+  // thumbnailUrl: string
 }
 
-const CategoryBeautyCardView = ({ category, thumbnailUrl }: Props) => {
+const CategoryBeautyCardView = ({ category }: Props) => {
   const navigate = useNavigate()
 
   return (
@@ -17,7 +19,12 @@ const CategoryBeautyCardView = ({ category, thumbnailUrl }: Props) => {
       <CardActionArea
         onClick={() => navigate('/list-course', { state: { categorySearchId: category.id } })}
       >
-        <CardMedia component="img" height="140" image={thumbnailUrl} alt="green iguana" />
+        <CardMedia
+          component="img"
+          height="140"
+          image={getImage(category.thumbnailUrl)}
+          alt="green iguana"
+        />
         <CardContent sx={{ textAlign: 'center' }}>
           <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: '600' }}>
             {category.name}

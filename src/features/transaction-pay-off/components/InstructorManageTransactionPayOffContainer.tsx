@@ -1,21 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/indent */
-import AddIcon from '@mui/icons-material/Add'
-import {
-  Box,
-  Container,
-  Dialog,
-  Paper,
-  DialogTitle,
-  DialogContent,
-  Grid,
-  Typography,
-} from '@mui/material'
+
+import { Container, Dialog, DialogContent, Grid, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 
-import TitleTypography from 'libs/ui/components/TitleTypography'
+import LayoutBodyContainer from 'components/Layout/LayoutBodyContainer'
 import { calcTotalPaymentAmount, formatCurrency } from 'libs/utils/handle-price'
-import { toastError } from 'libs/utils/handle-toast'
 
 import {
   getTransactionOrderDetailByTransacionPayOffByInstructor,
@@ -61,9 +51,7 @@ const InstructorManageTransactionPayOffContainer = () => {
 
   return (
     <Container maxWidth="md">
-      <TitleTypography title="Danh sách thanh toán" />
-
-      <Paper elevation={10}>
+      <LayoutBodyContainer title="Danh sách thanh toán">
         <TableTransactionPayOffsInstructor
           transactionPayOffsResponse={transactionPayOffs}
           onEditRow={async currId => {
@@ -75,7 +63,7 @@ const InstructorManageTransactionPayOffContainer = () => {
             setIsOpenForm(true)
           }}
         />
-      </Paper>
+      </LayoutBodyContainer>
 
       {currentTransactionOrderDetails && (
         <Dialog

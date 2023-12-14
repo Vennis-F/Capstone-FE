@@ -134,7 +134,7 @@ const EditPostDialogForm = (props: Props) => {
                 },
               }}
             >
-              {'Reset'}
+              {'Đặt lại'}
             </Button>
           </Grid>
           <Grid item>

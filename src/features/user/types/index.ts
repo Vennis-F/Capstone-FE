@@ -39,3 +39,21 @@ export type User = {
   status: string
   active: boolean
 }
+export type Role = {
+  id: string
+  name: UserRole
+}
+
+export type UserWithRole = {
+  id: string
+  firstName: string
+  lastName: string
+  middleName: string
+  phoneNumber: string
+  email?: string
+  userName?: string
+  avatar?: string
+  role: Role
+  status: string
+  active: boolean
+}

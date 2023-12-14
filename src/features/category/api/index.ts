@@ -16,7 +16,7 @@ export const getCategoryById = (id: string): Promise<Category> =>
 
 export const getCategoriesByAdmin = (): Promise<Category[]> => api.get(`${CATEGORY_BASE_URL}/admin`)
 
-export const createCategoryByAdmin = (body: CreateCategoryBodyRequest): Promise<void> =>
+export const createCategoryByAdmin = (body: CreateCategoryBodyRequest): Promise<Category> =>
   api.post(`${CATEGORY_BASE_URL}`, body)
 
 export const updateCategoryByAdmin = (id: string, body: UpdateCategoryBodyRequest): Promise<void> =>
@@ -24,3 +24,6 @@ export const updateCategoryByAdmin = (id: string, body: UpdateCategoryBodyReques
 
 export const deleteCategoryByAdmin = (id: string): Promise<void> =>
   api.delete(`${CATEGORY_BASE_URL}/${id}`)
+
+export const updateCategoryThumbnailByAdmin = (categoryId: string, body: any): Promise<void> =>
+  api.put(`${CATEGORY_BASE_URL}/thumbnail?categoryId=${categoryId}`, body)

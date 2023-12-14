@@ -28,20 +28,6 @@ const UploadImageControl = ({ url, onChangeFile }: Props) => {
   const [previewImage, setPreviewImage] = useState<string | undefined>(undefined)
   const [previewFile, setPreviewFile] = useState<File | null>(null)
 
-  // const handleUpload = async () => {
-  //   if (previewFile) {
-  //     const formData = new FormData()
-  //     formData.append('file', previewFile)
-  //     try {
-  //       await onUploadToServer(formData)
-  //       setPreviewFile(null)
-  //       toastSuccess({ message: 'Thay đổi ảnh thành công' })
-  //     } catch (error) {
-  //       console.error('Error uploading image', error)
-  //     }
-  //   }
-  // }
-
   const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
 
@@ -117,20 +103,6 @@ const UploadImageControl = ({ url, onChangeFile }: Props) => {
           Tải file lên
           <VisuallyHiddenInput type="file" onChange={handleImageChange} />
         </Button>
-        {/* <Button
-          component="label"
-          variant="contained"
-          onClick={handleUpload}
-          startIcon={!isLoading ? <CloudUploadIcon /> : undefined}
-          sx={{
-            backgroundColor: MainColor.RED_500,
-            ':hover': { backgroundColor: MainColor.RED_600 },
-            marginLeft: '10px',
-          }}
-          disabled={isLoading || !previewFile}
-        >
-          {!isLoading ? 'Cập nhật' : <CircularProgress size="26px" />}
-        </Button> */}
       </Grid>
     </Grid>
   )

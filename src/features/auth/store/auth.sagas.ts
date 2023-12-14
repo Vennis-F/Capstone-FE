@@ -27,6 +27,7 @@ function* handleLogin(payload: GuestLoginFormInputPayload) {
       email: decoded.email,
       username: decoded.username,
       role: decoded.role,
+      fullName: decoded.fullName,
     }
     yield put(authActions.loginSuccess(userInfor))
     payload.callbackSuccess(decoded.role)

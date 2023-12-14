@@ -9,6 +9,22 @@ export enum UserRole {
   LEARNER = 'Learner',
   INSTRUCTOR = 'Instructor',
 }
+export const userRoleInfor = (role: UserRole) => {
+  switch (role) {
+    case UserRole.CUSTOMER:
+      return 'Khách hàng'
+    case UserRole.ADMIN:
+      return 'Quản trị viên'
+    case UserRole.STAFF:
+      return 'Nhân viên'
+    case UserRole.INSTRUCTOR:
+      return 'Giảng viên'
+    case UserRole.LEARNER:
+      return 'Bé'
+    default:
+      return ''
+  }
+}
 export enum OrderType {
   ASC = 'ASC',
   DESC = 'DESC',

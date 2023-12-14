@@ -1,8 +1,20 @@
 /* eslint-disable @typescript-eslint/indent */
-import { Backdrop, Box, CircularProgress, Container, Grid, Typography, Paper } from '@mui/material'
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
+import {
+  Backdrop,
+  Box,
+  CircularProgress,
+  Container,
+  Grid,
+  Typography,
+  Paper,
+  Breadcrumbs,
+  Link,
+} from '@mui/material'
 import React, { useEffect, useState } from 'react'
 
 import { convertTransactionStatus } from 'features/transaction/types'
+import { MainColor } from 'libs/const/color'
 import TitleTypography from 'libs/ui/components/TitleTypography'
 import { getStringDayMonthYear } from 'libs/utils/handle-date'
 import { formatCurrency } from 'libs/utils/handle-price'
@@ -42,6 +54,17 @@ const CustomerOrderDetailContainer = ({ orderId }: Props) => {
       </Backdrop>
       {order && (
         <>
+          <Breadcrumbs sx={{ marginBottom: '10px' }}>
+            <Link
+              underline="hover"
+              sx={{ display: 'flex', alignItems: 'center', color: MainColor.YELLOW_500 }}
+              color="inherit"
+              href="/user/order-list"
+            >
+              <KeyboardBackspaceIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+              Quay trở lại danh sách đơn hàng
+            </Link>
+          </Breadcrumbs>
           <TitleTypography title="Đơn hàng chi tiết" />
           <Paper elevation={5} sx={{ padding: '20px', borderRadius: '10px' }}>
             <Box marginTop="20px">

@@ -13,6 +13,11 @@ export const createCourseFeedback = (
   body: CreateCourseFeedbackBodyRequest,
 ): Promise<void> => api.post(`${COURSE_FEEDBACK_BASE_URL}/create?courseId=${courseId}`, body)
 
+export const updateCourseFeedback = (
+  courseId: string,
+  body: CreateCourseFeedbackBodyRequest,
+): Promise<void> => api.put(`${COURSE_FEEDBACK_BASE_URL}?courseId=${courseId}`, body)
+
 export const getCoursesFeedback = (
   courseId: string,
   pageOptions: PageOptions,

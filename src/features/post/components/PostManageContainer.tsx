@@ -3,13 +3,14 @@ import AddIcon from '@mui/icons-material/Add'
 import { Box, Container, Paper } from '@mui/material'
 import { useEffect, useState } from 'react'
 
+import LayoutBodyContainer from 'components/Layout/LayoutBodyContainer'
 import CustomButton from 'libs/ui/components/CustomButton'
-import TitleTypography from 'libs/ui/components/TitleTypography'
+import DialogBinaryQuestion from 'libs/ui/components/DialogBinaryQuestion'
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastSuccess } from 'libs/utils/handle-toast'
-import { OrderType, PageOptions } from 'types'
+import { OrderType } from 'types'
 
-import { createPostByStaff, searchPosts, updatePostByStaff } from '../apis'
+import { createPostByStaff, deletePostByStaff, searchPosts, updatePostByStaff } from '../apis'
 import { PostFilterResponse } from '../types'
 
 import CreatePostDialogForm from './CreatePostDialogForm'
@@ -23,6 +24,8 @@ const PostManageContainer = () => {
   const [isOpenForm, setIsOpenForm] = useState(false)
   const [isLoadingCreate, setIsLoadingCreate] = useState(false)
   const [isOpenFormCreate, setIsOpenFormCreate] = useState(false)
+  const [currentPostDelete, setCurrPostDelete] = useState<PostFilterResponse | null>(null)
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false)
 
   const fetchPosts = async () => {
     try {
@@ -44,22 +47,22 @@ const PostManageContainer = () => {
 
   return (
     <Container maxWidth="lg">
-      <TitleTypography title="Bài đăng" />
-      <Box width="100%" textAlign="right" marginBottom="20px">
-        <CustomButton
-          onClick={() => {
-            setIsOpenFormCreate(true)
-          }}
-          sxCustom={{
-            width: '140px',
-            textTransform: 'capitalize',
-            padding: '10px 0px',
-          }}
-        >
-          <AddIcon /> Bài đăng mới
-        </CustomButton>
-      </Box>
-      <Paper elevation={10}>
+      <LayoutBodyContainer title="Bài đăng" isPadding>
+        <Box width="100%" textAlign="right" marginBottom="20px">
+          <CustomButton
+            onClick={() => {
+              setIsOpenFormCreate(true)
+            }}
+            sxCustom={{
+              width: '140px',
+              textTransform: 'capitalize',
+              padding: '10px 0px',
+            }}
+          >
+            <AddIcon /> Bài đăng mới
+          </CustomButton>
+        </Box>
+
         <TablePosts
           posts={posts}
           onEditRow={postId => {
@@ -67,8 +70,13 @@ const PostManageContainer = () => {
             setCurrentPost(post)
             setIsOpenForm(true)
           }}
+          onDeleteRow={postId => {
+            const post = posts.find(currPost => currPost.id === postId) as PostFilterResponse
+            setCurrPostDelete(post)
+          }}
         />
-      </Paper>
+      </LayoutBodyContainer>
+
       {currentPost && (
         <EditPostDialogForm
           defaultValues={{
@@ -106,6 +114,32 @@ const PostManageContainer = () => {
           handleCloseDialog={() => setIsOpenForm(false)}
         />
       )}
+
+      {currentPostDelete && (
+        <DialogBinaryQuestion
+          open={Boolean(currentPostDelete)}
+          isLoading={isLoadingDelete}
+          titleText="Xóa bài đăng"
+          contentText="Bạn có chắc muốn xóa bài đăng này không?"
+          clickAcceptAction={async () => {
+            setIsLoadingDelete(true)
+            try {
+              await deletePostByStaff(currentPostDelete.id)
+              toastSuccess({ message: 'Xóa bài đăng thành công' })
+              fetchPosts()
+            } catch (error) {
+              showErrorResponseSaga({ defaultMessage: 'Xóa bài đăng không thành công', error })
+            }
+            setCurrPostDelete(null)
+            setIsLoadingDelete(false)
+          }}
+          clickCloseModal={() => {
+            setIsLoadingDelete(false)
+            setCurrPostDelete(null)
+          }}
+        />
+      )}
+
       <CreatePostDialogForm
         defaultValues={{
           title: '',

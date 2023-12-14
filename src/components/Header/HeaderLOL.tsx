@@ -258,7 +258,7 @@ const HeaderLOL = () => {
               )}
               {currUserRole && currUserRole === UserRole.CUSTOMER && (
                 <ButtonLinkHeader to="/my-learning">
-                  <SchoolIcon sx={{ marginTop: "5px" }} />
+                  <SchoolIcon sx={{ marginTop: '5px' }} />
                 </ButtonLinkHeader>
               )}
               {!currUserRole && (

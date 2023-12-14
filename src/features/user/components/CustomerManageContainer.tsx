@@ -1,14 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import AddIcon from '@mui/icons-material/Add'
-import { Box, Container, Paper } from '@mui/material'
+import { Container, Paper } from '@mui/material'
 import { useEffect, useState } from 'react'
 
-import CustomButton from 'libs/ui/components/CustomButton'
-import DialogBinaryQuestion from 'libs/ui/components/DialogBinaryQuestion'
-import TitleTypography from 'libs/ui/components/TitleTypography'
-import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
-import { toastError, toastSuccess } from 'libs/utils/handle-toast'
-import { UserRole } from 'types'
+import LayoutBodyContainer from 'components/Layout/LayoutBodyContainer'
 
 import { getCustomersByAdmin } from '../apis'
 import { UserFilterResponse } from '../types'
@@ -48,24 +42,7 @@ const CustomerManageContainer = () => {
 
   return (
     <Container maxWidth="lg">
-      <TitleTypography title="Danh sách khách hàng" />
-
-      {/* <Box width="100%" textAlign="right" marginBottom="20px">
-        <CustomButton
-          onClick={() => {
-            setIsOpenFormCreate(true)
-          }}
-          sxCustom={{
-            width: '180px',
-            textTransform: 'capitalize',
-            padding: '10px 0px',
-          }}
-        >
-          <AddIcon /> Người quản lý mới
-        </CustomButton>
-      </Box> */}
-
-      <Paper elevation={10}>
+      <LayoutBodyContainer title="Danh sách khách hàng">
         <TableCustomers
           customers={customers}
           // onEditRow={CustomerId => {
@@ -80,7 +57,7 @@ const CustomerManageContainer = () => {
           //   setCurrBanCustomerId(CustomerId)
           // }}
         />
-      </Paper>
+      </LayoutBodyContainer>
 
       {/* {currentCustomer && (
         <EditCustomerDialogForm

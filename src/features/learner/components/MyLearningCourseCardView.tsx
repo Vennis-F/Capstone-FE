@@ -21,23 +21,26 @@ import {
   TextField,
   IconButton,
   Grid,
+  Tooltip,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { createCourseFeedback } from 'features/course-feedback/apis'
+import { createCourseFeedback, updateCourseFeedback } from 'features/course-feedback/apis'
 import { createCourseReportByCustomerOrLearner } from 'features/course-report/apis'
 import { CourseFilterResponse, CourseLearnerFilterResponse } from 'features/courses/types'
 import { getImage } from 'features/image/components/apis'
-import ReadMoreText from 'libs/ui/components/ReadMoreText'
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastError, toastSuccess } from 'libs/utils/handle-toast'
 
+import UpdateFeedbackCourseDialog from './UpdateFeedbackCourseDialog'
+
 interface Props {
   learningCourse: CourseLearnerFilterResponse | CourseFilterResponse
+  handleGetCourses: () => Promise<void>
 }
 
-export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
+export const MyLearningCourseCardView = ({ learningCourse, handleGetCourses }: Props) => {
   const navigate = useNavigate()
   const [completePercent, setCompletePercent] = useState<null | number>(null)
 
@@ -45,6 +48,7 @@ export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
   const [description, setDescription] = useState('')
   const [star, setStar] = useState<number>(5)
   const [isLoading, setIsLoading] = useState(false)
+  const [isOpenEditFeedback, setIsOpenEditFeedback] = useState(false)
 
   const [openReport, setOpenReport] = useState(false)
   const [descriptionReport, setDescriptionReport] = useState('')
@@ -135,12 +139,10 @@ export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
             </Box>
           </CardActions>
           <CardActions sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-            <Link
+            <IconButton
               sx={{
-                textDecoration: 'none',
-                cursor: 'pointer',
+                padding: 0,
                 color: 'blueviolet',
-                fontSize: '18px',
               }}
               onClick={() => {
                 setDescriptionReport('')
@@ -150,24 +152,44 @@ export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
               <Box>
                 <FlagIcon />
               </Box>
-            </Link>
-            <Link
-              sx={{
-                textDecoration: 'none',
-                cursor: 'pointer',
-                color: 'blueviolet',
-                fontSize: '18px',
-              }}
-              onClick={() => {
-                setOpen(true)
-                setStar(5)
-                setDescription('')
-              }}
-            >
-              <Box>
-                <Typography sx={{ fontSize: '12px' }}>{'Hãy đánh giá'}</Typography>
-              </Box>
-            </Link>
+            </IconButton>
+            {!learningCourse.ratedStar && !learningCourse.feedbackDescription ? (
+              <Link
+                sx={{
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                  color: 'blueviolet',
+                  fontSize: '18px',
+                }}
+                onClick={() => {
+                  setOpen(true)
+                  setStar(5)
+                  setDescription('')
+                }}
+              >
+                <Box>
+                  <Typography sx={{ fontSize: '12px' }}>{'Hãy đánh giá'}</Typography>
+                </Box>
+              </Link>
+            ) : (
+              <Link
+                sx={{
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                  color: 'blueviolet',
+                  fontSize: '18px',
+                }}
+                onClick={() => {
+                  setIsOpenEditFeedback(true)
+                }}
+              >
+                <Box>
+                  <Tooltip title="Thay đổi đánh giá">
+                    <Rating value={learningCourse.ratedStar} readOnly size="small" />
+                  </Tooltip>
+                </Box>
+              </Link>
+            )}
           </CardActions>
         </Card>
       </Paper>
@@ -227,6 +249,7 @@ export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
                   ratedStar: star,
                 })
                 toastSuccess({ message: 'Đánh giá khóa học thành công' })
+                handleGetCourses()
                 setOpen(false)
                 setStar(5)
                 setDescription('')
@@ -235,12 +258,42 @@ export const MyLearningCourseCardView = ({ learningCourse }: Props) => {
               }
               return setIsLoading(false)
             }}
-            autoFocus
           >
             Đánh giá
           </Button>
         </DialogActions>
       </Dialog>
+
+      {learningCourse.feedbackDescription && learningCourse.ratedStar && (
+        <UpdateFeedbackCourseDialog
+          open={isOpenEditFeedback}
+          isLoading={isLoading}
+          description={learningCourse.feedbackDescription}
+          star={learningCourse.ratedStar}
+          onAccept={async (feebackStar, feedbackDescription) => {
+            if (!feebackStar || !feedbackDescription || feedbackDescription.trim().length === 0)
+              return toastError({ message: 'Hãy điền đầy đủ thông tin' })
+
+            setIsLoading(true)
+            try {
+              await updateCourseFeedback(learningCourse.id, {
+                description: feedbackDescription,
+                ratedStar: feebackStar,
+              })
+              toastSuccess({ message: 'Cập nhật đánh giá thành công' })
+              setIsOpenEditFeedback(false)
+              handleGetCourses()
+            } catch (error) {
+              showErrorResponseSaga({ defaultMessage: 'Cập nhật đánh giá không thành công', error })
+            }
+            return setIsLoading(false)
+          }}
+          onClose={() => {
+            setIsLoading(false)
+            setIsOpenEditFeedback(false)
+          }}
+        />
+      )}
 
       <Dialog
         open={openReport}

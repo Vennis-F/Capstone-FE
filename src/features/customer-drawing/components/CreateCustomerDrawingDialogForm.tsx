@@ -57,7 +57,7 @@ const CreateCustomerDrawingDialogForm = (props: Props) => {
       //   (data.description && textFromHTMLCode(data.description).length === 0) ||
       //   (data.prize && textFromHTMLCode(data.prize).length === 0)
     ) {
-      toastWarn({ message: 'Cập nhật dữ liệu trước khi tiến hành đăng tải!' })
+      toastWarn({ message: 'Điền đầy đủ thông tin trước khi tiến hành đăng tải!' })
     } else {
       onSubmitClick(data, previewFile, reset)
     }

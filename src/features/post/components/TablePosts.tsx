@@ -20,11 +20,11 @@ import EditPostForm from './EditPostDialogForm'
 interface Props {
   posts: PostFilterResponse[]
   onEditRow: (id: string) => void
+  onDeleteRow: (id: string) => void
 }
 
-const TablePosts = ({ posts, onEditRow }: Props) => {
+const TablePosts = ({ posts, onEditRow, onDeleteRow }: Props) => {
   const columns: GridColDef[] = [
-    // { field: 'id', headerName: 'ID', width: 70, sortable: false, filterable: false },
     { field: 'title', headerName: 'Tiêu đề', width: 130 },
     { field: 'description', headerName: 'Miêu tả', width: 130 },
     {
@@ -70,33 +70,32 @@ const TablePosts = ({ posts, onEditRow }: Props) => {
       field: 'active',
       headerName: 'Hoạt động',
       type: 'boolean',
-      width: 130,
+      width: 110,
       sortable: false,
     },
     {
-      // field: 'u',
       field: '',
       headerName: 'Hành động',
       description: 'Cập nhật hoặc ẩn post',
-      width: 160,
+      width: 180,
       renderCell: (params: GridRenderCellParams) => (
         <div>
           <Button
             variant="contained"
-            color="primary"
+            color="info"
             size="small"
             onClick={() => onEditRow(params.row.id)} // Thay handleEdit bằng hàm xử lý sự kiện edit
             sx={{ marginRight: '10px' }}
           >
-            Edit
+            Thay đổi
           </Button>
           <Button
             variant="contained"
             color="error"
             size="small"
-            onClick={() => console.log(123)} // Thay handleDelete bằng hàm xử lý sự kiện delete
+            onClick={() => onDeleteRow(params.row.id)} // Thay handleDelete bằng hàm xử lý sự kiện delete
           >
-            Delete
+            Xóa
           </Button>
         </div>
       ),

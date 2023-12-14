@@ -2,29 +2,40 @@ import { Box, Grid, Link, Paper, Typography } from '@mui/material'
 import Container from '@mui/material/Container'
 import Image from 'material-ui-image'
 import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
+import { patternDetailPath } from 'libs/utils/handle-regex'
 import { toastError, toastSuccess } from 'libs/utils/handle-toast'
 import { decodeToken, getAccessToken } from 'libs/utils/handle-token'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { RootState } from 'store/store'
 import { UserRole } from 'types'
 
 import { authActions, selectIsLogging } from '../store'
 
 import { GuestLoginForm } from './GuestLoginForm'
 
-// import TitleTypography from 'libs/ui/components/TitleTypography'
-
 export const GuestLoginContainer = () => {
   const dispatch = useAppDispatch()
   const isLogging = useAppSelector(selectIsLogging)
   const navigate = useNavigate()
+  const routerState = useSelector((state: RootState) => state.router.previousLocations)
 
   const handleNavigateAfterLogin = (role: UserRole) => {
+    if (role === UserRole.CUSTOMER) {
+      if (routerState) {
+        const previousLocationPath = routerState[routerState.length - 1].location?.pathname
+
+        if (previousLocationPath && patternDetailPath.test(previousLocationPath))
+          return navigate(previousLocationPath)
+        return navigate('/')
+      }
+
+      return navigate('/')
+    }
+
     switch (role) {
-      case UserRole.CUSTOMER:
-        navigate('/')
-        break
       case UserRole.LEARNER:
         navigate('/my-learning')
         break
@@ -40,6 +51,7 @@ export const GuestLoginContainer = () => {
       default:
         break
     }
+    return null
   }
 
   useEffect(() => {
