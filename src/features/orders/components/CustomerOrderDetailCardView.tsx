@@ -31,6 +31,11 @@ const CustomerOrderDetailCardView = ({ orderDetail, order, handleGetOrder }: Pro
     order.transaction.status === TransactionStatus.Success &&
     !orderDetail.refund
 
+  const showRefundApproved =
+    order.orderStatus === NameOrderStatus.Success &&
+    order.transaction.status === TransactionStatus.Success &&
+    orderDetail.refund?.isApproved === true
+
   const handleCheckCanRefund = async () => {
     // setShowButtonRefund()
     try {
@@ -60,7 +65,7 @@ const CustomerOrderDetailCardView = ({ orderDetail, order, handleGetOrder }: Pro
       </Grid>
       <Grid
         item
-        md={7}
+        md={6}
         padding={0}
         onClick={() => navigate(`/detail-course/${orderDetail.course.id}`)}
       >
@@ -94,7 +99,7 @@ const CustomerOrderDetailCardView = ({ orderDetail, order, handleGetOrder }: Pro
       </Grid>
       <Grid
         item
-        md={2}
+        md={3}
         sx={{ textAlign: 'right', display: 'flex', flexDirection: 'column', paddingLeft: '20px' }}
       >
         {canRefund && showButtonRefund && (
@@ -105,6 +110,18 @@ const CustomerOrderDetailCardView = ({ orderDetail, order, handleGetOrder }: Pro
           >
             Hoàn tiền
           </CustomButton>
+        )}
+        {showRefundApproved && (
+          <Typography
+            color="#f97316"
+            fontWeight="bold"
+            textTransform="uppercase"
+            border="1px solid #f97316"
+            textAlign="center"
+            padding="4px 10px"
+          >
+            Đã hoàn tiền
+          </Typography>
         )}
       </Grid>
 

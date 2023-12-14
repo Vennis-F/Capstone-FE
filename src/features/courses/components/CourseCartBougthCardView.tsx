@@ -55,7 +55,6 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
   )
   const [promotionCourseApply, setPromotionCourseApply] = useState<PromotionCourse | null>(null)
   const [isOwned, setIsOwned] = useState(false)
-  const [isRefund, setIsRefund] = useState(false)
   const [promotionCouresView, setPromotionCouresView] = useState<PromotionCourse[]>([])
 
   const handleAddCartItem = () => {
@@ -108,8 +107,8 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
 
   const handleCheckCourseIsOwned = async () => {
     const response = await checkCourseIsOwnedByCourseId(courseDetail.id)
+
     setIsOwned(response.status)
-    setIsRefund(response.isRefund)
   }
 
   const handleGetPromotionCoursesView = async () => {
@@ -122,11 +121,7 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
   }, [courseDetail])
 
   const handleNavigateChapterLecture = () => {
-    if (isRefund)
-      return toastError({
-        message: 'Bạn đã hoàn tiền khóa học này nên không thể truy cập được nữa',
-      })
-    return navigate(`/course/${courseDetail.id}/chapter-lecture`)
+    navigate(`/course/${courseDetail.id}/chapter-lecture`)
   }
 
   useEffect(() => {
@@ -200,6 +195,7 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
             },
             marginTop: '10px',
           }}
+          onClick={handleAddCartItem}
         >
           Mua ngay
         </Button> */}
