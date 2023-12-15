@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
 import { AddOutlined } from '@material-ui/icons'
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch'
 import { Box, Button } from '@mui/material'
 import React, { useCallback, useEffect, useState } from 'react'
 import { DragDropContext, DraggableLocation, DropResult } from 'react-beautiful-dnd'
@@ -18,6 +19,7 @@ import {
 } from '../../chapter-lecture/api/index'
 
 import DroppableList from './DroppableList'
+import RequirementCurriculumnDialog from './RequirementCurriculumnDialog'
 
 interface Props {
   course: CourseFullInfor
@@ -28,6 +30,7 @@ const InstructorCurriculumEdit = ({ course, isEditable }: Props) => {
   const [chapterLectures, setChapterLectures] = useState<ChapterLecture[]>([])
   const [openDialog, setOpenDialog] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [openRequirement, setOpenRequirement] = useState(false)
 
   const handleGetChapterLecturesByCourseId = useCallback(async () => {
     const chapterLecturesRes = await getChapterLecturesByCourseId(course.id, true)
@@ -61,11 +64,15 @@ const InstructorCurriculumEdit = ({ course, isEditable }: Props) => {
   }, [handleGetChapterLecturesByCourseId])
 
   return (
-    <LayoutBodyContainer
-      title="Chương trình giảng dạy"
-      introduction="Chương trình giảng dạy đóng vai trò quan trọng trong việc thu hút học viên và xây dựng uy tín cho bạn trên nền tảng này. Chúng tôi khuyến khích bạn xây dựng một chương trình với ít nhất 6 bài giảng. Trong khoảng từ 6 đến 10 bài, học viên được xem trước 1 bài giảng để có cái nhìn sơ bộ về nội dung. Nếu chương trình có hơn 10 bài giảng, chỉ tối đa 2 bài được xem trước. Mỗi bài giảng cần phải có video định dạng MP4 để nội dung trở nên sinh động hơn. Video sẽ giúp học viên tiếp cận thông tin một cách sinh động và dễ hiểu, tăng cường trải nghiệm học tập và giữ chân họ trong quá trình học"
-      isPadding={true}
-    >
+    <LayoutBodyContainer title="Chương trình giảng dạy" isPadding={true}>
+      <Button
+        variant="text"
+        onClick={() => setOpenRequirement(true)}
+        sx={{ textTransform: 'capitalize', color: '#ef4444' }}
+      >
+        <RocketLaunchIcon sx={{ marginRight: '5px' }} /> Lưu ý quan trọng khi tạo các bài giảng
+      </Button>
+
       {isEditable && (
         <Box display="flex" justifyContent="flex-end">
           <Button
@@ -83,6 +90,7 @@ const InstructorCurriculumEdit = ({ course, isEditable }: Props) => {
           </Button>
         </Box>
       )}
+
       <Box padding="30px">
         {isEditable ? (
           <DragDropContext onDragEnd={handleDragEnd}>
@@ -107,7 +115,7 @@ const InstructorCurriculumEdit = ({ course, isEditable }: Props) => {
 
       <CreateChapterLectureDialogForm
         type="create"
-        onSubmitClick={async data => {
+        onSubmitClick={async (data, reset) => {
           try {
             setIsLoading(true)
             await createChapterLecture({
@@ -116,6 +124,7 @@ const InstructorCurriculumEdit = ({ course, isEditable }: Props) => {
               courseId: course.id,
               index: chapterLectures.length + 1,
             })
+            reset()
             toastSuccess({ message: 'Tạo bài giảng mới thành công' })
             handleGetChapterLecturesByCourseId()
             setOpenDialog(false)
@@ -128,6 +137,11 @@ const InstructorCurriculumEdit = ({ course, isEditable }: Props) => {
         handleOpenDialog={() => setOpenDialog(true)}
         handleCloseDialog={() => setOpenDialog(false)}
         isLoading={isLoading}
+      />
+
+      <RequirementCurriculumnDialog
+        openDialog={openRequirement}
+        handleCloseDialog={() => setOpenRequirement(false)}
       />
     </LayoutBodyContainer>
   )

@@ -5,7 +5,7 @@ import { Promotion } from '../types'
 
 interface Props {
   promotions: Promotion[]
-  onDeletePromotion: (id: string) => void
+  onDeletePromotion: (promotion: Promotion) => void
   onUpdatePromotion: (promotion: Promotion) => void
   onWatchPromotionCourses: (id: string) => void
 }
@@ -72,7 +72,7 @@ const TablePromotions = ({
             variant="contained"
             color="error"
             size="small"
-            onClick={() => onDeletePromotion(params.row.id)} // Thay handleDelete bằng hàm xử lý sự kiện delete
+            onClick={() => onDeletePromotion(params.row)} // Thay handleDelete bằng hàm xử lý sự kiện delete
           >
             Xóa
           </Button>

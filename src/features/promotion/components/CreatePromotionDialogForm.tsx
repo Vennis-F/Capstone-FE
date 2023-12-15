@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
-import { Box, Button, CircularProgress, Dialog, DialogTitle, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Dialog, DialogTitle, Grid, Typography } from '@mui/material'
 import Stack from '@mui/material/Stack'
 import { UseFormReset, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
@@ -7,6 +7,7 @@ import * as Yup from 'yup'
 import { MainColor } from 'libs/const/color'
 import FormDateField from 'libs/ui/form-components/FormDateField'
 import { FormTextField } from 'libs/ui/form-components/FormTextField'
+import { generateRandomString } from 'libs/utils/handle-random'
 
 import { CreatePromotionFormInput } from '../types/form.type'
 
@@ -53,13 +54,17 @@ const CreatePromotionDialogForm = (props: Props) => {
     control,
     reset,
     handleSubmit,
+    setValue,
     // formState: { isDirty, dirtyFields }, // tự nhiêm làm bước này xong thì lại thành công vcl
   } = methods
 
   const submitHandler = (data: CreatePromotionFormInput) => {
     onSubmitClick(data, reset)
   }
-  console.log('[defaultValues]', defaultValues)
+
+  const handleAutoGenCode = () => {
+    setValue('code', generateRandomString())
+  }
 
   return (
     <Dialog
@@ -94,7 +99,16 @@ const CreatePromotionDialogForm = (props: Props) => {
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
             Mã
           </Typography>
-          <FormTextField name="code" control={control} size="small" />
+          <Grid container alignItems="center">
+            <Grid item xs={10}>
+              <FormTextField name="code" control={control} size="small" />
+            </Grid>
+            <Grid item xs={2} paddingLeft="10px">
+              <Button onClick={handleAutoGenCode} sx={{ fontSize: '12px' }}>
+                Tự động tạo mã
+              </Button>
+            </Grid>
+          </Grid>
         </Box>
         <Box sx={{ height: '90px' }}>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">

@@ -129,8 +129,7 @@ const InstructorEditCourseThumbnail = ({
           <Link href="https://support.udemy.com/hc/en-us/articles/229232347">
             tiêu chuẩn chất lượng hình ảnh khóa học
           </Link>
-          . Hướng dẫn quan trọng: 750x422 pixel; .jpg, .jpeg,. gif, hoặc .png. và không có chữ trên
-          hình ảnh.
+          . Hướng dẫn quan trọng: .jpg, .jpeg,. gif, hoặc .png. và không có chữ trên hình ảnh.
         </>
       }
     >
@@ -148,7 +147,7 @@ const InstructorEditCourseThumbnail = ({
             <VisuallyHiddenInput
               type="file"
               onChange={handleImageChange}
-              accept="image/png, image/jpeg, image/gif"
+              accept="image/png, image/jpeg, image/gif, image/jpg"
             />
           </Button>
           <Button

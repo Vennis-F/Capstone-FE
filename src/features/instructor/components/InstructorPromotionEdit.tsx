@@ -15,21 +15,21 @@ import PromotionCourseDialogContainer from 'features/promotion/components/Promot
 import TablePromotions from 'features/promotion/components/TablePromotions'
 import UpdatePromotionDialogForm from 'features/promotion/components/UpdatePromotionDialogForm'
 import { Promotion } from 'features/promotion/types'
+import DialogBinaryQuestion from 'libs/ui/components/DialogBinaryQuestion'
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastError, toastSuccess } from 'libs/utils/handle-toast'
 
 const InstructorPromotionEdit = () => {
   const [promotions, setPromotions] = useState<Promotion[]>([])
-
   const [openCreatePromotion, setOpenCreatePromotion] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-
   const [currPromotionUpdate, setCurrPromotionUpdate] = useState<Promotion | null>(null)
   const [loadingUpdatePromotion, setLoadingUpdatePromotion] = useState(false)
-
   const [currPromotionCoursesOfPromotionId, setCurrPromotionCoursesOfPromotionId] = useState<
     string | null
   >(null)
+  const [currPromotionDelete, setCurrPromotionDelete] = useState<Promotion | null>(null)
+  const [loadingDelete, setLoadingDelete] = useState(false)
 
   const handleGetPromotions = async () => {
     const promotionsRes = await findPromotions()
@@ -83,14 +83,8 @@ const InstructorPromotionEdit = () => {
           </Box>
           <TablePromotions
             promotions={promotions}
-            onDeletePromotion={async id => {
-              try {
-                await deletePromotion(id)
-                handleGetPromotions()
-                toastSuccess({ message: 'Xóa mã giảm giá thành công' })
-              } catch (error) {
-                showErrorResponseSaga({ error, defaultMessage: 'Xóa mã giảm giá thất bại' })
-              }
+            onDeletePromotion={async currPromotion => {
+              setCurrPromotionDelete(currPromotion)
             }}
             onUpdatePromotion={promotion => setCurrPromotionUpdate(promotion)}
             onWatchPromotionCourses={id => setCurrPromotionCoursesOfPromotionId(id)}
@@ -190,6 +184,30 @@ const InstructorPromotionEdit = () => {
           handleCloseDialog={() => setCurrPromotionCoursesOfPromotionId(null)}
           openDialog={Boolean(currPromotionCoursesOfPromotionId)}
           promotionId={currPromotionCoursesOfPromotionId}
+        />
+      )}
+
+      {currPromotionDelete && (
+        <DialogBinaryQuestion
+          open={Boolean(currPromotionDelete)}
+          isLoading={loadingDelete}
+          titleText="Xóa mã giảm giá"
+          contentText="Bạn có chắc muốn xóa mã giảm giá này không?"
+          clickCloseModal={() => {
+            setCurrPromotionDelete(null)
+          }}
+          clickAcceptAction={async () => {
+            setLoadingDelete(true)
+            try {
+              await deletePromotion(currPromotionDelete.id)
+              handleGetPromotions()
+              toastSuccess({ message: 'Xóa mã giảm giá thành công' })
+            } catch (error) {
+              showErrorResponseSaga({ error, defaultMessage: 'Xóa mã giảm giá thất bại' })
+            }
+            setCurrPromotionDelete(null)
+            setLoadingDelete(false)
+          }}
         />
       )}
     </>

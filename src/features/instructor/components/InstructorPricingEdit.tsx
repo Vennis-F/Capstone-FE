@@ -28,9 +28,8 @@ const InstructorPricingEdit = ({ courseId, price, isEditable, handleGetCourse }:
           <Typography color="black" fontWeight="bold">
             Đặt giá cho khóa học của bạn
           </Typography>
-          Vui lòng chọn đơn vị tiền tệ và mức giá cho khóa học của bạn. Nếu bạn muốn cung cấp miễn
-          phí khóa học của mình thì khóa học đó phải có tổng thời lượng video dưới 2 giờ. Ngoài ra,
-          các khóa học có bài kiểm tra thực hành không thể miễn phí.
+          Vui lòng chọn đơn vị tiền tệ và mức giá cho khóa học của bạn. Giá của khóa học phải nhỏ
+          nhất là từ 10.000VND và lớn nhất là 10.000.000VND.
         </>
       }
     >
