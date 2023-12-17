@@ -3,7 +3,7 @@ export const ExpectFromCourses = [
     id: '1',
     title: 'Hướng dẫn chất lượng',
     description:
-      'Các khóa học sẽ cung cấp hướng dẫn từ các giảng viên có kinh nghiệm để bạn phát triển kỹ năng vẽ của mình.',
+      'Các khóa học sẽ cung cấp hướng dẫn từ các giáo viên có kinh nghiệm để bạn phát triển kỹ năng vẽ của mình.',
   },
   {
     id: '2',

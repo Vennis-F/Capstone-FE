@@ -8,6 +8,7 @@ import { toastError, toastSuccess } from 'libs/utils/handle-toast'
 import { approveRefundByAdmin, getRefundsByAdmin } from '../apis'
 import { RefundFilterResponse } from '../types'
 
+import GmailRefundDialogForm from './GmailRefundDialogForm'
 import TableRefundsInAdmin from './TableRefunds'
 
 const RefundsManageContainer = () => {
@@ -16,6 +17,8 @@ const RefundsManageContainer = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [value, setValue] = useState(0)
+  const [currentRefundGmail, setCurrentRefundGmail] = useState<RefundFilterResponse | null>(null)
+  const [isLoadingGmail, setIsLoadingGmail] = useState(false)
 
   const fetchRefunds = async (newValue: number) => {
     let status: 'approved' | 'not-approved' | undefined
@@ -73,6 +76,9 @@ const RefundsManageContainer = () => {
             setCurrentRefund(refund)
             setIsOpen(true)
           }}
+          onGmailRefund={refund => {
+            setCurrentRefundGmail(refund)
+          }}
         />
       </LayoutBodyContainer>
 
@@ -98,6 +104,28 @@ const RefundsManageContainer = () => {
               toastError({ message: 'Không thể hoàn tiền cho khách hàng' })
             }
             setIsLoading(false)
+          }}
+        />
+      )}
+
+      {currentRefundGmail && (
+        <GmailRefundDialogForm
+          openDialog={Boolean(currentRefundGmail)}
+          isLoading={isLoadingGmail}
+          handleCloseDialog={() => {
+            setCurrentRefundGmail(null)
+          }}
+          onSubmitClick={async () => {
+            setIsLoadingGmail(true)
+            try {
+              // await approveRefundByAdmin(currentRefund.id)
+              setCurrentRefundGmail(null)
+              fetchRefunds(value)
+              toastSuccess({ message: 'Gửi gmail cho khách hàng thành công' })
+            } catch (error) {
+              toastError({ message: 'Không thể gmail cho khách hàng' })
+            }
+            setIsLoadingGmail(false)
           }}
         />
       )}

@@ -5,9 +5,11 @@ import { PageResponse } from 'types'
 
 import {
   Contest,
+  ContestStatus,
   CreateContestBodyRequest,
   DefinePromotionForWinnerBodyRequest,
   FindContestsFilterBodyRequest,
+  UpdateContestBodyRequest,
   ViewWinner,
 } from '../types'
 
@@ -17,7 +19,8 @@ const CONTEST_BASE_URL = `/contest`
 
 export const getContestById = (id: string): Promise<Contest> => api.get(`${CONTEST_BASE_URL}/${id}`)
 
-export const getContestsByStaff = (): Promise<Contest[]> => api.get(`${CONTEST_BASE_URL}/staff`)
+export const getContestsByStaff = (status?: ContestStatus): Promise<Contest[]> =>
+  api.get(`${CONTEST_BASE_URL}/staff${status ? `?status=${status}` : ''}`)
 
 export const findContestsFilter = (
   body: FindContestsFilterBodyRequest,
@@ -25,6 +28,11 @@ export const findContestsFilter = (
 
 export const createContestByStaff = (body: CreateContestBodyRequest): Promise<Contest> =>
   api.post(`${CONTEST_BASE_URL}/create`, body)
+
+export const updateContestByStaff = (
+  contestId: string,
+  body: UpdateContestBodyRequest,
+): Promise<Contest> => api.put(`${CONTEST_BASE_URL}/${contestId}`, body)
 
 export const updateContestThumbnailByStaff = (contestId: string, body: any): Promise<void> =>
   api.put(`${CONTEST_BASE_URL}/thumbnail?contestId=${contestId}`, body)

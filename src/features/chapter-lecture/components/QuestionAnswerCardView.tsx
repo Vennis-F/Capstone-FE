@@ -16,7 +16,7 @@ const QuestionAnswerCardView = ({ questionAnswer }: Props) => {
     : `${questionAnswer.learner?.lastName} ${questionAnswer.learner?.middleName} ${questionAnswer.learner?.firstName} `
 
   const teacherFullName =
-    questionAnswer.user?.role?.name === UserRole.INSTRUCTOR ? ' - Giảng viên' : undefined
+    questionAnswer.user?.role?.name === UserRole.INSTRUCTOR ? ' - Giáo viên' : undefined
 
   return (
     <Paper

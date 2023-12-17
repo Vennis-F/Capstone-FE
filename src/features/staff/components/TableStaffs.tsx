@@ -19,10 +19,11 @@ import { StaffFilterResponse } from '../types'
 interface Props {
   staffs: StaffFilterResponse[]
   onBanStaff: (staffId: string) => void
+  onReactiveStaff: (staffId: string) => void
   onEditRow: (id: string) => void
 }
 
-const TableStaffs = ({ staffs, onBanStaff, onEditRow }: Props) => {
+const TableStaffs = ({ staffs, onBanStaff, onEditRow, onReactiveStaff }: Props) => {
   const columns: GridColDef[] = [
     // { field: 'id', headerName: 'ID', width: 70, sortable: false, filterable: false },
     {
@@ -67,7 +68,7 @@ const TableStaffs = ({ staffs, onBanStaff, onEditRow }: Props) => {
       field: '',
       headerName: 'Hành động',
       description: 'Cập nhật hoặc ẩn Staff',
-      width: 160,
+      width: 200,
       renderCell: (params: GridRenderCellParams) => {
         const staffId = params.row.id
         return (
@@ -81,17 +82,31 @@ const TableStaffs = ({ staffs, onBanStaff, onEditRow }: Props) => {
             >
               Chi tiết
             </Button>
-            <Button
-              variant="contained"
-              color="error"
-              size="small"
-              disabled={!params.row.active}
-              onClick={() => {
-                onBanStaff(staffId)
-              }} // Thay handleDelete bằng hàm xử lý sự kiện delete
-            >
-              Xóa
-            </Button>
+            {!params.row.active ? (
+              <Button
+                variant="contained"
+                color="success"
+                size="small"
+                disabled={params.row.active}
+                onClick={() => {
+                  onReactiveStaff(staffId)
+                }}
+              >
+                Kích hoạt
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                color="error"
+                size="small"
+                disabled={!params.row.active}
+                onClick={() => {
+                  onBanStaff(staffId)
+                }} // Thay handleDelete bằng hàm xử lý sự kiện delete
+              >
+                Xóa
+              </Button>
+            )}
           </div>
         )
       },

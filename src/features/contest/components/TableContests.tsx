@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Button } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import { DataGrid, GridColDef, GridRenderCellParams, GridValueGetterParams } from '@mui/x-data-grid'
 import RenderImage from 'material-ui-image'
 import { useState } from 'react'
 
 import { getImage } from 'features/image/components/apis'
 
-import { Contest } from '../types'
+import { Contest, ContestStatus, mapStatusToVietnamese, mapStatusToVietnameseColor } from '../types'
 
 interface Props {
   contests: Contest[]
@@ -16,16 +16,7 @@ interface Props {
 
 const TableContests = ({ contests, onEditRow, onApproveContest }: Props) => {
   const columns: GridColDef[] = [
-    // { field: 'id', headerName: 'ID', width: 70, sortable: false, filterable: false },
     { field: 'title', headerName: 'Tiêu đề', width: 130 },
-    // { field: 'description', headerName: 'Miêu tả', width: 130 },
-    // {
-    //   field: 'insertedDate',
-    //   headerName: 'Ngày tạo',
-    //   type: 'date',
-    //   width: 130,
-    //   valueGetter: (params: GridValueGetterParams) => new Date(params.row.insertedDate),
-    // },
     {
       field: 'startedDate',
       headerName: 'Ngày bắt đầu',
@@ -59,26 +50,45 @@ const TableContests = ({ contests, onEditRow, onApproveContest }: Props) => {
       filterable: false,
     },
     { field: 'staffName', headerName: 'Người tạo', width: 130 },
-    { field: 'totalCustomerDrawing', headerName: 'Số lượng người gia cuộc thi', width: 200 },
+    { field: 'totalCustomerDrawing', headerName: 'Số lượng tham gia', width: 160 },
     {
-      field: 'active',
-      headerName: 'Hoạt động',
+      field: 'isVisible',
+      headerName: 'Phát hành',
       type: 'boolean',
       width: 130,
       sortable: false,
     },
-    { field: 'status', headerName: 'Trạng thái', width: 130 },
     {
-      // field: 'u',
+      field: 'status',
+      headerName: 'Trạng thái',
+      width: 130,
+      renderCell: (params: GridRenderCellParams) => {
+        const statusInfor = mapStatusToVietnameseColor(params.row.status as ContestStatus)
+
+        return (
+          <Typography
+            sx={{
+              marginRight: '10px',
+              color: statusInfor.color,
+              textTransform: 'capitalize',
+              fontWeight: 'bold',
+            }}
+          >
+            {statusInfor.vietnam}
+          </Typography>
+        )
+      },
+    },
+    {
       field: '',
       headerName: 'Hành động',
       description: 'Cập nhật hoặc ẩn post',
-      width: 250,
+      width: 350,
       renderCell: (params: GridRenderCellParams) => (
         <div>
           <Button
             variant="contained"
-            color="primary"
+            color="info"
             size="small"
             onClick={() => onEditRow(params.row.id)} // Thay handleEdit bằng hàm xử lý sự kiện edit
             sx={{ marginRight: '10px' }}
@@ -89,19 +99,19 @@ const TableContests = ({ contests, onEditRow, onApproveContest }: Props) => {
             variant="contained"
             color="secondary"
             size="small"
-            onClick={() => onApproveContest(params.row.id)} // Thay handleEdit bằng hàm xử lý sự kiện edit
+            onClick={() => onApproveContest(params.row.id)}
             sx={{ marginRight: '10px' }}
           >
             Xét duyệt bài vẽ
           </Button>
-          {/* <Button
+          <Button
             variant="contained"
             color="error"
             size="small"
             onClick={() => console.log(123)} // Thay handleDelete bằng hàm xử lý sự kiện delete
           >
-            Delete
-          </Button> */}
+            Xóa
+          </Button>
         </div>
       ),
       sortable: false,

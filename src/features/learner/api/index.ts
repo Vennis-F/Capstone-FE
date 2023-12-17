@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Env } from 'config/Env'
-import { CourseLearnerFilterResponse } from 'features/courses/types'
+import { CourseLearnStatus, CourseLearnerFilterResponse } from 'features/courses/types'
 import makeApi from 'libs/core/configureAxios'
 import { PageMetaResponse } from 'types'
 
@@ -33,8 +33,9 @@ export const getLearnersByUser = (): Promise<LearnerFilterResponse[]> =>
 
 export const getCourseForLearnerSearchByUser = (
   search: string,
+  status?: CourseLearnStatus,
 ): Promise<{ data: CourseLearnerFilterResponse[]; meta: PageMetaResponse }> =>
-  api.post(`${LEARNER_BASE_URL}/course/user?search=${search}`)
+  api.post(`${LEARNER_BASE_URL}/course/user?search=${search}${status ? `&status=${status}` : ''}`)
 
 export const getCourseForLearnerSearchByLearnerIdFromCustomer = (
   search: string,

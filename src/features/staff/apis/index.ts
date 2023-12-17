@@ -27,3 +27,6 @@ export const getProfileOfStaff = (): Promise<StaffFilterResponse> =>
 
 export const deleteStaffByAdmin = (staffId: string): Promise<void> =>
   api.delete(`${STAFF_BASE_URL}/${staffId}`)
+
+export const reActiveStaffByAdmin = (staffId: string): Promise<void> =>
+  api.put(`${STAFF_BASE_URL}/reactive/${staffId}`)

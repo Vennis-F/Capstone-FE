@@ -23,3 +23,15 @@ export const getStringMinuteHourDayMonthYear = (dateString: string) => {
 
   return formattedDate.replace(',', ' lúc')
 }
+
+export const getCurrentDateWithPlus1Year = () => {
+  const currentDate = new Date()
+
+  // Thêm một năm vào ngày hiện tại
+  currentDate.setFullYear(currentDate.getFullYear() + 1)
+
+  // Chuyển đổi ngày sau khi thêm 1 năm về dạng chuỗi theo múi giờ UTC
+  const futureDate = currentDate.toUTCString()
+
+  return futureDate
+}

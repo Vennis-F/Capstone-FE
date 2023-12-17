@@ -25,6 +25,15 @@ export type CreateContestBodyRequest = {
   isVisible: boolean
 }
 
+export type UpdateContestBodyRequest = {
+  title: string
+  description: string
+  prize: string
+  startedDate: string
+  expiredDate: string
+  isVisible: boolean
+}
+
 export enum ContestStatus {
   PENDING = 'PENDING',
   ACTIVE = 'ACTIVE',
@@ -46,6 +55,31 @@ export function mapStatusToVietnamese(status: ContestStatus): string {
       return 'đã kết thúc'
     default:
       return 'Trạng thái không xác định'
+  }
+}
+
+export function mapStatusToVietnameseColor(status: ContestStatus) {
+  switch (status) {
+    case ContestStatus.PENDING:
+      return {
+        vietnam: 'chưa diễn ra',
+        color: '#3498db', // Màu xanh dương
+      }
+    case ContestStatus.ACTIVE:
+      return {
+        vietnam: 'đang diễn ra',
+        color: '#2ecc71', // Màu xanh lá cây
+      }
+    case ContestStatus.EXPIRED:
+      return {
+        vietnam: 'đã kết thúc',
+        color: '#e74c3c', // Màu đỏ
+      }
+    default:
+      return {
+        vietnam: 'Trạng thái không xác định',
+        color: '#95a5a6', // Màu xám
+      }
   }
 }
 

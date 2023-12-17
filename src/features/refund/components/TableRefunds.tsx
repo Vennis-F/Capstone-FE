@@ -9,9 +9,10 @@ import { RefundFilterResponse } from '../types'
 interface Props {
   refunds: RefundFilterResponse[]
   onEditRow: (id: string) => void
+  onGmailRefund: (refund: RefundFilterResponse) => void
 }
 
-const TableRefundsInAdmin = ({ refunds, onEditRow }: Props) => {
+const TableRefundsInAdmin = ({ refunds, onEditRow, onGmailRefund }: Props) => {
   const columns: GridColDef[] = [
     // { field: 'id', headerName: 'ID', width: 70, sortable: false, filterable: false },
     { field: 'courseTitle', headerName: 'Tên khóa học', width: 130 },
@@ -66,6 +67,18 @@ const TableRefundsInAdmin = ({ refunds, onEditRow }: Props) => {
               Đã hoàn tiền
             </Button>
           )}
+          {/* {!params.row.isApproved && ( */}
+          <Button
+            variant="contained"
+            color="warning"
+            size="small"
+            onClick={() => onGmailRefund(params.row)} // Thay handleEdit bằng hàm xử lý sự kiện edit
+            sx={{ marginRight: '10px' }}
+            // disabled={params.row.isApproved}
+          >
+            Ấn em đi ạ
+          </Button>
+          {/* )} */}
         </div>
       ),
       sortable: false,

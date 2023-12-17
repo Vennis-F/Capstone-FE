@@ -10,6 +10,7 @@ import FormDateField from 'libs/ui/form-components/FormDateField'
 import FormReactQuillField from 'libs/ui/form-components/FormReactQuillField'
 import FormSwitchField from 'libs/ui/form-components/FormSwitchField'
 import { FormTextField } from 'libs/ui/form-components/FormTextField'
+import { getCurrentDateWithPlus1Year } from 'libs/utils/handle-date'
 import { textFromHTMLCode } from 'libs/utils/handle-html-data'
 import { toastWarn } from 'libs/utils/handle-toast'
 
@@ -65,12 +66,10 @@ const CreateContestDialogForm = (props: Props) => {
     control,
     reset,
     handleSubmit,
-    formState: { isDirty, dirtyFields }, // tự nhiêm làm bước này xong thì lại thành công vcl
+    formState: { isDirty },
   } = methods
 
   const submitHandler = (data: CreateContestFormInput) => {
-    console.log(123)
-    console.log('[submit]', isDirty, dirtyFields, data, textFromHTMLCode(data.description).length)
     if (
       !isDirty ||
       textFromHTMLCode(data.description).length === 0 ||
@@ -79,16 +78,49 @@ const CreateContestDialogForm = (props: Props) => {
       toastWarn({
         message: 'Điền đầy đủ thông tin trước khi khởi tạo!',
       })
+    } else if (
+      new Date(data.startedDate).getTime() < new Date().getTime() ||
+      new Date(data.expiredDate).getTime() < new Date().getTime()
+    ) {
+      toastWarn({
+        message:
+          'Thời gian bắt đầu cuộc thi hoặc thời gian kết thúc cuộc thi phải lớn hơn thời gian hiện tại!',
+      })
+    } else if (new Date(data.startedDate).getTime() >= new Date(data.expiredDate).getTime()) {
+      toastWarn({
+        message: 'Thời gian bắt đầu cuộc thi phải bé hơn thời gian kết thúc cuộc thi!',
+      })
     } else {
       onSubmitClick(data, reset)
+      // console.log(data, reset, onSubmitClick)
     }
   }
+
   console.log('[defaultValues]', defaultValues)
 
   return (
     <Dialog
       open={props.openDialog}
-      onClose={props.handleCloseDialog}
+      onClose={() => {
+        reset({
+          title: '',
+          description: '',
+          prize: '',
+          startedDate: new Date().toUTCString(),
+          expiredDate: new Date().toUTCString(),
+          discountPercentFirst: 50,
+          effectiveDateFirst: new Date().toUTCString(),
+          expiredDateFirst: getCurrentDateWithPlus1Year(),
+          discountPercentSecond: 40,
+          effectiveDateSecond: new Date().toUTCString(),
+          expiredDateSecond: getCurrentDateWithPlus1Year(),
+          discountPercentThird: 30,
+          effectiveDateThird: new Date().toUTCString(),
+          expiredDateThird: getCurrentDateWithPlus1Year(),
+          isVisible: true,
+        })
+        props.handleCloseDialog()
+      }}
       maxWidth="md"
       fullWidth={true}
     >
@@ -96,7 +128,7 @@ const CreateContestDialogForm = (props: Props) => {
         Tạo cuộc thi
       </DialogTitle>
       <Stack sx={{ padding: '20px' }} direction="column" spacing={1} justifyContent="center">
-        <Box sx={{ height: '60px', marginBottom: '25px' }}>
+        <Box sx={{ height: '60px', marginBottom: '35px' }}>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
             Tiêu đề
           </Typography>
@@ -123,13 +155,13 @@ const CreateContestDialogForm = (props: Props) => {
         <Box sx={{ height: '60px' }} />
         <Box sx={{ height: '90px' }}>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
-            Ngày bắt đầu
+            Thời gian bắt đầu
           </Typography>
           <FormDateField name="startedDate" control={control} />
         </Box>
         <Box sx={{ height: '90px' }}>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
-            Ngày kết thúc
+            Thời gian kết thúc
           </Typography>
           <FormDateField name="expiredDate" control={control} />
         </Box>

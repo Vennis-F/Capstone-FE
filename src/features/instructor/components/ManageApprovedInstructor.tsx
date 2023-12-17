@@ -20,7 +20,11 @@ import {
 import TableTransactionOrderDetailsInAdmin from 'features/transaction-pay-off/components/TableTransactionOrderDetailsInAdmin'
 import { TransactionOrderDetailResponse } from 'features/transaction-pay-off/types'
 import CustomButton from 'libs/ui/components/CustomButton'
-import { calcTotalPaymentAmount, formatCurrency } from 'libs/utils/handle-price'
+import {
+  calcTotalPaymentAmount,
+  calcTotalRefundAmount,
+  formatCurrency,
+} from 'libs/utils/handle-price'
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastError, toastSuccess } from 'libs/utils/handle-toast'
 
@@ -71,7 +75,7 @@ const ManageApprovedInstructor = () => {
       setCurrentInstructorPayment(null)
       // currentInstructorPayment()
     } catch (error) {
-      showErrorResponseSaga({ error, defaultMessage: 'Không thể thanh toán cho giảng viên được' })
+      showErrorResponseSaga({ error, defaultMessage: 'Không thể thanh toán cho giáo viên được' })
     }
     return setIsLoading(false)
   }
@@ -150,7 +154,11 @@ const ManageApprovedInstructor = () => {
                     color="black"
                     marginLeft="20px"
                   >
-                    {formatCurrency(calcTotalPaymentAmount(currTransactionOrderDetail))}VND
+                    {formatCurrency(
+                      calcTotalPaymentAmount(currTransactionOrderDetail) -
+                        calcTotalRefundAmount(currTransactionOrderDetail),
+                    )}
+                    VND
                   </Typography>
                 </Typography>
               </Grid>
@@ -168,7 +176,11 @@ const ManageApprovedInstructor = () => {
             <CustomButton
               sxCustom={{ width: '160px' }}
               onClick={handleCreateTransactionPayoffByAdmin}
-              disable={calcTotalPaymentAmount(currTransactionOrderDetail) <= 0 || isLoading}
+              disable={
+                calcTotalPaymentAmount(currTransactionOrderDetail) -
+                  calcTotalRefundAmount(currTransactionOrderDetail) <=
+                  0 || isLoading
+              }
             >
               {!isLoading ? 'Đã Thanh toán' : <CircularProgress size="26px" />}
             </CustomButton>

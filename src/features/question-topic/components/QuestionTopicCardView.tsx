@@ -41,7 +41,7 @@ const QuestionTopicCardView = ({ questionTopic, onChangeQuestionTopic }: Props) 
           <Typography>
             {userFullName}{' '}
             <Typography component="span" fontWeight="bold">
-              {questionTopic.user?.role?.name === UserRole.INSTRUCTOR && ' - Giảng viên'}
+              {questionTopic.user?.role?.name === UserRole.INSTRUCTOR && ' - Giáo viên'}
             </Typography>
           </Typography>
           <h5 style={{ margin: 0, textAlign: 'left' }}>{questionTopic.title}</h5>

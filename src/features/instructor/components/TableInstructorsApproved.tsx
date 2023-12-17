@@ -112,7 +112,7 @@ const TableInstructorsApproved = ({
     {
       field: 'action3',
       headerName: 'Thanh toán',
-      description: 'Thanh toán cho giảng viên',
+      description: 'Thanh toán cho giáo viên',
       width: 140,
       renderCell: (params: GridRenderCellParams) => {
         const instructorId = params.row.id

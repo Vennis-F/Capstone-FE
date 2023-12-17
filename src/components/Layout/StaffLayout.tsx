@@ -80,7 +80,7 @@ const routesAdmin = [
     title: 'Hoàn tiền',
   },
   { path: '/admin/manage/staff', icon: <ManageAccountsIcon />, title: 'Nhân viên' },
-  { path: '/admin/manage/instructor', icon: <CastForEducationIcon />, title: 'Giảng viên' },
+  { path: '/admin/manage/instructor', icon: <CastForEducationIcon />, title: 'Giáo viên' },
   { path: '/admin/manage/customer', icon: <FamilyRestroomIcon />, title: 'Khách hàng' },
 ]
 

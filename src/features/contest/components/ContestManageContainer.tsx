@@ -1,24 +1,31 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import AddIcon from '@mui/icons-material/Add'
-import { Box, Container, Dialog, DialogContent, DialogTitle, Paper } from '@mui/material'
+import { Box, Container, Dialog, DialogContent, DialogTitle, Paper, Tab, Tabs } from '@mui/material'
 import { useEffect, useState } from 'react'
 
 import LayoutBodyContainer from 'components/Layout/LayoutBodyContainer'
 import TableCustomerDrawings from 'features/customer-drawing/components/TableCustomerDrawings'
 import CustomButton from 'libs/ui/components/CustomButton'
 import TitleTypography from 'libs/ui/components/TitleTypography'
+import { getCurrentDateWithPlus1Year } from 'libs/utils/handle-date'
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastSuccess } from 'libs/utils/handle-toast'
 import { OrderType, PageOptions } from 'types'
 
-import { createContestByStaff, definePromotionForWinner, getContestsByStaff } from '../api'
-import { Contest } from '../types'
+import {
+  createContestByStaff,
+  definePromotionForWinner,
+  getContestsByStaff,
+  updateContestByStaff,
+} from '../api'
+import { Contest, ContestStatus } from '../types'
 
 import CreateContestDialogForm from './CreateContestDialogForm'
 import EditContestDialogForm from './EditContestDialogForm'
 import TableContests from './TableContests'
 
 const ContestManageContainer = () => {
+  const [value, setValue] = useState(0)
   const [contests, setContests] = useState<Contest[]>([])
   const [currentContest, setCurrentContest] = useState<Contest | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -27,24 +34,47 @@ const ContestManageContainer = () => {
   const [isOpenFormCreate, setIsOpenFormCreate] = useState(false)
   const [currentContestNeedApprove, setCurrentContestNeedApprove] = useState<string | null>(null)
 
-  const fetchContests = async () => {
+  const fetchContests = async (newValue: number) => {
+    let status
+
+    switch (newValue) {
+      case 0:
+        status = undefined
+        break
+      case 1:
+        status = ContestStatus.ACTIVE
+        break
+      case 2:
+        status = ContestStatus.PENDING
+        break
+      case 3:
+        status = ContestStatus.EXPIRED
+        break
+      default:
+        status = undefined
+        break
+    }
+
     try {
-      const fetchedContests = await getContestsByStaff()
+      const fetchedContests = await getContestsByStaff(status)
       setContests(fetchedContests)
     } catch (error) {
       console.error('Error fetching Contests:', error)
     }
   }
 
-  useEffect(() => {
-    fetchContests()
-  }, [])
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue)
+    fetchContests(newValue)
+  }
 
-  console.log(currentContest)
+  useEffect(() => {
+    fetchContests(0)
+  }, [])
 
   return (
     <Container maxWidth="xl">
-      <LayoutBodyContainer title="Cuộc thi" introduction="">
+      <LayoutBodyContainer title="Cuộc thi" isPadding>
         <Box width="100%" textAlign="right" marginBottom="20px">
           <CustomButton
             onClick={() => {
@@ -60,6 +90,16 @@ const ContestManageContainer = () => {
           </CustomButton>
         </Box>
 
+        <Box sx={{ width: '100%' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={value} onChange={handleChange}>
+              <Tab label="Tất cả" id="all" />
+              <Tab label="Đang diễn ra" id="active" />
+              <Tab label="Chưa diễn ra" id="pending" />
+              <Tab label="Đã kết thúc" id="expired" />
+            </Tabs>
+          </Box>
+        </Box>
         <TableContests
           contests={contests}
           onEditRow={contestId => {
@@ -76,7 +116,6 @@ const ContestManageContainer = () => {
           defaultValues={{
             title: currentContest.title,
             prize: currentContest.prize,
-            // active: currentContest.active,
             description: currentContest.description,
             startedDate: currentContest.startedDate,
             expiredDate: currentContest.expiredDate,
@@ -85,30 +124,32 @@ const ContestManageContainer = () => {
           otherValues={{
             url: currentContest.thumbnailUrl,
             contestId: currentContest.id,
+            contest: currentContest,
           }}
-          onSubmitClick={async data => {
-            // setIsLoading(true)
-            // try {
-            //   await updateContestByStaff({
-            //     ContestId: currentContest.id,
-            //     active: data.active,
-            //     description: data.description,
-            //     resources: data.resources,
-            //     title: data.title,
-            //   })
-            //   fetchContests()
-            //   setCurrentContest(null)
-            //   setIsOpenForm(false)
-            //   toastSuccess({ message: 'Cập nhật bài đăng thành công' })
-            // } catch (error) {
-            //   showErrorResponseSaga({ defaultMessage: 'Không thể cập nhật bài đăng', error })
-            // }
-            // setIsLoading(false)
+          onSubmitClick={async (data, reset) => {
+            setIsLoadingCreate(true)
+            try {
+              await updateContestByStaff(currentContest.id, {
+                title: data.title,
+                description: data.description,
+                prize: data.prize,
+                startedDate: data.startedDate,
+                expiredDate: data.expiredDate,
+                isVisible: data.isVisible,
+              })
+
+              reset()
+              fetchContests(value)
+              setCurrentContest(null)
+              toastSuccess({ message: 'Cập nhật cuộc thi thành công' })
+            } catch (error) {
+              showErrorResponseSaga({ defaultMessage: 'Cập nhật cuộc thi không thành công', error })
+            }
+            setIsLoadingCreate(false)
           }}
-          openDialog={isOpenForm}
-          isLoading={isLoading}
-          handleOpenDialog={() => setIsOpenForm(true)}
-          handleCloseDialog={() => setIsOpenForm(false)}
+          openDialog={Boolean(currentContest)}
+          isLoading={isLoadingCreate}
+          handleCloseDialog={() => setCurrentContest(null)}
         />
       )}
 
@@ -117,17 +158,17 @@ const ContestManageContainer = () => {
           title: '',
           description: '',
           prize: '',
-          startedDate: '',
-          expiredDate: '',
-          discountPercentFirst: 10,
-          effectiveDateFirst: '',
-          expiredDateFirst: '',
-          discountPercentSecond: 10,
-          effectiveDateSecond: '',
-          expiredDateSecond: '',
-          discountPercentThird: 10,
-          effectiveDateThird: '',
-          expiredDateThird: '',
+          startedDate: new Date().toUTCString(),
+          expiredDate: new Date().toUTCString(),
+          discountPercentFirst: 50,
+          effectiveDateFirst: new Date().toUTCString(),
+          expiredDateFirst: getCurrentDateWithPlus1Year(),
+          discountPercentSecond: 40,
+          effectiveDateSecond: new Date().toUTCString(),
+          expiredDateSecond: getCurrentDateWithPlus1Year(),
+          discountPercentThird: 30,
+          effectiveDateThird: new Date().toUTCString(),
+          expiredDateThird: getCurrentDateWithPlus1Year(),
           isVisible: true,
         }}
         onSubmitClick={async (data, reset) => {
@@ -158,11 +199,11 @@ const ContestManageContainer = () => {
             )
 
             reset()
-            fetchContests()
+            fetchContests(0)
             setIsOpenFormCreate(false)
-            toastSuccess({ message: 'Tạo bài đăng mới thành công' })
+            toastSuccess({ message: 'Tạo cuộc thi mới thành công' })
           } catch (error) {
-            showErrorResponseSaga({ defaultMessage: 'Không thể tạo bài đăng mới', error })
+            showErrorResponseSaga({ defaultMessage: 'Không thể tạo cuộc thi mới', error })
           }
           setIsLoadingCreate(false)
         }}

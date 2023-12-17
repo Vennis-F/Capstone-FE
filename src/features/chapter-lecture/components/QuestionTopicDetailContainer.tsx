@@ -50,7 +50,7 @@ const QuestionTopicDetailContainer = ({
                 <span
                   style={{ color: 'gray', fontWeight: 'bold', fontSize: '16px', marginLeft: '4px' }}
                 >
-                  - Giảng viên
+                  - Giáo viên
                 </span>
               )}
             </h4>

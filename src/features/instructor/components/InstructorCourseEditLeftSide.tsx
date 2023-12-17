@@ -52,7 +52,7 @@ const InstructorCourseEditLeftSide = ({ currentType, course, handleGetCourse }: 
       const { msgErrors } = await checkCourseCreateValid(course.id)
 
       if (msgErrors.length === 0) {
-        toastSuccess({ message: 'Đã gửi đi để Admin xem xét thành công' })
+        toastSuccess({ message: 'Đã gửi đi để nhân viên xem xét thành công' })
         handleGetCourse()
       } else {
         const renderMsgErrors = (

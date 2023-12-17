@@ -42,7 +42,7 @@ export const MyLearningContainer = () => {
 
     if (userRole === UserRole.CUSTOMER) setCourses(await getCourseByCustomer(courseLearnStatus))
     else if (userRole === UserRole.LEARNER)
-      setCourses((await getCourseForLearnerSearchByUser('')).data)
+      setCourses((await getCourseForLearnerSearchByUser('', courseLearnStatus)).data)
   }
 
   useEffect(() => {

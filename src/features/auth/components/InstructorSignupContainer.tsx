@@ -32,10 +32,10 @@ const InstructorSignupContainer = () => {
           fontWeight="bold"
           sx={{ fontWeight: '600', fontFamily: 'sans-serif', marginBottom: '10px' }}
         >
-          Trở thành giảng viên trên nền tảng
+          Trở thành giáo viên trên nền tảng
         </Typography>
         <Typography sx={{ fontFamily: 'sans-serif', fontSize: '14px' }}>
-          Khám phá cộng đồng hỗ trợ bao gồm nhiều giảng viên online. Được phép sử dụng ngay tất cả
+          Khám phá cộng đồng hỗ trợ bao gồm nhiều giáo viên online. Được phép sử dụng ngay tất cả
           các tài nguyên sáng tạo khóa học.
         </Typography>
       </Box>
@@ -84,7 +84,7 @@ const InstructorSignupContainer = () => {
                 color: MainColor.RED_450,
               }}
             >
-              Đăng ký giảng viên
+              Đăng ký giáo viên
             </Typography>
             <Box sx={{ paddingX: '100px', border: 0 }}>
               <GuestSignupForm

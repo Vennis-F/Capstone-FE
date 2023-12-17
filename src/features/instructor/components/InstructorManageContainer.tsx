@@ -6,7 +6,7 @@ import TabsListInstructor from './TabsListInstructor'
 
 const InstructorManageContainer = () => (
   <Container maxWidth="lg">
-    <LayoutBodyContainer title="Danh sách giảng viên" introduction="">
+    <LayoutBodyContainer title="Danh sách giáo viên" introduction="">
       <TabsListInstructor />
     </LayoutBodyContainer>
   </Container>

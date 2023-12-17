@@ -11,7 +11,12 @@ import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastError, toastSuccess } from 'libs/utils/handle-toast'
 import { UserRole } from 'types'
 
-import { createStaffByAdmin, deleteStaffByAdmin, getStaffsByAdmin } from '../apis'
+import {
+  createStaffByAdmin,
+  deleteStaffByAdmin,
+  getStaffsByAdmin,
+  reActiveStaffByAdmin,
+} from '../apis'
 import { StaffFilterResponse } from '../types'
 
 import CreateStaffDialogForm from './CreateStaffDialogForm'
@@ -21,12 +26,13 @@ import TableStaffs from './TableStaffs'
 const StaffManageContainer = () => {
   const [staffs, setStaffs] = useState<StaffFilterResponse[]>([])
   const [currentStaff, setCurrentStaff] = useState<StaffFilterResponse | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
   const [isOpenForm, setIsOpenForm] = useState(false)
   const [isLoadingCreate, setIsLoadingCreate] = useState(false)
   const [isOpenFormCreate, setIsOpenFormCreate] = useState(false)
   const [isOpenBan, setIsOpenBan] = useState(false)
   const [currBanStaffId, setCurrBanStaffId] = useState<string | null>(null)
+  const [currReActiveStaffId, setCurrReActiveStaffId] = useState<string | null>(null)
+  const [isLoadingReActive, setIsLoadingReActive] = useState(false)
 
   const fetchStaffs = async () => {
     try {
@@ -41,12 +47,27 @@ const StaffManageContainer = () => {
     try {
       await deleteStaffByAdmin(currBanStaffId as string)
       fetchStaffs()
+      toastSuccess({ message: 'Xóa nhân viên thành công' })
     } catch (error) {
-      toastError({ message: 'Không thể ban người quản lý này được' })
+      toastError({ message: 'Không thể xóa nhân viên này được' })
       console.log(error)
     }
     setCurrBanStaffId(null)
     setIsOpenBan(false)
+  }
+
+  const handleReActiveStaff = async () => {
+    setIsLoadingReActive(true)
+    try {
+      await reActiveStaffByAdmin(currReActiveStaffId as string)
+      fetchStaffs()
+      toastSuccess({ message: 'Kích hoạt nhân viên thành công' })
+    } catch (error) {
+      toastError({ message: 'Không thể kích hoạt nhân viên được' })
+      console.log(error)
+    }
+    setIsLoadingReActive(false)
+    setCurrReActiveStaffId(null)
   }
 
   useEffect(() => {
@@ -81,6 +102,9 @@ const StaffManageContainer = () => {
           onBanStaff={staffId => {
             setIsOpenBan(true)
             setCurrBanStaffId(staffId)
+          }}
+          onReactiveStaff={staffId => {
+            setCurrReActiveStaffId(staffId)
           }}
         />
       </LayoutBodyContainer>
@@ -155,7 +179,7 @@ const StaffManageContainer = () => {
       />
 
       <DialogBinaryQuestion
-        titleText="Ban khỏi nền tảng"
+        titleText="Xóa khỏi nền tảng"
         contentText="Bạn có chắc muốn xóa nhân viên này khỏi nền tảng?"
         open={isOpenBan}
         clickAcceptAction={handleBanStaff}
@@ -164,6 +188,19 @@ const StaffManageContainer = () => {
           setIsOpenBan(false)
         }}
       />
+
+      {currReActiveStaffId && (
+        <DialogBinaryQuestion
+          titleText="Kích hoạt nhân viên"
+          contentText="Bạn có chắc muốn kích hoạt lại nhân viên này?"
+          open={Boolean(currReActiveStaffId)}
+          clickAcceptAction={handleReActiveStaff}
+          clickCloseModal={() => {
+            setCurrReActiveStaffId(null)
+          }}
+          isLoading={isLoadingReActive}
+        />
+      )}
     </Container>
   )
 }

@@ -18,7 +18,7 @@ export const userRoleInfor = (role: UserRole) => {
     case UserRole.STAFF:
       return 'Nhân viên'
     case UserRole.INSTRUCTOR:
-      return 'Giảng viên'
+      return 'Giáo viên'
     case UserRole.LEARNER:
       return 'Bé'
     default:

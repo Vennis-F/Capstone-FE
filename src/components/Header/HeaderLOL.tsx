@@ -262,7 +262,7 @@ const HeaderLOL = () => {
                 </ButtonLinkHeader>
               )}
               {!currUserRole && (
-                <ButtonLinkContain to="/instructor/signup">Đăng ký giảng viên</ButtonLinkContain>
+                <ButtonLinkContain to="/instructor/signup">Đăng ký giáo viên</ButtonLinkContain>
               )}
               <ButtonLinkHeader to="/blog">Blog</ButtonLinkHeader>
               <ButtonLinkHeader to="/contest">

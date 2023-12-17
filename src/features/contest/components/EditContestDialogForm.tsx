@@ -15,16 +15,16 @@ import { textFromHTMLCode } from 'libs/utils/handle-html-data'
 import { toastWarn } from 'libs/utils/handle-toast'
 
 import { updateContestThumbnailByStaff } from '../api'
+import { Contest, ContestStatus } from '../types'
 import { EditContestFormInput } from '../types/form.type'
 
 export type Props = {
   defaultValues?: EditContestFormInput
   onSubmitClick(data: EditContestFormInput, reset: UseFormReset<EditContestFormInput>): void
   openDialog: boolean
-  handleOpenDialog: () => void
   handleCloseDialog: () => void
   isLoading: boolean
-  otherValues: { url?: string; contestId: string }
+  otherValues: { url?: string; contestId: string; contest: Contest }
 }
 
 const EditContestDialogForm = (props: Props) => {
@@ -32,11 +32,29 @@ const EditContestDialogForm = (props: Props) => {
   console.log(defaultValues)
 
   const newValidationSchema = Yup.object().shape({
-    // title: Yup.string()
-    //   .required('Không được để trống tiêu đề')
-    //   .max(100, 'Tiêu đề không được quá 100 ký tự'),
-    // description: Yup.string().required('Không được để trống miêu tả'),
-    // resources: Yup.string().required('Không được để trống bài viét'),
+    title: Yup.string()
+      .required('Không được để trống tiêu đề')
+      .max(100, 'Tiêu đề không được quá 100 ký tự'),
+    startedDate: Yup.string().required('Không được để trống ngày bắt đầu'),
+    expiredDate: Yup.string().required('Không được để trống ngày kết thúc'),
+    // effectiveDateFirst: Yup.string().required('Không được để trống ngày bắt đầu'),
+    // expiredDateFirst: Yup.string().required('Không được để trống ngày kết thúc'),
+    // effectiveDateSecond: Yup.string().required('Không được để trống ngày bắt đầu'),
+    // expiredDateSecond: Yup.string().required('Không được để trống ngày kết thúc'),
+    // effectiveDateThird: Yup.string().required('Không được để trống ngày bắt đầu'),
+    // expiredDateThird: Yup.string().required('Không được để trống ngày kết thúc'),
+    // discountPercentFirst: Yup.number()
+    //   .required('Không được để trống ngày kết thúc')
+    //   .min(1, 'Nhỏ nhất là 1')
+    //   .max(100, 'Lớn nhất là 100'),
+    // discountPercentSecond: Yup.number()
+    //   .required('Không được để trống ngày kết thúc')
+    //   .min(1, 'Nhỏ nhất là 1')
+    //   .max(100, 'Lớn nhất là 100'),
+    // discountPercentThird: Yup.number()
+    //   .required('Không được để trống ngày kết thúc')
+    //   .min(1, 'Nhỏ nhất là 1')
+    //   .max(100, 'Lớn nhất là 100'),
   })
 
   const methods = useForm<EditContestFormInput>({
@@ -52,19 +70,37 @@ const EditContestDialogForm = (props: Props) => {
   } = methods
 
   const submitHandler = (data: EditContestFormInput) => {
-    console.log('[submit]', isDirty, dirtyFields, data)
     if (
       !isDirty ||
-      (data.description && textFromHTMLCode(data.description).length === 0) ||
-      (data.prize && textFromHTMLCode(data.prize).length === 0)
+      textFromHTMLCode(data.description).length === 0 ||
+      textFromHTMLCode(data.prize).length === 0
     ) {
-      toastWarn({ message: 'Cập nhật dữ liệu trước khi tiến hành cập nhật!' })
+      toastWarn({
+        message: 'Điền đầy đủ thông tin trước khi khởi tạo!',
+      })
+    } else if (
+      (new Date(data.startedDate).getTime() < new Date().getTime() &&
+        new Date(data.startedDate).getTime() !==
+          new Date(otherValues.contest.startedDate).getTime()) ||
+      (new Date(data.expiredDate).getTime() < new Date().getTime() &&
+        new Date(data.expiredDate).getTime() !==
+          new Date(otherValues.contest.expiredDate).getTime())
+    ) {
+      toastWarn({
+        message: 'Thời gian bắt đầu hoặc thời gian kết thúc phải lớn hơn thời gian hiện tại!',
+      })
+    } else if (new Date(data.startedDate).getTime() >= new Date(data.expiredDate).getTime()) {
+      toastWarn({
+        message: 'Thời gian bắt đầu phải bé hơn thời gian kết thúc!',
+      })
     } else {
       onSubmitClick(data, reset)
+      // console.log(data, reset, onSubmitClick)
     }
   }
 
   useEffect(() => {
+    console.log(dirtyFields)
     if (!isSubmitting) methods.reset(props.defaultValues)
   }, [props.defaultValues])
 
@@ -120,9 +156,9 @@ const EditContestDialogForm = (props: Props) => {
         </Box>
         <Box sx={{ height: '60px', marginBottom: '40px' }}>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
-            Hoạt động
+            Phát hành
           </Typography>
-          <FormSwitchField name="active" control={control} />
+          <FormSwitchField name="isVisible" control={control} />
         </Box>
         <Box sx={{ height: '60px', marginBottom: '40px' }}>
           <UploadImage
@@ -167,8 +203,8 @@ const EditContestDialogForm = (props: Props) => {
                   backgroundColor: MainColor.RED_600,
                 },
               }}
-              //   disabled={props.isLoading}
-              disabled={true}
+              disabled={props.isLoading || otherValues.contest.status === ContestStatus.EXPIRED}
+              // disabled={true}
             >
               {!props.isLoading ? 'Cập nhật' : <CircularProgress size="26px" />}
             </Button>
