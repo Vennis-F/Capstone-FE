@@ -109,12 +109,16 @@ const ChapterLectureLearnPage = () => {
   return (
     <>
       <BackdropCustom open={loading} />
-      {!loading && isAllow ? (
-        <TourProvider steps={steps}>
-          <ChapterLectureLearnContainer courseId={courseId as string} />
-        </TourProvider>
-      ) : (
-        <NotFound />
+      {!loading && (
+        <>
+          {isAllow ? (
+            <TourProvider steps={steps}>
+              <ChapterLectureLearnContainer courseId={courseId as string} />
+            </TourProvider>
+          ) : (
+            <NotFound />
+          )}
+        </>
       )}
     </>
   )
