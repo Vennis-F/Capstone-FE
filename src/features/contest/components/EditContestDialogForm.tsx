@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/indent */
+
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { Box, Button, CircularProgress, Dialog, DialogTitle, Grid, Typography } from '@mui/material'
 import Stack from '@mui/material/Stack'
@@ -15,7 +17,7 @@ import { textFromHTMLCode } from 'libs/utils/handle-html-data'
 import { toastWarn } from 'libs/utils/handle-toast'
 
 import { updateContestThumbnailByStaff } from '../api'
-import { Contest } from '../types'
+import { Contest, ContestStatus } from '../types'
 import { EditContestFormInput } from '../types/form.type'
 
 export type Props = {
@@ -174,46 +176,49 @@ const EditContestDialogForm = (props: Props) => {
           />
         </Box>
         <Box sx={{ height: '100px' }} />
-        <Grid container>
-          <Grid item>
-            <Button
-              onClick={() => reset()}
-              variant={'outlined'}
-              size="large"
-              sx={{
-                marginRight: '20px',
-                width: '140px',
-                borderColor: MainColor.RED_500,
-                color: MainColor.RED_500,
-                fontWeight: '600',
-                '&:hover': {
-                  borderColor: MainColor.RED_500,
-                  color: MainColor.RED_500,
-                },
-              }}
-            >
-              {'Đặt lại'}
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              onClick={handleSubmit(submitHandler)}
-              variant={'contained'}
-              size="large"
-              sx={{
-                width: '140px',
-                backgroundColor: MainColor.RED_500,
-                fontWeight: '600',
-                '&:hover': {
-                  backgroundColor: MainColor.RED_600,
-                },
-              }}
-              disabled={props.isLoading}
-            >
-              {!props.isLoading ? 'Cập nhật' : <CircularProgress size="26px" />}
-            </Button>
-          </Grid>
-        </Grid>
+        {otherValues.contest.status === ContestStatus.ACTIVE &&
+          otherValues.contest.status === ContestStatus.ACTIVE && (
+            <Grid container>
+              <Grid item>
+                <Button
+                  onClick={() => reset()}
+                  variant={'outlined'}
+                  size="large"
+                  sx={{
+                    marginRight: '20px',
+                    width: '140px',
+                    borderColor: MainColor.RED_500,
+                    color: MainColor.RED_500,
+                    fontWeight: '600',
+                    '&:hover': {
+                      borderColor: MainColor.RED_500,
+                      color: MainColor.RED_500,
+                    },
+                  }}
+                >
+                  {'Đặt lại'}
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  onClick={handleSubmit(submitHandler)}
+                  variant={'contained'}
+                  size="large"
+                  sx={{
+                    width: '140px',
+                    backgroundColor: MainColor.RED_500,
+                    fontWeight: '600',
+                    '&:hover': {
+                      backgroundColor: MainColor.RED_600,
+                    },
+                  }}
+                  disabled={props.isLoading}
+                >
+                  {!props.isLoading ? 'Cập nhật' : <CircularProgress size="26px" />}
+                </Button>
+              </Grid>
+            </Grid>
+          )}
       </Stack>
     </Dialog>
   )

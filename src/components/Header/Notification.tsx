@@ -54,7 +54,18 @@ const Notification = () => {
         if (data.type === 'CUSTOMER-REFUND') {
           navigate('/user/refunds')
         }
+
+        if (data.type === 'CUSTOMER-CUSTOMER_DRAWING') {
+          navigate(`/contest/detail/${data.contestId}`)
+        }
       }
+
+      if (currUserRole.role === UserRole.STAFF) {
+        if (data.type === 'STAFF-CUSTOMER_DRAWING') {
+          navigate('/staff/manage/contest')
+        }
+      }
+
       if (currUserRole.role === UserRole.INSTRUCTOR) {
         if (data.type === 'INSTRUCTOR-PAYMENT') {
           navigate('/instructor/transaction')
@@ -82,7 +93,6 @@ const Notification = () => {
 
   useEffect(() => {
     if (getUserRoleOrNull()) {
-      console.log('1234545645555555555555')
       handleSetNotifications()
     }
   }, [])

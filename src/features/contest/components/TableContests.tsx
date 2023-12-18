@@ -94,7 +94,7 @@ const TableContests = ({ contests, onEditRow, onApproveContest, onDeleteRow }: P
             onClick={() => onEditRow(params.row.id)} // Thay handleEdit bằng hàm xử lý sự kiện edit
             sx={{ marginRight: '10px' }}
           >
-            Thay đổi
+            Chi tiết
           </Button>
           <Button
             variant="contained"
