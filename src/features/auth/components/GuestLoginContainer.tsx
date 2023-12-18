@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
+import { requestPermission, saveDevice } from 'features/achivement copy/api'
 import { patternDetailPath } from 'libs/utils/handle-regex'
 import { toastError, toastSuccess } from 'libs/utils/handle-toast'
 import { decodeToken, getAccessToken } from 'libs/utils/handle-token'
@@ -54,6 +55,19 @@ export const GuestLoginContainer = () => {
     return null
   }
 
+  const handleSaveDeviceToken = async () => {
+    const token = await requestPermission()
+
+    if (!token) return
+
+    try {
+      console.log('helo ae hehe', token)
+      await saveDevice({ deviceTokenId: token })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     if (getAccessToken()) {
       const decode = decodeToken(getAccessToken() as string)
@@ -99,9 +113,9 @@ export const GuestLoginContainer = () => {
                         guessLoginFormInput: data,
                         callbackFail: (message: string) => {
                           toastError({ message })
-                          // console.log()
                         },
                         callbackSuccess: (role: UserRole) => {
+                          handleSaveDeviceToken()
                           toastSuccess({ message: 'Đăng nhập thành công' })
                           handleNavigateAfterLogin(role)
                         },

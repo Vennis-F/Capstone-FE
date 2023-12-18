@@ -26,52 +26,6 @@ const InstructorSignupContainer = () => {
 
   return (
     <Container maxWidth="lg">
-      {/* <Box sx={{ textAlign: 'left', marginBottom: '20px' }}>
-        <Typography
-          variant="h6"
-          fontWeight="bold"
-          sx={{ fontWeight: '600', fontFamily: 'sans-serif', marginBottom: '10px' }}
-        >
-          Trở thành giáo viên trên nền tảng
-        </Typography>
-        <Typography sx={{ fontFamily: 'sans-serif', fontSize: '14px' }}>
-          Khám phá cộng đồng hỗ trợ bao gồm nhiều giáo viên online. Được phép sử dụng ngay tất cả
-          các tài nguyên sáng tạo khóa học.
-        </Typography>
-      </Box>
-      <GuestSignupForm
-        onSubmitClick={async data => {
-          setIsLoading(true)
-          try {
-            const response = await customerSignUp({ ...data, role: 'Instructor' })
-            toastSuccess({ message: 'Đăng ký thành công' })
-            navigate(`/confirm-otp?email=${response.email}&isInstructor=${true}`)
-          } catch (error) {
-            showErrorResponseSaga({
-              error,
-              defaultMessage: 'Không đăng ký được, vui lòng kiểm tra lại thông tin',
-            })
-          }
-          setIsLoading(false)
-        }}
-        isLoading={isLoading}
-      />
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginTop: '10px',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Link
-          sx={{ color: 'black', fontSize: '14px', cursor: 'pointer' }}
-          onClick={() => navigate('/guest-login')}
-        >
-          Đã có tài khoản? Đăng nhập
-        </Link>
-      </Box> */}
       <Paper elevation={3} sx={{ textAlign: 'center' }}>
         <Grid container spacing={0}>
           <Grid item xs={6} sx={{}}>

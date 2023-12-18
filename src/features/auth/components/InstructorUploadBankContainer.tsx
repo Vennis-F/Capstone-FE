@@ -1,3 +1,4 @@
+import LabelImportantIcon from '@mui/icons-material/LabelImportant'
 import { Container, Paper, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -68,7 +69,7 @@ const InstructorUploadBankContainer = ({ email }: Props) => {
             textAlign: 'center',
           }}
         >
-          Hãy nhập tài khoản ngân hàng của bạn
+          Tài khoản ngân hàng của bạn
         </Typography>
         <Typography
           variant="caption"
@@ -108,6 +109,23 @@ const InstructorUploadBankContainer = ({ email }: Props) => {
           }}
           isLoading={isLoading}
         />
+
+        <Typography
+          variant="caption"
+          component={'div'}
+          sx={{
+            fontFamily: 'sans-serif',
+            marginTop: '15px',
+            color: 'red',
+            fontSize: '16px',
+          }}
+        >
+          <LabelImportantIcon sx={{ fontSize: '14px !important' }} /> Chúng tôi áp dụng một mô hình
+          chia sẻ lợi nhuận là <span style={{ fontWeight: 'bold' }}>80/20</span>. Điều này có nghĩa
+          là với mỗi khóa học được bán, bạn sẽ nhận được{' '}
+          <span style={{ fontWeight: 'bold' }}>80%</span> tổng lợi nhuận và chúng tôi sẽ chỉ lấy{' '}
+          <span style={{ fontWeight: 'bold' }}>20%</span>
+        </Typography>
       </Paper>
     </Container>
   )

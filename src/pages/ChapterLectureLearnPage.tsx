@@ -83,12 +83,10 @@ const steps: StepType[] = [
 
 const ChapterLectureLearnPage = () => {
   const { courseId } = useParams()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [isAllow, setIsAllow] = useState(false)
 
   const handleCheckUserValidAccess = async () => {
-    setLoading(true)
-
     try {
       const { status } = await checkCourseAndUserValid(courseId as string)
       setLoading(false)

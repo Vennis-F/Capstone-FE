@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/indent */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Brush } from '@material-ui/icons'
 import PaletteIcon from '@mui/icons-material/Palette'
 import PersonIcon from '@mui/icons-material/Person'
@@ -27,6 +28,7 @@ import Image from 'material-ui-image'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { getNotifications, onMessageListener } from 'features/achivement copy/api'
 import useAuthService from 'features/auth/hook/useAuthService'
 import { useCartService } from 'features/cart/hooks'
 import { getCoursesBySearch } from 'features/courses/api'
@@ -140,6 +142,16 @@ const HeaderLOL = () => {
   }, [searchText])
 
   const currUserRole = getUserRoleOrNull()
+
+  onMessageListener()
+    .then((payload: any) => {
+      console.log(payload)
+      toastSuccess({ message: payload.notification.body })
+      getNotifications().then(payloadNotification => {
+        console.log(payloadNotification)
+      })
+    })
+    .catch(err => console.log('failed: ', err))
 
   return (
     <>

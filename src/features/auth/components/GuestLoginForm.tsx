@@ -31,43 +31,47 @@ export const GuestLoginForm = (props: GuestLoginFormProps) => {
 
   const { control, reset, handleSubmit } = methods
   const submitHandler = (data: GuestLoginFormInput) => {
+    console.log(data)
     onSubmitClick(data, reset)
   }
 
   return (
     <Stack sx={{ pt: 0 }} direction="column" spacing={1} justifyContent="center">
-      <Box sx={{ height: '60px' }}>
-        <FormTextField
-          name="emailOrUsername"
-          label={'Email hoặc Tên đăng nhập'}
-          control={control}
-          size="small"
-        />
-      </Box>
-      <Box sx={{ height: '60px' }}>
-        <FormTextField
-          name="password"
-          label={'Mật khẩu'}
-          control={control}
-          size="small"
-          type="password"
-        />
-      </Box>
-      <Button
-        onClick={handleSubmit(submitHandler)}
-        variant={'contained'}
-        size="medium"
-        sx={{
-          backgroundColor: MainColor.RED_500,
-          fontWeight: '600',
-          '&:hover': {
-            backgroundColor: MainColor.RED_600,
-          },
-        }}
-        disabled={props.isLogging}
-      >
-        {!props.isLogging ? 'Đăng nhập' : <CircularProgress size="26px" />}
-      </Button>
+      <form onSubmit={handleSubmit(submitHandler)}>
+        <Box sx={{ height: '60px' }}>
+          <FormTextField
+            name="emailOrUsername"
+            label={'Email hoặc Tên đăng nhập'}
+            control={control}
+            size="small"
+          />
+        </Box>
+        <Box sx={{ height: '60px' }}>
+          <FormTextField
+            name="password"
+            label={'Mật khẩu'}
+            control={control}
+            size="small"
+            type="password"
+          />
+        </Box>
+        <Button
+          type="submit"
+          variant={'contained'}
+          size="medium"
+          fullWidth
+          sx={{
+            backgroundColor: MainColor.RED_500,
+            fontWeight: '600',
+            '&:hover': {
+              backgroundColor: MainColor.RED_600,
+            },
+          }}
+          disabled={props.isLogging}
+        >
+          {!props.isLogging ? 'Đăng nhập' : <CircularProgress size="26px" />}
+        </Button>
+      </form>
     </Stack>
   )
 }

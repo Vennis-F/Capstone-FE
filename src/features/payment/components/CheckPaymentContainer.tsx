@@ -113,8 +113,8 @@ const CheckPaymentContainer = () => {
 
           <EqualTitle titleLeft="Thể loại thanh toán" titleRight="VnPay" />
           <EqualTitle titleLeft="Ngân hàng" titleRight={vnpBankCode} />
-          <EqualTitle titleLeft="Email" titleRight={'hoanganhgo28062001@gmail.com'} />
-          <Box sx={{ display: 'flex', justifyContent: 'center', marginY: '20px' }}>
+          <EqualTitle titleLeft="Mã giao dịch" titleRight={vnpTransactionNo} />
+          <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
             <Typography
               sx={{ width: '40%', color: 'GrayText', fontSize: '18px', fontWeight: '600' }}
             >
@@ -126,10 +126,9 @@ const CheckPaymentContainer = () => {
               {formatCurrency(Number(vnpAmount) / 100)} VND
             </Typography>
           </Box>
-          <EqualTitle titleLeft="Mã giao dịch" titleRight={vnpTransactionNo} />
-          <Box sx={{ textAlign: 'center', marginTop: '40px' }}>
+          <Box sx={{ textAlign: 'center', marginTop: '39px' }}>
             <CustomButton sxCustom={{ width: '200px' }} onClick={() => navigate('/')}>
-              TRang chủ
+              Trang chủ
             </CustomButton>
           </Box>
         </Paper>

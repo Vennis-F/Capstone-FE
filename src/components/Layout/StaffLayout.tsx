@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import AccessibilityIcon from '@mui/icons-material/Accessibility'
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
 import BarChartIcon from '@mui/icons-material/BarChart'
@@ -37,6 +39,7 @@ import React, { useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 // import Footer from 'components/Footer/Footer'
+import { getNotifications, onMessageListener } from 'features/achivement copy/api'
 import useAuthService from 'features/auth/hook/useAuthService'
 import { toastSuccess } from 'libs/utils/handle-toast'
 import { getUserInforOrNull, getUserRole } from 'libs/utils/handle-token'
@@ -105,6 +108,16 @@ const StaffLayout = () => {
   const handleDrawerClose = () => {
     setOpen(false)
   }
+
+  onMessageListener()
+    .then((payload: any) => {
+      console.log(payload)
+      toastSuccess({ message: payload.notification.body })
+      getNotifications().then(payloadNotification => {
+        console.log(payloadNotification)
+      })
+    })
+    .catch(err => console.log('failed: ', err))
 
   useEffect(() => {
     const role = getUserRole()
