@@ -5,7 +5,7 @@ import LayoutBodyContainer from 'components/Layout/LayoutBodyContainer'
 import DialogBinaryQuestion from 'libs/ui/components/DialogBinaryQuestion'
 import { toastError, toastSuccess } from 'libs/utils/handle-toast'
 
-import { approveRefundByAdmin, getRefundsByAdmin } from '../apis'
+import { approveRefundByAdmin, askRefund, getRefundsByAdmin } from '../apis'
 import { RefundFilterResponse } from '../types'
 
 import GmailRefundDialogForm from './GmailRefundDialogForm'
@@ -115,10 +115,10 @@ const RefundsManageContainer = () => {
           handleCloseDialog={() => {
             setCurrentRefundGmail(null)
           }}
-          onSubmitClick={async () => {
+          onSubmitClick={async data => {
             setIsLoadingGmail(true)
             try {
-              // await approveRefundByAdmin(currentRefund.id)
+              await askRefund(currentRefundGmail.id, data.body)
               setCurrentRefundGmail(null)
               fetchRefunds(value)
               toastSuccess({ message: 'Gửi gmail cho khách hàng thành công' })

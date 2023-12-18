@@ -16,6 +16,7 @@ import { PromotionCourse } from '../types'
 import TablePromotionCourses from './TablePromotionCourse'
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { CourseStatus } from 'features/courses/types'
+import { toastWarn } from 'libs/utils/handle-toast'
 
 export type Props = {
   openDialog: boolean
@@ -28,6 +29,7 @@ const PromotionCourseDialogContainer = (props: Props) => {
   const [courses, setCourses] = useState<CourseFilterByInstructorResponse[]>([])
   const [promotionCourses, setPromotionCourses] = useState<PromotionCourse[]>([])
   const [selectCourses, setSelectCourses] = useState<CourseFilterByInstructorResponse[]>([])
+  const [loadingAddCourse, setLoadingAddCourse] = useState<boolean>(false)
 
   const handlePrepare = async () => {
     const promotionCoursesRes = await findPromotionCoursesByPromotionId(props.promotionId)
@@ -53,11 +55,17 @@ const PromotionCourseDialogContainer = (props: Props) => {
   }
 
   const hanldeCreatePromotionCourses = async () => {
+    if (selectCourses.length <= 0) {
+      return toastWarn({ message: 'Hãy chọn khóa học bạn muốn giảm giá' })
+    }
+
+    setLoadingAddCourse(true)
+
     for (let index = 0; index < selectCourses.length; index++) {
       try {
         await createPromotionCourse({
           courseId: selectCourses[index].id,
-          isView: false,
+          isView: true,
           promotionId: props.promotionId,
         })
       } catch (error) {
@@ -69,6 +77,7 @@ const PromotionCourseDialogContainer = (props: Props) => {
     }
     setSelectCourses([])
     handlePrepare()
+    setLoadingAddCourse(false)
   }
 
   useEffect(() => {
@@ -99,6 +108,7 @@ const PromotionCourseDialogContainer = (props: Props) => {
               onChange={(_, selectedOptions) => {
                 setSelectCourses(selectedOptions)
               }}
+              disabled={loadingAddCourse}
               renderInput={params => (
                 <TextField
                   {...params}
@@ -110,7 +120,11 @@ const PromotionCourseDialogContainer = (props: Props) => {
             />
           </Grid>
           <Grid item xs={2} paddingLeft="20px">
-            <CustomButton onClick={hanldeCreatePromotionCourses} sxCustom={{ height: '40px' }}>
+            <CustomButton
+              onClick={hanldeCreatePromotionCourses}
+              sxCustom={{ height: '40px' }}
+              disable={loadingAddCourse}
+            >
               Thêm khóa học
             </CustomButton>
           </Grid>

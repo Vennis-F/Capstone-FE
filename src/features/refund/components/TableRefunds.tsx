@@ -52,7 +52,7 @@ const TableRefundsInAdmin = ({ refunds, onEditRow, onGmailRefund }: Props) => {
       field: '',
       headerName: 'Hành động',
       description: 'Hoàn tiền',
-      width: 140,
+      width: 250,
       renderCell: (params: GridRenderCellParams) => (
         <div>
           {!params.row.isApproved && (
@@ -76,7 +76,7 @@ const TableRefundsInAdmin = ({ refunds, onEditRow, onGmailRefund }: Props) => {
             sx={{ marginRight: '10px' }}
             // disabled={params.row.isApproved}
           >
-            Ấn em đi ạ
+            Liên lạc
           </Button>
           {/* )} */}
         </div>

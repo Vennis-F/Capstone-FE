@@ -1,4 +1,14 @@
+import { CustomerDrawing } from 'features/customer-drawing/types'
+import { Promotion } from 'features/promotion/types'
 import { PageOptions } from 'types'
+
+export type Winner = {
+  id: string
+  position: number
+  active: boolean
+  customerDrawing: CustomerDrawing | null
+  promotion: Promotion
+}
 
 export type Contest = {
   id: string
@@ -14,6 +24,7 @@ export type Contest = {
   staffName: string
   totalCustomerDrawing: number
   isVisible: boolean
+  winners: Winner[]
 }
 
 export type CreateContestBodyRequest = {

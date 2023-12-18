@@ -38,6 +38,7 @@ import InstructorCreateCoursePage from 'pages/instructor/InstructorCreateCourseP
 import InstructorDashboardAnalyst from 'pages/instructor/InstructorDashboardAnalyst'
 import InstructorHomepagePage from 'pages/instructor/InstructorHomepagePage'
 import InstructorPromotionPage from 'pages/instructor/InstructorPromotionPage'
+import InstructorSignupSuccessPage from 'pages/instructor/InstructorSignupSuccessPage'
 import InstructorTransactionDetailPage from 'pages/instructor/InstructorTransactionDetailPage'
 import ListCoursePage from 'pages/ListCoursePage'
 import MyLearningPage from 'pages/MyLearningPage'
@@ -68,6 +69,7 @@ const AppRoutes = () => (
             path="/instructor/signup/certificate"
             element={<InstructorCertificateRegisterPage />}
           />
+          <Route path="/instructor/signup/success" element={<InstructorSignupSuccessPage />} />
 
           <Route path="/confirm-otp" element={<ConfirmOTPPage />} />
           <Route path="/posts" element={<AboutPage />} />

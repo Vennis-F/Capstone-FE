@@ -31,7 +31,7 @@ const InstrurctorUploadCertificateContainer = ({ email }: Props) => {
             textAlign: 'center',
           }}
         >
-          Chọn bằng cấp mà bạn muốn upload
+          Chọn bằng cấp mà bạn muốn đăng tải
         </Typography>
         <Typography
           variant="caption"
@@ -55,9 +55,9 @@ const InstrurctorUploadCertificateContainer = ({ email }: Props) => {
 
               if (!status) throw new Error()
               toastSuccess({
-                message: 'Đăng tải khóa bằng cấp thành công, bạn hãy check email và chờ xét duyệt',
+                message: 'Đăng tải khóa bằng cấp thành công',
               })
-              navigate('/guest-login')
+              navigate('/instructor/signup/success')
             } catch (error) {
               console.log('[component=InstrurctorUploadCertificateContainer]', error)
 

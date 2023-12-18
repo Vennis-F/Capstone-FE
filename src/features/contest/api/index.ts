@@ -37,6 +37,9 @@ export const updateContestByStaff = (
 export const updateContestThumbnailByStaff = (contestId: string, body: any): Promise<void> =>
   api.put(`${CONTEST_BASE_URL}/thumbnail?contestId=${contestId}`, body)
 
+export const deleteContestByStaff = (contestId: string): Promise<void> =>
+  api.delete(`${CONTEST_BASE_URL}/${contestId}`)
+
 // ----------------------------------------------------------------
 
 const WINNER_BASE_URL = `/winner`

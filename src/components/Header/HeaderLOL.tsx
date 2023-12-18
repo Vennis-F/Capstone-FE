@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/indent */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Brush } from '@material-ui/icons'
 import PaletteIcon from '@mui/icons-material/Palette'
 import PersonIcon from '@mui/icons-material/Person'
@@ -28,7 +27,6 @@ import Image from 'material-ui-image'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { getNotifications, onMessageListener } from 'features/achivement copy/api'
 import useAuthService from 'features/auth/hook/useAuthService'
 import { useCartService } from 'features/cart/hooks'
 import { getCoursesBySearch } from 'features/courses/api'
@@ -41,6 +39,8 @@ import ButtonLinkHeader from 'libs/ui/components/ButtonLinkHeader'
 import { toastSuccess } from 'libs/utils/handle-toast'
 import { decodeToken, getAccessToken, getUserRoleOrNull } from 'libs/utils/handle-token'
 import { OrderType, UserRole } from 'types'
+
+import Notification from './Notification'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -80,9 +80,9 @@ const HeaderLOL = () => {
   const [forceUpdate, setForceUpdate] = useState(false)
   const [coursesSearch, setCoursesSearch] = useState<Course[]>([])
   const [isPaperVisible, setIsPaperVisible] = useState(false)
-
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
@@ -142,16 +142,6 @@ const HeaderLOL = () => {
   }, [searchText])
 
   const currUserRole = getUserRoleOrNull()
-
-  onMessageListener()
-    .then((payload: any) => {
-      console.log(payload)
-      toastSuccess({ message: payload.notification.body })
-      getNotifications().then(payloadNotification => {
-        console.log(payloadNotification)
-      })
-    })
-    .catch(err => console.log('failed: ', err))
 
   return (
     <>
@@ -282,6 +272,10 @@ const HeaderLOL = () => {
               </ButtonLinkHeader>
               {!currUserRole && <ButtonLinkHeader to="/guest-login">Đăng nhập</ButtonLinkHeader>}
               {!currUserRole && <ButtonLinkHeader to="/guest-signup">Đăng ký</ButtonLinkHeader>}
+              {currUserRole &&
+                (currUserRole === UserRole.CUSTOMER || currUserRole === UserRole.LEARNER) && (
+                  <Notification />
+                )}
               {currUserRole && (
                 <>
                   <ButtonDropdownHeader handlerClick={handleClick}>

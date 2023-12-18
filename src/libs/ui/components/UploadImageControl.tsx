@@ -101,7 +101,11 @@ const UploadImageControl = ({ url, onChangeFile }: Props) => {
       <Grid item>
         <Button component="label" variant="contained" startIcon={<UploadIcon />}>
           Tải file lên
-          <VisuallyHiddenInput type="file" onChange={handleImageChange} />
+          <VisuallyHiddenInput
+            type="file"
+            onChange={handleImageChange}
+            accept="image/png, image/jpeg, image/gif, image/jpg"
+          />
         </Button>
       </Grid>
     </Grid>

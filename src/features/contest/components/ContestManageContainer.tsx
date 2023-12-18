@@ -1,22 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import AddIcon from '@mui/icons-material/Add'
-import { Box, Container, Dialog, DialogContent, DialogTitle, Paper, Tab, Tabs } from '@mui/material'
+import { Box, Container, Dialog, DialogContent, DialogTitle, Tab, Tabs } from '@mui/material'
 import { useEffect, useState } from 'react'
 
 import LayoutBodyContainer from 'components/Layout/LayoutBodyContainer'
 import TableCustomerDrawings from 'features/customer-drawing/components/TableCustomerDrawings'
 import CustomButton from 'libs/ui/components/CustomButton'
-import TitleTypography from 'libs/ui/components/TitleTypography'
-import { getCurrentDateWithPlus1Year } from 'libs/utils/handle-date'
+import DialogBinaryQuestion from 'libs/ui/components/DialogBinaryQuestion'
+import { getDateWithPlus1Year } from 'libs/utils/handle-date'
 import { showErrorResponseSaga } from 'libs/utils/handle-saga-error'
 import { toastSuccess } from 'libs/utils/handle-toast'
-import { OrderType, PageOptions } from 'types'
 
 import {
   createContestByStaff,
   definePromotionForWinner,
+  deleteContestByStaff,
   getContestsByStaff,
   updateContestByStaff,
+  updateContestThumbnailByStaff,
 } from '../api'
 import { Contest, ContestStatus } from '../types'
 
@@ -33,6 +34,8 @@ const ContestManageContainer = () => {
   const [isLoadingCreate, setIsLoadingCreate] = useState(false)
   const [isOpenFormCreate, setIsOpenFormCreate] = useState(false)
   const [currentContestNeedApprove, setCurrentContestNeedApprove] = useState<string | null>(null)
+  const [currentContestDelete, setCurrentContestDelete] = useState<string | null>(null)
+  const [loadingDelete, setLoadingDelete] = useState(false)
 
   const fetchContests = async (newValue: number) => {
     let status
@@ -107,6 +110,9 @@ const ContestManageContainer = () => {
             setCurrentContest(currContest)
             setIsOpenForm(true)
           }}
+          onDeleteRow={contestId => {
+            setCurrentContestDelete(contestId)
+          }}
           onApproveContest={contestId => setCurrentContestNeedApprove(contestId)}
         />
       </LayoutBodyContainer>
@@ -120,6 +126,15 @@ const ContestManageContainer = () => {
             startedDate: currentContest.startedDate,
             expiredDate: currentContest.expiredDate,
             isVisible: currentContest.isVisible,
+            discountPercentFirst:
+              currentContest.winners.find(winner => winner.position === 1)?.promotion
+                .discountPercent || 50,
+            discountPercentSecond:
+              currentContest.winners.find(winner => winner.position === 2)?.promotion
+                .discountPercent || 40,
+            discountPercentThird:
+              currentContest.winners.find(winner => winner.position === 3)?.promotion
+                .discountPercent || 30,
           }}
           otherValues={{
             url: currentContest.thumbnailUrl,
@@ -161,17 +176,11 @@ const ContestManageContainer = () => {
           startedDate: new Date().toUTCString(),
           expiredDate: new Date().toUTCString(),
           discountPercentFirst: 50,
-          effectiveDateFirst: new Date().toUTCString(),
-          expiredDateFirst: getCurrentDateWithPlus1Year(),
           discountPercentSecond: 40,
-          effectiveDateSecond: new Date().toUTCString(),
-          expiredDateSecond: getCurrentDateWithPlus1Year(),
           discountPercentThird: 30,
-          effectiveDateThird: new Date().toUTCString(),
-          expiredDateThird: getCurrentDateWithPlus1Year(),
           isVisible: true,
         }}
-        onSubmitClick={async (data, reset) => {
+        onSubmitClick={async (data, file, reset) => {
           setIsLoadingCreate(true)
           try {
             const contest = await createContestByStaff({
@@ -188,18 +197,23 @@ const ContestManageContainer = () => {
                 discountPercentFirst: data.discountPercentFirst,
                 discountPercentSecond: data.discountPercentSecond,
                 discountPercentThird: data.discountPercentThird,
-                effectiveDateFirst: data.effectiveDateFirst,
-                effectiveDateSecond: data.effectiveDateSecond,
-                effectiveDateThird: data.effectiveDateThird,
-                expiredDateFirst: data.expiredDateFirst,
-                expiredDateSecond: data.expiredDateSecond,
-                expiredDateThird: data.expiredDateThird,
+                effectiveDateFirst: data.expiredDate,
+                effectiveDateSecond: data.expiredDate,
+                effectiveDateThird: data.expiredDate,
+                expiredDateFirst: getDateWithPlus1Year(data.expiredDate),
+                expiredDateSecond: getDateWithPlus1Year(data.expiredDate),
+                expiredDateThird: getDateWithPlus1Year(data.expiredDate),
               },
               contest.id,
             )
 
+            const formData = new FormData()
+            formData.append('file', file)
+            await updateContestThumbnailByStaff(contest.id, formData)
+
             reset()
-            fetchContests(0)
+            fetchContests(2)
+            setValue(2)
             setIsOpenFormCreate(false)
             toastSuccess({ message: 'Tạo cuộc thi mới thành công' })
           } catch (error) {
@@ -229,6 +243,29 @@ const ContestManageContainer = () => {
             <TableCustomerDrawings contestId={currentContestNeedApprove} />
           </DialogContent>
         </Dialog>
+      )}
+
+      {currentContestDelete && (
+        <DialogBinaryQuestion
+          open={Boolean(currentContestDelete)}
+          isLoading={loadingDelete}
+          titleText="Xóa cuộc thi"
+          contentText="Bạn có chắc muốn xóa cuộc thi này?"
+          clickAcceptAction={async () => {
+            setLoadingDelete(true)
+            try {
+              await deleteContestByStaff(currentContestDelete)
+            } catch (error) {
+              showErrorResponseSaga({ error, defaultMessage: 'Xóa cuộc thi không thành công' })
+            }
+
+            fetchContests(value)
+            setValue(value)
+            setLoadingDelete(false)
+            setCurrentContestDelete(null)
+          }}
+          clickCloseModal={() => setCurrentContestDelete(null)}
+        />
       )}
     </Container>
   )

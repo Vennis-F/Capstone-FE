@@ -14,7 +14,6 @@ import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn'
 import LogoutIcon from '@mui/icons-material/Logout'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import MenuIcon from '@mui/icons-material/Menu'
-// import NotificationsIcon from '@mui/icons-material/Notifications'
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo'
 // import PaidIcon from '@mui/icons-material/Paid'
 import ReportIcon from '@mui/icons-material/Report'
@@ -39,7 +38,7 @@ import React, { useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 // import Footer from 'components/Footer/Footer'
-import { getNotifications, onMessageListener } from 'features/achivement copy/api'
+import Notification from 'components/Header/Notification'
 import useAuthService from 'features/auth/hook/useAuthService'
 import { toastSuccess } from 'libs/utils/handle-toast'
 import { getUserInforOrNull, getUserRole } from 'libs/utils/handle-token'
@@ -109,16 +108,6 @@ const StaffLayout = () => {
     setOpen(false)
   }
 
-  onMessageListener()
-    .then((payload: any) => {
-      console.log(payload)
-      toastSuccess({ message: payload.notification.body })
-      getNotifications().then(payloadNotification => {
-        console.log(payloadNotification)
-      })
-    })
-    .catch(err => console.log('failed: ', err))
-
   useEffect(() => {
     const role = getUserRole()
     setCurrentRole(role)
@@ -145,6 +134,7 @@ const StaffLayout = () => {
             <MenuIcon />
           </IconButton>
           <Stack direction="row" spacing={2} alignItems="center">
+            <Notification />
             {userInfor && (
               <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '18px' }}>
                 <Typography component="span" variant="inherit" color="GrayText">

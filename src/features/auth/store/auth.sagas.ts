@@ -41,8 +41,8 @@ function* handleLogin(payload: GuestLoginFormInputPayload) {
 }
 
 function* handleLogout() {
-  console.log('[SAGA LOGOUT]')
   const accessToken = getAccessToken() as string
+  console.log('[SAGA LOGOUT]', accessToken)
 
   yield call(guestSignOut, accessToken)
   removeAccessToken()

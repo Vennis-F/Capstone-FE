@@ -1,8 +1,13 @@
-import {
-  CreateContestBodyRequest,
-  DefinePromotionForWinnerBodyRequest,
-  UpdateContestBodyRequest,
-} from '.'
+import { CreateContestBodyRequest, UpdateContestBodyRequest } from '.'
 
-export type CreateContestFormInput = DefinePromotionForWinnerBodyRequest & CreateContestBodyRequest
-export type EditContestFormInput = UpdateContestBodyRequest
+export type CreateContestFormInput = {
+  discountPercentFirst: number
+  discountPercentSecond: number
+  discountPercentThird: number
+} & CreateContestBodyRequest
+
+export type EditContestFormInput = {
+  discountPercentFirst: number
+  discountPercentSecond: number
+  discountPercentThird: number
+} & UpdateContestBodyRequest

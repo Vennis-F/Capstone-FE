@@ -1,16 +1,16 @@
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { Box, Button, CircularProgress, Dialog, DialogTitle, Grid, Typography } from '@mui/material'
 import Stack from '@mui/material/Stack'
-import React from 'react'
+import React, { useState } from 'react'
 import { UseFormReset, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
 import { MainColor } from 'libs/const/color'
+import UploadImageControl from 'libs/ui/components/UploadImageControl'
 import FormDateField from 'libs/ui/form-components/FormDateField'
 import FormReactQuillField from 'libs/ui/form-components/FormReactQuillField'
 import FormSwitchField from 'libs/ui/form-components/FormSwitchField'
 import { FormTextField } from 'libs/ui/form-components/FormTextField'
-import { getCurrentDateWithPlus1Year } from 'libs/utils/handle-date'
 import { textFromHTMLCode } from 'libs/utils/handle-html-data'
 import { toastWarn } from 'libs/utils/handle-toast'
 
@@ -18,7 +18,11 @@ import { CreateContestFormInput } from '../types/form.type'
 
 export type Props = {
   defaultValues?: CreateContestFormInput
-  onSubmitClick(data: CreateContestFormInput, reset: UseFormReset<CreateContestFormInput>): void
+  onSubmitClick(
+    data: CreateContestFormInput,
+    file: File,
+    reset: UseFormReset<CreateContestFormInput>,
+  ): void
   openDialog: boolean
   handleOpenDialog: () => void
   handleCloseDialog: () => void
@@ -28,21 +32,14 @@ export type Props = {
 
 const CreateContestDialogForm = (props: Props) => {
   const { defaultValues, onSubmitClick } = props
+  const [previewFile, setPreviewFile] = useState<File | null>(null)
 
   const newValidationSchema = Yup.object().shape({
     title: Yup.string()
       .required('Không được để trống tiêu đề')
       .max(100, 'Tiêu đề không được quá 100 ký tự'),
-    // description: Yup.string().required('Không được để trống miêu tả'),
-    // prize: Yup.string().required('Không được để trống giải thưởng'),
     startedDate: Yup.string().required('Không được để trống ngày bắt đầu'),
     expiredDate: Yup.string().required('Không được để trống ngày kết thúc'),
-    effectiveDateFirst: Yup.string().required('Không được để trống ngày bắt đầu'),
-    expiredDateFirst: Yup.string().required('Không được để trống ngày kết thúc'),
-    effectiveDateSecond: Yup.string().required('Không được để trống ngày bắt đầu'),
-    expiredDateSecond: Yup.string().required('Không được để trống ngày kết thúc'),
-    effectiveDateThird: Yup.string().required('Không được để trống ngày bắt đầu'),
-    expiredDateThird: Yup.string().required('Không được để trống ngày kết thúc'),
     discountPercentFirst: Yup.number()
       .required('Không được để trống ngày kết thúc')
       .min(1, 'Nhỏ nhất là 1')
@@ -73,7 +70,8 @@ const CreateContestDialogForm = (props: Props) => {
     if (
       !isDirty ||
       textFromHTMLCode(data.description).length === 0 ||
-      textFromHTMLCode(data.prize).length === 0
+      textFromHTMLCode(data.prize).length === 0 ||
+      !previewFile
     ) {
       toastWarn({
         message: 'Điền đầy đủ thông tin trước khi khởi tạo!',
@@ -90,9 +88,18 @@ const CreateContestDialogForm = (props: Props) => {
       toastWarn({
         message: 'Thời gian bắt đầu cuộc thi phải bé hơn thời gian kết thúc cuộc thi!',
       })
+    } else if (
+      !(
+        data.discountPercentFirst > data.discountPercentSecond &&
+        data.discountPercentSecond > data.discountPercentThird &&
+        data.discountPercentFirst > data.discountPercentThird
+      )
+    ) {
+      toastWarn({
+        message: 'Mã giảm giá giải nhất phải lớn hơn giải hai và giải hai phải lớn hơn giải ba!',
+      })
     } else {
-      onSubmitClick(data, reset)
-      // console.log(data, reset, onSubmitClick)
+      onSubmitClick(data, previewFile, reset)
     }
   }
 
@@ -109,17 +116,12 @@ const CreateContestDialogForm = (props: Props) => {
           startedDate: new Date().toUTCString(),
           expiredDate: new Date().toUTCString(),
           discountPercentFirst: 50,
-          effectiveDateFirst: new Date().toUTCString(),
-          expiredDateFirst: getCurrentDateWithPlus1Year(),
           discountPercentSecond: 40,
-          effectiveDateSecond: new Date().toUTCString(),
-          expiredDateSecond: getCurrentDateWithPlus1Year(),
           discountPercentThird: 30,
-          effectiveDateThird: new Date().toUTCString(),
-          expiredDateThird: getCurrentDateWithPlus1Year(),
           isVisible: true,
         })
         props.handleCloseDialog()
+        setPreviewFile(null)
       }}
       maxWidth="md"
       fullWidth={true}
@@ -167,80 +169,53 @@ const CreateContestDialogForm = (props: Props) => {
         </Box>
         <Box>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
-            Giải nhất
+            Phần trăm giảm giá cho các hạng
           </Typography>
           <Grid container>
-            <Grid item xs={4} paddingX="20px">
-              <Typography color="GrayText" fontSize="14px">
-                Phần trăm giảm giá
+            <Grid item xs={4}>
+              <Typography color="GrayText" fontSize="14px" fontWeight="bold">
+                Giải nhất
               </Typography>
-              <FormTextField type="number" name="discountPercentFirst" control={control} />
+              <Box display="flex" alignItems="center" width="80%">
+                <FormTextField type="number" name="discountPercentFirst" control={control} />
+                <Typography marginLeft="5px">%</Typography>
+              </Box>
             </Grid>
-            <Grid item xs={4} paddingX="20px">
-              <Typography color="GrayText" fontSize="14px">
-                Ngày bắt đầu
+            <Grid item xs={4}>
+              <Typography color="GrayText" fontSize="14px" fontWeight="bold">
+                Giải nhì
               </Typography>
-              <FormDateField name="effectiveDateFirst" control={control} />
+              <Box display="flex" alignItems="center" width="80%">
+                <FormTextField type="number" name="discountPercentSecond" control={control} />
+                <Typography marginLeft="5px">%</Typography>
+              </Box>
             </Grid>
-            <Grid item xs={4} paddingX="20px">
-              <Typography color="GrayText" fontSize="14px">
-                Ngày kết thúc
+            <Grid item xs={4}>
+              <Typography color="GrayText" fontSize="14px" fontWeight="bold">
+                Giải ba
               </Typography>
-              <FormDateField name="expiredDateFirst" control={control} />
+              <Box display="flex" alignItems="center" width="80%">
+                <FormTextField type="number" name="discountPercentThird" control={control} />
+                <Typography marginLeft="5px">%</Typography>
+              </Box>
             </Grid>
           </Grid>
         </Box>
-        <Box>
+
+        <Box sx={{ height: '10px' }}></Box>
+        <Box sx={{ height: '60px', marginBottom: '40px' }}>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
-            Giải hai
+            Hình ảnh
           </Typography>
-          <Grid container>
-            <Grid item xs={4} paddingX="20px">
-              <Typography color="GrayText" fontSize="14px">
-                Phần trăm giảm giá
-              </Typography>
-              <FormTextField type="number" name="discountPercentSecond" control={control} />
-            </Grid>
-            <Grid item xs={4} paddingX="20px">
-              <Typography color="GrayText" fontSize="14px">
-                Ngày bắt đầu
-              </Typography>
-              <FormDateField name="effectiveDateSecond" control={control} />
-            </Grid>
-            <Grid item xs={4} paddingX="20px">
-              <Typography color="GrayText" fontSize="14px">
-                Ngày kết thúc
-              </Typography>
-              <FormDateField name="expiredDateSecond" control={control} />
-            </Grid>
-          </Grid>
+          <UploadImageControl
+            onChangeFile={file => {
+              setPreviewFile(file)
+            }}
+          />
         </Box>
-        <Box>
-          <Typography variant="h6" fontWeight="bold" fontSize="18px">
-            Giải ba
-          </Typography>
-          <Grid container>
-            <Grid item xs={4} paddingX="20px">
-              <Typography color="GrayText" fontSize="14px">
-                Phần trăm giảm giá
-              </Typography>
-              <FormTextField type="number" name="discountPercentThird" control={control} />
-            </Grid>
-            <Grid item xs={4} paddingX="20px">
-              <Typography color="GrayText" fontSize="14px">
-                Ngày bắt đầu
-              </Typography>
-              <FormDateField name="effectiveDateThird" control={control} />
-            </Grid>
-            <Grid item xs={4} paddingX="20px">
-              <Typography color="GrayText" fontSize="14px">
-                Ngày kết thúc
-              </Typography>
-              <FormDateField name="expiredDateThird" control={control} />
-            </Grid>
-          </Grid>
-        </Box>
-        <Box sx={{ height: '90px' }}>
+
+        <Box sx={{ height: '130px' }}></Box>
+        <Box sx={{ height: '60px' }}>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
             Phát hành
           </Typography>

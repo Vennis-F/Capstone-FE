@@ -11,10 +11,11 @@ import { Contest, ContestStatus, mapStatusToVietnamese, mapStatusToVietnameseCol
 interface Props {
   contests: Contest[]
   onEditRow: (id: string) => void
+  onDeleteRow: (id: string) => void
   onApproveContest: (id: string) => void
 }
 
-const TableContests = ({ contests, onEditRow, onApproveContest }: Props) => {
+const TableContests = ({ contests, onEditRow, onApproveContest, onDeleteRow }: Props) => {
   const columns: GridColDef[] = [
     { field: 'title', headerName: 'Tiêu đề', width: 130 },
     {
@@ -108,7 +109,7 @@ const TableContests = ({ contests, onEditRow, onApproveContest }: Props) => {
             variant="contained"
             color="error"
             size="small"
-            onClick={() => console.log(123)} // Thay handleDelete bằng hàm xử lý sự kiện delete
+            onClick={() => onDeleteRow(params.row.id)}
           >
             Xóa
           </Button>
@@ -130,16 +131,6 @@ const TableContests = ({ contests, onEditRow, onApproveContest }: Props) => {
           },
         }}
         pageSizeOptions={[10, 15]}
-        // checkboxSelection
-        // sortModel={[
-        //   {
-        //     field: 'age',
-        //     sort: 'asc', // Default sorting order for the 'age' column
-        //   },
-        // ]}
-        // onSortModelChange={model => handleSortModelChange(model)}
-        // onPaginationModelChange={model => handelPaginationModelChange(model)}
-        // onFilterModelChange={model => console.log(model)}
         density="comfortable"
       />
     </div>

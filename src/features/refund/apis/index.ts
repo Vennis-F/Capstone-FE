@@ -30,3 +30,6 @@ export const approveRefundByAdmin = (refundId: string): Promise<void> =>
 
 export const checkRefund = (orderDetailId: string): Promise<boolean> =>
   api.get(`${REFUND_BASE_URL}/isRefund/${orderDetailId}`)
+
+export const askRefund = (refundId: string, question: string): Promise<void> =>
+  api.get(`${REFUND_BASE_URL}/ask/question?id=${refundId}&question=${question}`)

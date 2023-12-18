@@ -1,3 +1,4 @@
+/* eslint-disable */
 export type CreateDeviceTokenBodyRequest = {
   deviceTokenId: string
 }
@@ -7,6 +8,6 @@ export type NotificationResponse = {
   title: string
   body: string
   data: any
-  createdDate: Date
+  createdDate: string
   isSeen: boolean
 }

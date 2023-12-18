@@ -15,7 +15,7 @@ import { textFromHTMLCode } from 'libs/utils/handle-html-data'
 import { toastWarn } from 'libs/utils/handle-toast'
 
 import { updateContestThumbnailByStaff } from '../api'
-import { Contest, ContestStatus } from '../types'
+import { Contest } from '../types'
 import { EditContestFormInput } from '../types/form.type'
 
 export type Props = {
@@ -37,24 +37,18 @@ const EditContestDialogForm = (props: Props) => {
       .max(100, 'Tiêu đề không được quá 100 ký tự'),
     startedDate: Yup.string().required('Không được để trống ngày bắt đầu'),
     expiredDate: Yup.string().required('Không được để trống ngày kết thúc'),
-    // effectiveDateFirst: Yup.string().required('Không được để trống ngày bắt đầu'),
-    // expiredDateFirst: Yup.string().required('Không được để trống ngày kết thúc'),
-    // effectiveDateSecond: Yup.string().required('Không được để trống ngày bắt đầu'),
-    // expiredDateSecond: Yup.string().required('Không được để trống ngày kết thúc'),
-    // effectiveDateThird: Yup.string().required('Không được để trống ngày bắt đầu'),
-    // expiredDateThird: Yup.string().required('Không được để trống ngày kết thúc'),
-    // discountPercentFirst: Yup.number()
-    //   .required('Không được để trống ngày kết thúc')
-    //   .min(1, 'Nhỏ nhất là 1')
-    //   .max(100, 'Lớn nhất là 100'),
-    // discountPercentSecond: Yup.number()
-    //   .required('Không được để trống ngày kết thúc')
-    //   .min(1, 'Nhỏ nhất là 1')
-    //   .max(100, 'Lớn nhất là 100'),
-    // discountPercentThird: Yup.number()
-    //   .required('Không được để trống ngày kết thúc')
-    //   .min(1, 'Nhỏ nhất là 1')
-    //   .max(100, 'Lớn nhất là 100'),
+    discountPercentFirst: Yup.number()
+      .required('Không được để trống ngày kết thúc')
+      .min(1, 'Nhỏ nhất là 1')
+      .max(100, 'Lớn nhất là 100'),
+    discountPercentSecond: Yup.number()
+      .required('Không được để trống ngày kết thúc')
+      .min(1, 'Nhỏ nhất là 1')
+      .max(100, 'Lớn nhất là 100'),
+    discountPercentThird: Yup.number()
+      .required('Không được để trống ngày kết thúc')
+      .min(1, 'Nhỏ nhất là 1')
+      .max(100, 'Lớn nhất là 100'),
   })
 
   const methods = useForm<EditContestFormInput>({
@@ -87,11 +81,22 @@ const EditContestDialogForm = (props: Props) => {
           new Date(otherValues.contest.expiredDate).getTime())
     ) {
       toastWarn({
-        message: 'Thời gian bắt đầu hoặc thời gian kết thúc phải lớn hơn thời gian hiện tại!',
+        message:
+          'Thời gian bắt đầu hoặc thời gian kết thúc cuộc thi phải lớn hơn thời gian hiện tại!',
       })
     } else if (new Date(data.startedDate).getTime() >= new Date(data.expiredDate).getTime()) {
       toastWarn({
         message: 'Thời gian bắt đầu phải bé hơn thời gian kết thúc!',
+      })
+    } else if (
+      !(
+        data.discountPercentFirst > data.discountPercentSecond &&
+        data.discountPercentSecond > data.discountPercentThird &&
+        data.discountPercentFirst > data.discountPercentThird
+      )
+    ) {
+      toastWarn({
+        message: 'Mã giảm giá giải nhất phải lớn hơn giải hai và giải hai phải lớn hơn giải ba!',
       })
     } else {
       onSubmitClick(data, reset)
@@ -144,13 +149,13 @@ const EditContestDialogForm = (props: Props) => {
         <Box sx={{ height: '60px' }} />
         <Box sx={{ height: '90px' }}>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
-            Ngày bắt đầu
+            Thời gian bắt đầu
           </Typography>
           <FormDateField name="startedDate" control={control} />
         </Box>
         <Box sx={{ height: '90px' }}>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
-            Ngày kết thúc
+            Thời gian kết thúc
           </Typography>
           <FormDateField name="expiredDate" control={control} />
         </Box>
@@ -187,7 +192,7 @@ const EditContestDialogForm = (props: Props) => {
                 },
               }}
             >
-              {'Reset'}
+              {'Đặt lại'}
             </Button>
           </Grid>
           <Grid item>
@@ -203,8 +208,7 @@ const EditContestDialogForm = (props: Props) => {
                   backgroundColor: MainColor.RED_600,
                 },
               }}
-              disabled={props.isLoading || otherValues.contest.status === ContestStatus.EXPIRED}
-              // disabled={true}
+              disabled={props.isLoading}
             >
               {!props.isLoading ? 'Cập nhật' : <CircularProgress size="26px" />}
             </Button>

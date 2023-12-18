@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { requestPermission, saveDevice } from 'features/achivement copy/api'
+import { requestPermission, saveDevice } from 'features/notification/api'
 import { patternDetailPath } from 'libs/utils/handle-regex'
 import { toastError, toastSuccess } from 'libs/utils/handle-toast'
 import { decodeToken, getAccessToken } from 'libs/utils/handle-token'

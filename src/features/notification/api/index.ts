@@ -45,3 +45,6 @@ export const onMessageListener = () =>
       resolve(payload)
     })
   })
+
+export const updateNotificationSeen = (createdDate: string): Promise<void> =>
+  api.put(`${DYNAMODB_BASE_URL}/notification/seen?createdDate=${createdDate}`)
