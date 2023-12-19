@@ -4,6 +4,8 @@ import { UserInfor } from 'features/auth/types'
 
 const TOKEN = 'access_token'
 
+const DEVICE_TOKEN = 'device_token'
+
 export const decodeToken = (accessToken: string): UserInfor => jwt_decode(accessToken)
 
 export const getAccessToken = () => localStorage.getItem(TOKEN)
@@ -25,3 +27,11 @@ export const getUserInforOrNull = () => {
   if (!accessToken) return null
   return decodeToken(accessToken)
 }
+
+// ----------------------------------------------------------------
+
+export const setDeviceToken = (token: string) => localStorage.setItem(DEVICE_TOKEN, token)
+
+export const getDeviceToken = () => localStorage.getItem(DEVICE_TOKEN)
+
+export const removeDeviceToken = () => localStorage.removeItem(DEVICE_TOKEN)

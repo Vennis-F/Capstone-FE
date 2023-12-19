@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { requestPermission, saveDevice } from 'features/notification/api'
 import { patternDetailPath } from 'libs/utils/handle-regex'
 import { toastError, toastSuccess } from 'libs/utils/handle-toast'
-import { decodeToken, getAccessToken } from 'libs/utils/handle-token'
+import { decodeToken, getAccessToken, setDeviceToken } from 'libs/utils/handle-token'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { RootState } from 'store/store'
 import { UserRole } from 'types'
@@ -62,6 +62,7 @@ export const GuestLoginContainer = () => {
 
     try {
       await saveDevice({ deviceTokenId: token })
+      setDeviceToken(token)
     } catch (error) {
       console.log(error)
     }

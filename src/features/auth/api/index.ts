@@ -11,8 +11,10 @@ const AUTH_BASE_URL = `/auth`
 export const guestSignIn = (loginFormInput: GuestLoginFormInput): Promise<Token> =>
   api.post(`${AUTH_BASE_URL}/signin`, loginFormInput)
 
-export const guestSignOut = (code: string): Promise<void> =>
-  api.get(`${AUTH_BASE_URL}/signout?code=${code}`)
+export const guestSignOut = (code: string, deviceToken: string): Promise<void> =>
+  api.get(
+    `${AUTH_BASE_URL}/signout?code=${code}${deviceToken ? `&deviceToken=${deviceToken}` : ''}`,
+  )
 
 export const customerSignUp = (body: CustomerSignupRequest): Promise<{ email: string }> =>
   api.post(`${AUTH_BASE_URL}/customer/signup`, body)

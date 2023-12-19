@@ -6,7 +6,9 @@ import { ResponseError } from 'libs/utils/handle-saga-error'
 import {
   decodeToken,
   getAccessToken,
+  getDeviceToken,
   removeAccessToken,
+  removeDeviceToken,
   setAccessToken,
 } from 'libs/utils/handle-token'
 
@@ -42,10 +44,13 @@ function* handleLogin(payload: GuestLoginFormInputPayload) {
 
 function* handleLogout() {
   const accessToken = getAccessToken() as string
+  const deviceToken = getDeviceToken() as string
+
   console.log('[SAGA LOGOUT]', accessToken)
 
-  yield call(guestSignOut, accessToken)
+  yield call(guestSignOut, accessToken, deviceToken)
   removeAccessToken()
+  if (deviceToken) removeDeviceToken()
   yield delay(1000)
   /*
     Need to check access token is existed in components
