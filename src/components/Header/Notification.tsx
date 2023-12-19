@@ -24,7 +24,7 @@ const Notification = () => {
   const navigate = useNavigate()
 
   const handleSetNotifications = () => {
-    getNotifications().then(payloadNotifications => {
+    getNotifications(5).then(payloadNotifications => {
       setNotificationResponse([...payloadNotifications])
     })
   }

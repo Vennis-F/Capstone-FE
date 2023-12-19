@@ -16,11 +16,14 @@ const DYNAMODB_BASE_URL = `/dynamodb`
 export const saveDevice = (body: CreateDeviceTokenBodyRequest): Promise<void> =>
   api.post(`${DEVICE_BASE_URL}/save`, body)
 
-export const getNotifications = (): Promise<NotificationResponse[]> =>
-  api.get(`${DYNAMODB_BASE_URL}/notifications`)
+export const getNotifications = (size: number): Promise<NotificationResponse[]> =>
+  api.get(`${DYNAMODB_BASE_URL}/notifications?size=${size}`)
 
 export const requestPermission = async () => {
   const permission = await Notification.requestPermission()
+
+  console.log('[firebase permission request] ', permission)
+
   if (permission === 'granted') {
     const token = await getToken(messaging, {
       vapidKey:
@@ -33,9 +36,12 @@ export const requestPermission = async () => {
   }
 
   if (permission === 'denied') {
-    toastError({ message: 'Hãy mở cho phép thông báo trên trình duyệt' })
+    toastError({
+      message: 'Hãy mở cho phép thông báo trên trình duyệt và đăng nhập lại để nhận thông báo',
+    })
     return null
   }
+
   return null
 }
 

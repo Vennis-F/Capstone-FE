@@ -61,7 +61,6 @@ export const GuestLoginContainer = () => {
     if (!token) return
 
     try {
-      console.log('helo ae hehe', token)
       await saveDevice({ deviceTokenId: token })
     } catch (error) {
       console.log(error)
