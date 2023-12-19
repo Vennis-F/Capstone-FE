@@ -59,10 +59,10 @@ export const GuestLoginContainer = () => {
     const token = await requestPermission()
 
     if (!token) return
+    setDeviceToken(token)
 
     try {
       await saveDevice({ deviceTokenId: token })
-      setDeviceToken(token)
     } catch (error) {
       console.log(error)
     }
