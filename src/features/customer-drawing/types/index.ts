@@ -60,3 +60,18 @@ export enum CustomerDrawingStatus {
   REJECTED = 'REJECTED',
   BANNED = 'BANNED',
 }
+
+export const convertCustomerDrawingStatus = (status: CustomerDrawingStatus) => {
+  switch (status) {
+    case CustomerDrawingStatus.APPROVED:
+      return { color: '#008000', vietnamse: 'Thông qua', status: CustomerDrawingStatus.APPROVED }
+    case CustomerDrawingStatus.REJECTED:
+      return { color: '#FF0000', vietnamse: 'Từ chối', status: CustomerDrawingStatus.REJECTED }
+    case CustomerDrawingStatus.PENDING:
+      return { color: '#FFD700', vietnamse: 'Đang chờ', status: CustomerDrawingStatus.PENDING }
+    case CustomerDrawingStatus.BANNED:
+      return { color: '#FF0000', vietnamse: 'Cấm', status: CustomerDrawingStatus.BANNED }
+    default:
+      return { color: '#808080', vietnamse: 'Unkown', status: 'None' }
+  }
+}

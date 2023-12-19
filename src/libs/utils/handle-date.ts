@@ -39,10 +39,8 @@ export const getCurrentDateWithPlus1Year = () => {
 export const getDateWithPlus1Year = (date: string) => {
   const currentDate = new Date(date)
 
-  // Thêm một năm vào ngày hiện tại
   currentDate.setFullYear(currentDate.getFullYear() + 1)
 
-  // Chuyển đổi ngày sau khi thêm 1 năm về dạng chuỗi theo múi giờ UTC
   const futureDate = currentDate.toUTCString()
 
   return futureDate

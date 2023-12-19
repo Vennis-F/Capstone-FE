@@ -128,7 +128,12 @@ const EditContestDialogForm = (props: Props) => {
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
             Tiêu đề
           </Typography>
-          <FormTextField name="title" control={control} size="small" />
+          <FormTextField
+            name="title"
+            control={control}
+            size="small"
+            disable={otherValues.contest.status === ContestStatus.EXPIRED}
+          />
         </Box>
         <Box>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
@@ -139,6 +144,7 @@ const EditContestDialogForm = (props: Props) => {
             name="description"
             label={'Miêu tả'}
             control={control}
+            disable={otherValues.contest.status === ContestStatus.EXPIRED}
           />
         </Box>
         <Box sx={{ height: '60px' }} />
@@ -146,20 +152,86 @@ const EditContestDialogForm = (props: Props) => {
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
             Giải thưởng
           </Typography>
-          <FormReactQuillField isFull={true} name="prize" label={'Giải thưởng'} control={control} />
+          <FormReactQuillField
+            isFull={true}
+            name="prize"
+            label={'Giải thưởng'}
+            control={control}
+            disable={otherValues.contest.status === ContestStatus.EXPIRED}
+          />
         </Box>
         <Box sx={{ height: '60px' }} />
         <Box sx={{ height: '90px' }}>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
             Thời gian bắt đầu
           </Typography>
-          <FormDateField name="startedDate" control={control} />
+          <FormDateField
+            name="startedDate"
+            control={control}
+            disable={
+              otherValues.contest.status === ContestStatus.EXPIRED ||
+              otherValues.contest.status === ContestStatus.ACTIVE
+            }
+          />
         </Box>
         <Box sx={{ height: '90px' }}>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
             Thời gian kết thúc
           </Typography>
-          <FormDateField name="expiredDate" control={control} />
+          <FormDateField
+            name="expiredDate"
+            control={control}
+            disable={otherValues.contest.status === ContestStatus.EXPIRED}
+          />
+        </Box>
+        <Box>
+          <Typography variant="h6" fontWeight="bold" fontSize="18px">
+            Phần trăm giảm giá cho các hạng
+          </Typography>
+          <Grid container>
+            <Grid item xs={4}>
+              <Typography color="GrayText" fontSize="14px" fontWeight="bold">
+                Giải nhất
+              </Typography>
+              <Box display="flex" alignItems="center" width="80%">
+                <FormTextField
+                  type="number"
+                  name="discountPercentFirst"
+                  control={control}
+                  disable={otherValues.contest.status === ContestStatus.EXPIRED}
+                />
+                <Typography marginLeft="5px">%</Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography color="GrayText" fontSize="14px" fontWeight="bold">
+                Giải nhì
+              </Typography>
+              <Box display="flex" alignItems="center" width="80%">
+                <FormTextField
+                  type="number"
+                  name="discountPercentSecond"
+                  control={control}
+                  disable={otherValues.contest.status === ContestStatus.EXPIRED}
+                />
+                <Typography marginLeft="5px">%</Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography color="GrayText" fontSize="14px" fontWeight="bold">
+                Giải ba
+              </Typography>
+              <Box display="flex" alignItems="center" width="80%">
+                <FormTextField
+                  type="number"
+                  name="discountPercentThird"
+                  control={control}
+                  disable={otherValues.contest.status === ContestStatus.EXPIRED}
+                />
+                <Typography marginLeft="5px">%</Typography>
+              </Box>
+            </Grid>
+          </Grid>
         </Box>
         <Box sx={{ height: '60px', marginBottom: '40px' }}>
           <Typography variant="h6" fontWeight="bold" fontSize="18px">
@@ -173,52 +245,51 @@ const EditContestDialogForm = (props: Props) => {
             onUploadToServer={async formData => {
               await updateContestThumbnailByStaff(otherValues.contestId, formData)
             }}
+            disable={otherValues.contest.status === ContestStatus.EXPIRED}
           />
         </Box>
         <Box sx={{ height: '100px' }} />
-        {otherValues.contest.status === ContestStatus.ACTIVE &&
-          otherValues.contest.status === ContestStatus.ACTIVE && (
-            <Grid container>
-              <Grid item>
-                <Button
-                  onClick={() => reset()}
-                  variant={'outlined'}
-                  size="large"
-                  sx={{
-                    marginRight: '20px',
-                    width: '140px',
-                    borderColor: MainColor.RED_500,
-                    color: MainColor.RED_500,
-                    fontWeight: '600',
-                    '&:hover': {
-                      borderColor: MainColor.RED_500,
-                      color: MainColor.RED_500,
-                    },
-                  }}
-                >
-                  {'Đặt lại'}
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button
-                  onClick={handleSubmit(submitHandler)}
-                  variant={'contained'}
-                  size="large"
-                  sx={{
-                    width: '140px',
-                    backgroundColor: MainColor.RED_500,
-                    fontWeight: '600',
-                    '&:hover': {
-                      backgroundColor: MainColor.RED_600,
-                    },
-                  }}
-                  disabled={props.isLoading}
-                >
-                  {!props.isLoading ? 'Cập nhật' : <CircularProgress size="26px" />}
-                </Button>
-              </Grid>
-            </Grid>
-          )}
+
+        <Grid container>
+          <Grid item>
+            <Button
+              onClick={() => reset()}
+              variant={'outlined'}
+              size="large"
+              sx={{
+                marginRight: '20px',
+                width: '140px',
+                borderColor: MainColor.RED_500,
+                color: MainColor.RED_500,
+                fontWeight: '600',
+                '&:hover': {
+                  borderColor: MainColor.RED_500,
+                  color: MainColor.RED_500,
+                },
+              }}
+            >
+              {'Đặt lại'}
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              onClick={handleSubmit(submitHandler)}
+              variant={'contained'}
+              size="large"
+              sx={{
+                width: '140px',
+                backgroundColor: MainColor.RED_500,
+                fontWeight: '600',
+                '&:hover': {
+                  backgroundColor: MainColor.RED_600,
+                },
+              }}
+              disabled={props.isLoading}
+            >
+              {!props.isLoading ? 'Cập nhật' : <CircularProgress size="26px" />}
+            </Button>
+          </Grid>
+        </Grid>
       </Stack>
     </Dialog>
   )

@@ -43,6 +43,9 @@ export type UpdateContestBodyRequest = {
   startedDate: string
   expiredDate: string
   isVisible: boolean
+  discountPercentFirst: number
+  discountPercentSecond: number
+  discountPercentThird: number
 }
 
 export enum ContestStatus {

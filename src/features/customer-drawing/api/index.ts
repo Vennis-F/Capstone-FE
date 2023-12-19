@@ -42,8 +42,13 @@ export const approveCustomerDrawingByStaff = (
 
 export const getCustomerDrawingsByContestByStaff = (
   contestId: string,
+  status?: CustomerDrawingStatus,
 ): Promise<CustomerDrawingNotFilter[]> =>
-  api.get(`${CUSTOMER_DRAWING_BASE_URL}/contest/staff?contestId=${contestId}`)
+  api.get(
+    `${CUSTOMER_DRAWING_BASE_URL}/contest/staff?contestId=${contestId}${
+      status ? `&status=${status}` : ''
+    }`,
+  )
 
 export const getCustomerDrawingsInContestByCustomer = (
   contestId: string,

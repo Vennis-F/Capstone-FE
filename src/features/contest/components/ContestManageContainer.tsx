@@ -151,6 +151,9 @@ const ContestManageContainer = () => {
                 startedDate: data.startedDate,
                 expiredDate: data.expiredDate,
                 isVisible: data.isVisible,
+                discountPercentFirst: data.discountPercentFirst,
+                discountPercentSecond: data.discountPercentSecond,
+                discountPercentThird: data.discountPercentThird,
               })
 
               reset()
@@ -240,7 +243,14 @@ const ContestManageContainer = () => {
         >
           <DialogTitle>Danh sách chi tiết các bài vẽ</DialogTitle>
           <DialogContent>
-            <TableCustomerDrawings contestId={currentContestNeedApprove} />
+            <TableCustomerDrawings
+              contestId={currentContestNeedApprove}
+              contest={
+                contests.find(
+                  currContest => currContest.id === currentContestNeedApprove,
+                ) as Contest
+              }
+            />
           </DialogContent>
         </Dialog>
       )}

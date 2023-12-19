@@ -26,9 +26,10 @@ interface Props {
   //   courseId: string
   onUploadToServer: (formData: FormData) => Promise<void>
   url?: string | null
+  disable?: boolean
 }
 
-const UploadImage = ({ onUploadToServer, url }: Props) => {
+const UploadImage = ({ onUploadToServer, url, disable }: Props) => {
   const [previewImage, setPreviewImage] = useState<string | undefined>(undefined)
   const [previewFile, setPreviewFile] = useState<File | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -116,26 +117,28 @@ const UploadImage = ({ onUploadToServer, url }: Props) => {
           imageStyle={{ height: '148px', width: '244px' }}
         />
       </Grid>
-      <Grid item>
-        <Button component="label" variant="contained" startIcon={<UploadIcon />}>
-          Tải file lên
-          <VisuallyHiddenInput type="file" onChange={handleImageChange} />
-        </Button>
-        <Button
-          component="label"
-          variant="contained"
-          onClick={handleUpload}
-          startIcon={!isLoading ? <CloudUploadIcon /> : undefined}
-          sx={{
-            backgroundColor: MainColor.RED_500,
-            ':hover': { backgroundColor: MainColor.RED_600 },
-            marginLeft: '10px',
-          }}
-          disabled={isLoading || !previewFile}
-        >
-          {!isLoading ? 'Cập nhật' : <CircularProgress size="26px" />}
-        </Button>
-      </Grid>
+      {disable !== undefined && !disable && (
+        <Grid item>
+          <Button component="label" variant="contained" startIcon={<UploadIcon />}>
+            Tải file lên
+            <VisuallyHiddenInput type="file" onChange={handleImageChange} />
+          </Button>
+          <Button
+            component="label"
+            variant="contained"
+            onClick={handleUpload}
+            startIcon={!isLoading ? <CloudUploadIcon /> : undefined}
+            sx={{
+              backgroundColor: MainColor.RED_500,
+              ':hover': { backgroundColor: MainColor.RED_600 },
+              marginLeft: '10px',
+            }}
+            disabled={isLoading || !previewFile}
+          >
+            {!isLoading ? 'Cập nhật' : <CircularProgress size="26px" />}
+          </Button>
+        </Grid>
+      )}
     </Grid>
   )
 }

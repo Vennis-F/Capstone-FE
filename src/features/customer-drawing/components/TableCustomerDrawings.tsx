@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Button } from '@mui/material'
+/* eslint-disable  @typescript-eslint/indent */
+import { Box, Button, Tab, Tabs, Typography } from '@mui/material'
 import { DataGrid, GridColDef, GridRenderCellParams, GridValueGetterParams } from '@mui/x-data-grid'
 import RenderImage from 'material-ui-image'
 import { useEffect, useState } from 'react'
 
+import { Contest, ContestStatus } from 'features/contest/types'
 import { getImage } from 'features/image/components/apis'
 import { OrderType } from 'types'
 
@@ -12,22 +14,56 @@ import {
   getCustomerDrawingsByContest,
   getCustomerDrawingsByContestByStaff,
 } from '../api'
-import { CustomerDrawing, CustomerDrawingNotFilter, CustomerDrawingStatus } from '../types'
+import {
+  CustomerDrawing,
+  CustomerDrawingNotFilter,
+  CustomerDrawingStatus,
+  convertCustomerDrawingStatus,
+} from '../types'
 
 interface Props {
   contestId: string
+  contest: Contest
 }
 
-const TableCustomerDrawings = ({ contestId }: Props) => {
+const TableCustomerDrawings = ({ contestId, contest }: Props) => {
   const [customerDrawings, setCustomerDrawings] = useState<CustomerDrawingNotFilter[]>([])
+  const [value, setValue] = useState(0)
 
-  const fetchCustomerDrawings = async () => {
+  const fetchCustomerDrawings = async (newValue: number) => {
+    let status
+
+    switch (newValue) {
+      case 0:
+        status = undefined
+        break
+      case 1:
+        status = CustomerDrawingStatus.PENDING
+        break
+      case 2:
+        status = CustomerDrawingStatus.APPROVED
+        break
+      case 3:
+        status = CustomerDrawingStatus.REJECTED
+        break
+      case 4:
+        status = CustomerDrawingStatus.BANNED
+        break
+      default:
+        status = undefined
+        break
+    }
     try {
-      const res = await getCustomerDrawingsByContestByStaff(contestId)
+      const res = await getCustomerDrawingsByContestByStaff(contestId, status)
       setCustomerDrawings(res)
     } catch (error) {
       console.error('Error fetching customer drawings:', error)
     }
+  }
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue)
+    fetchCustomerDrawings(newValue)
   }
 
   const columns: GridColDef[] = [
@@ -77,6 +113,15 @@ const TableCustomerDrawings = ({ contestId }: Props) => {
       headerName: 'Trạng thái',
       width: 130,
       sortable: false,
+      renderCell: (params: GridRenderCellParams) => {
+        const status = convertCustomerDrawingStatus(params.row.status)
+
+        return (
+          <Typography sx={{ color: status.color, fontWeight: 'bold' }}>
+            {status.vietnamse}
+          </Typography>
+        )
+      },
     },
     {
       // field: 'u',
@@ -86,46 +131,53 @@ const TableCustomerDrawings = ({ contestId }: Props) => {
       width: 250,
       renderCell: (params: GridRenderCellParams) => (
         <div>
-          {params.row.status === CustomerDrawingStatus.PENDING && (
-            <>
-              <Button
-                variant="contained"
-                color="secondary"
-                size="small"
-                onClick={async () => {
-                  await approveCustomerDrawingByStaff(params.row.id, CustomerDrawingStatus.APPROVED)
-                  fetchCustomerDrawings()
-                }}
-                sx={{ marginRight: '10px' }}
-              >
-                Chấp nhận
-              </Button>
-              <Button
-                variant="contained"
-                color="warning"
-                size="small"
-                onClick={async () => {
-                  await approveCustomerDrawingByStaff(params.row.id, CustomerDrawingStatus.REJECTED)
-                  fetchCustomerDrawings()
-                }}
-                sx={{ marginRight: '10px' }}
-              >
-                Từ chối
-              </Button>
-              <Button
-                variant="contained"
-                color="error"
-                size="small"
-                onClick={async () => {
-                  await approveCustomerDrawingByStaff(params.row.id, CustomerDrawingStatus.BANNED)
-                  fetchCustomerDrawings()
-                }}
-                sx={{ marginRight: '10px' }}
-              >
-                Ban
-              </Button>
-            </>
-          )}
+          {params.row.status === CustomerDrawingStatus.PENDING &&
+            contest.status === ContestStatus.ACTIVE && (
+              <>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  size="small"
+                  onClick={async () => {
+                    await approveCustomerDrawingByStaff(
+                      params.row.id,
+                      CustomerDrawingStatus.APPROVED,
+                    )
+                    fetchCustomerDrawings(0)
+                  }}
+                  sx={{ marginRight: '10px' }}
+                >
+                  Chấp nhận
+                </Button>
+                <Button
+                  variant="contained"
+                  color="warning"
+                  size="small"
+                  onClick={async () => {
+                    await approveCustomerDrawingByStaff(
+                      params.row.id,
+                      CustomerDrawingStatus.REJECTED,
+                    )
+                    fetchCustomerDrawings(0)
+                  }}
+                  sx={{ marginRight: '10px' }}
+                >
+                  Từ chối
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  size="small"
+                  onClick={async () => {
+                    await approveCustomerDrawingByStaff(params.row.id, CustomerDrawingStatus.BANNED)
+                    fetchCustomerDrawings(0)
+                  }}
+                  sx={{ marginRight: '10px' }}
+                >
+                  Ban
+                </Button>
+              </>
+            )}
         </div>
       ),
       sortable: false,
@@ -134,11 +186,22 @@ const TableCustomerDrawings = ({ contestId }: Props) => {
   ]
 
   useEffect(() => {
-    fetchCustomerDrawings()
+    fetchCustomerDrawings(0)
   }, [contestId])
 
   return (
-    <div style={{ height: 500, width: '100%' }}>
+    <div style={{ height: 800, width: '100%' }}>
+      <Box sx={{ width: '100%' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs value={value} onChange={handleChange}>
+            <Tab label="Tất cả" id="all" />
+            <Tab label="Đang chờ" id="pending" />
+            <Tab label="Được phê duyệt" id="approved" />
+            <Tab label="Từ chối" id="rejected" />
+            <Tab label="Cấm" id="banned" />
+          </Tabs>
+        </Box>
+      </Box>
       <DataGrid
         rows={customerDrawings}
         columns={columns}
@@ -148,16 +211,6 @@ const TableCustomerDrawings = ({ contestId }: Props) => {
           },
         }}
         pageSizeOptions={[10, 15]}
-        // checkboxSelection
-        // sortModel={[
-        //   {
-        //     field: 'age',
-        //     sort: 'asc', // Default sorting order for the 'age' column
-        //   },
-        // ]}
-        // onSortModelChange={model => handleSortModelChange(model)}
-        // onPaginationModelChange={model => handelPaginationModelChange(model)}
-        // onFilterModelChange={model => console.log(model)}
         density="comfortable"
       />
     </div>
