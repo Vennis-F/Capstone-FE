@@ -58,6 +58,10 @@ const Notification = () => {
         if (data.type === 'CUSTOMER-CUSTOMER_DRAWING') {
           navigate(`/contest/detail/${data.contestId}`)
         }
+
+        if (data.type === 'WINNER-PRIZE') {
+          navigate(`/contest/detail/${data.contestId}`)
+        }
       }
 
       if (currUserRole.role === UserRole.STAFF) {
