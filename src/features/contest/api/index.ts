@@ -19,6 +19,9 @@ const CONTEST_BASE_URL = `/contest`
 
 export const getContestById = (id: string): Promise<Contest> => api.get(`${CONTEST_BASE_URL}/${id}`)
 
+export const getContestStatusActive = (): Promise<Contest[]> =>
+  api.get(`${CONTEST_BASE_URL}/status/active`)
+
 export const getContestsByStaff = (status?: ContestStatus): Promise<Contest[]> =>
   api.get(`${CONTEST_BASE_URL}/staff${status ? `?status=${status}` : ''}`)
 

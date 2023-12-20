@@ -10,23 +10,28 @@ import {
   Grid,
   Button,
   Typography,
-
 } from '@mui/material'
 import Image from 'material-ui-image'
 import { useEffect, useState } from 'react'
 import Carousel from 'react-material-ui-carousel'
 import { useNavigate } from 'react-router-dom'
 
+import { getCustomerDrawingsHomePage } from 'features/customer-drawing/api'
+import { CustomerDrawing, CustomerDrawingSortField } from 'features/customer-drawing/types'
 import { getImage } from 'features/image/components/apis'
 import { OrderType } from 'types'
 
-import { findContestsFilter } from '../api'
+import { findContestsFilter, getContestStatusActive } from '../api'
 import { Contest, mapStatusToVietnamese } from '../types'
 
+import ContestCardView from './ContestCardView'
 import LearnerDrawingCardView from './LearnerDrawingCardView'
 
 const ContestHomePageContainer = () => {
   const [contests, setContests] = useState<Contest[]>([])
+  const [contestActives, setContestActives] = useState<Contest[]>([])
+  const [drawingBestVotes, setDrawingBestVotes] = useState<CustomerDrawing[]>([])
+  const [drawingBestUpdateds, setDrawingBestUpdateds] = useState<CustomerDrawing[]>([])
   const navigate = useNavigate()
 
   const handleGetContests = async () => {
@@ -38,21 +43,47 @@ const ContestHomePageContainer = () => {
       },
     })
     setContests(res.data)
+
+    setContestActives(await getContestStatusActive())
+
+    const drawingBestVoteRes = await getCustomerDrawingsHomePage({
+      customerDrawingSortField: CustomerDrawingSortField.VOTE,
+      pageOptions: {
+        order: OrderType.DESC,
+        page: 1,
+        take: 3,
+      },
+    })
+    setDrawingBestVotes(drawingBestVoteRes.data)
+
+    const drawingBestUpdatedDateRes = await getCustomerDrawingsHomePage({
+      customerDrawingSortField: CustomerDrawingSortField.UPDATED_DATE,
+      pageOptions: {
+        order: OrderType.DESC,
+        page: 1,
+        take: 3,
+      },
+    })
+
+    setDrawingBestUpdateds(drawingBestUpdatedDateRes.data)
   }
 
   useEffect(() => {
     handleGetContests()
   }, [])
   return (
-    <Container maxWidth={false} sx={{
-      backgroundImage: `url("https://png.pngtree.com/background/20210711/original/pngtree-art-training-class-education-and-training-background-template-picture-image_1120018.jpg")`,
-      backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat',
-      height: '160vh',
-      margin: '-50px 0',
-      paddingTop: "50px"
-    }}>
-      <Container maxWidth="lg" >
+    <Container
+      maxWidth={false}
+      sx={{
+        backgroundImage: `url("https://png.pngtree.com/background/20210711/original/pngtree-art-training-class-education-and-training-background-template-picture-image_1120018.jpg")`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        height: '160vh',
+        margin: '-50px 0',
+        paddingTop: '50px',
+      }}
+    >
+      <Container maxWidth="lg">
         <Carousel>
           {contests.map(contest => (
             <Grid
@@ -158,32 +189,31 @@ const ContestHomePageContainer = () => {
           </ListItem>
         </List>
 
-        {/* <Paper elevation={10}> */}
         <Grid container spacing={10}>
           <Grid item xs={4}>
-            ĐÃ CHẤP NHẬN ĐĂNG KÝ
+            CUỘC THI ĐANG DIỄN RA
             <Divider style={{ marginTop: 15, marginBottom: 30 }} />
-            <LearnerDrawingCardView />
-            <LearnerDrawingCardView />
+            {contestActives.map(contest => (
+              <ContestCardView key={contest.id} contest={contest} />
+            ))}
           </Grid>
           <Grid item xs={4}>
-            ĐANG BỎ PHIẾU
+            BÀI THI SỐ LƯỢNG BÌNH CHỌN CAO NHẤT
             <Divider style={{ marginTop: 15, marginBottom: 30 }} />
-            <LearnerDrawingCardView />
-            <LearnerDrawingCardView />
+            {drawingBestVotes.map(drawing => (
+              <LearnerDrawingCardView key={drawing.id} customerDrawing={drawing} />
+            ))}
           </Grid>
           <Grid item xs={4}>
             HOÀN THÀNH GẦN ĐÂY
             <Divider style={{ marginTop: 15, marginBottom: 30 }} />
-            <LearnerDrawingCardView />
-            <LearnerDrawingCardView />
+            {drawingBestUpdateds.map(drawing => (
+              <LearnerDrawingCardView key={drawing.id} customerDrawing={drawing} />
+            ))}
           </Grid>
         </Grid>
-        {/* </Paper> */}
-
       </Container>
     </Container>
-
   )
 }
 export default ContestHomePageContainer

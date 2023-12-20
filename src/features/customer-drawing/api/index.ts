@@ -63,3 +63,7 @@ export const getCustomerDrawingsInContestByCustomer = (
 
 export const checkCustomerDrawingSubmitted = (contestId: string): Promise<boolean> =>
   api.get(`${CUSTOMER_DRAWING_BASE_URL}/submit/${contestId}`)
+
+export const getCustomerDrawingsHomePage = (
+  body: FilterCustomerDrawingBodyRequest,
+): Promise<PageResponse<CustomerDrawing>> => api.post(`${CUSTOMER_DRAWING_BASE_URL}`, body)

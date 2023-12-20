@@ -30,7 +30,7 @@ const WinnerCardView = ({ winner }: Props) => {
           }}
         >
           <Typography style={{ fontWeight: 'bold', fontSize: 30 }}>{winner.position}</Typography>
-          <Image
+          {/* <Image
             src={getImage(winner.imageUrl)}
             style={{ height: '50px', width: '50px', padding: 0 }}
             imageStyle={{
@@ -39,7 +39,7 @@ const WinnerCardView = ({ winner }: Props) => {
               borderRadius: 40,
               marginLeft: 15,
             }}
-          />
+          /> */}
         </Box>
       </Grid>
       <Grid item xs={4}>
@@ -50,9 +50,7 @@ const WinnerCardView = ({ winner }: Props) => {
       </Grid>
       <Grid item xs={4}>
         <Image
-          src={
-            'https://fineartamerica.com/images/contestlogos/logo1-your-personal-masterpiece-digital-art-or-photography.jpg'
-          }
+          src={getImage(winner.imageUrl)}
           style={{ height: '70px', width: '120px', padding: 0 }}
           imageStyle={{ height: '70px', width: '120px', borderRadius: 10 }}
         />

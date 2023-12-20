@@ -2,45 +2,55 @@ import { Grid, Typography } from '@mui/material'
 import Divider from '@mui/material/Divider'
 import Image from 'material-ui-image'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
-import { CustomerDrawing } from 'features/customer-drawing/types'
 import { getImage } from 'features/image/components/apis'
 import { getStringDayMonthYear } from 'libs/utils/handle-date'
 
+import { Contest } from '../types'
+
 type Props = {
-  customerDrawing: CustomerDrawing
+  contest: Contest
 }
 
-const LearnerDrawingCardView = ({ customerDrawing }: Props) => {
+const ContestCardView = ({ contest }: Props) => {
   console.log(123)
+  const navigate = useNavigate()
   return (
-    <Grid container spacing={0} style={{ marginBottom: 50 }}>
+    <Grid
+      container
+      spacing={0}
+      style={{ marginBottom: 50, cursor: 'pointer' }}
+      onClick={() => navigate(`/contest/detail/${contest.id}`)}
+    >
       <Grid item xs={6}>
         <Image
-          src={getImage(customerDrawing.imageUrl)}
+          src={getImage(contest.thumbnailUrl)}
           style={{ height: '125px', width: '120px', padding: 0 }}
           imageStyle={{ height: '125px', width: '120px', elevation: 5, borderRadius: 3 }}
         />
       </Grid>
       <Grid item xs={6}>
-        <Typography style={{ fontSize: 15, fontWeight: '500' }}>{customerDrawing.title}</Typography>
+        <Typography style={{ fontSize: 15, fontWeight: '500' }}>{contest.title}</Typography>
         <Divider style={{ marginTop: 8, marginBottom: 8 }} />
         <Grid container spacing={0}>
           <Grid item xs={6}>
-            <Typography style={{ fontSize: 10, color: '#666666' }}>Ngày đăng:</Typography>
+            <Typography style={{ fontSize: 10, color: '#666666' }}>Bắt đầu:</Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography style={{ fontSize: 10 }}>
-              {getStringDayMonthYear(customerDrawing.insertedDate)}
+              {getStringDayMonthYear(contest.startedDate)}
             </Typography>
           </Grid>
         </Grid>
         <Grid container spacing={0}>
           <Grid item xs={6}>
-            <Typography style={{ fontSize: 10, color: '#666666' }}>Số lượng bình chọn:</Typography>
+            <Typography style={{ fontSize: 10, color: '#666666' }}>Kết thúc:</Typography>
           </Grid>
           <Grid item xs={6}>
-            <Typography style={{ fontSize: 10 }}>{customerDrawing.totalVotes}</Typography>
+            <Typography style={{ fontSize: 10 }}>
+              {getStringDayMonthYear(contest.expiredDate)}
+            </Typography>
           </Grid>
         </Grid>
       </Grid>
@@ -48,4 +58,4 @@ const LearnerDrawingCardView = ({ customerDrawing }: Props) => {
   )
 }
 
-export default LearnerDrawingCardView
+export default ContestCardView
