@@ -72,7 +72,7 @@ const TableInstructorsApproved = ({
     {
       field: 'status',
       headerName: 'Trạng thái',
-      width: 130,
+      width: 150,
       renderCell: (params: GridRenderCellParams) => {
         const statusInfor: InstructorStatusInfo = instructorStatusInfors.find(
           infor => infor.status === params.row.status,

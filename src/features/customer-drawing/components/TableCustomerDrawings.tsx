@@ -68,8 +68,19 @@ const TableCustomerDrawings = ({ contestId, contest }: Props) => {
 
   const columns: GridColDef[] = [
     { field: 'title', headerName: 'Tiêu đề', width: 130 },
-    { field: 'customerName', headerName: 'Tên người đăng', width: 130 },
-    { field: 'description', headerName: 'Miêu tả', width: 130 },
+    {
+      field: 'customerName',
+      headerName: 'Tên người đăng',
+      width: 250,
+      valueGetter: (params: GridValueGetterParams) => {
+        const { user } = params.row
+        if (user) {
+          return `${user.lastName} ${user.middleName} ${user.firstName}`
+        }
+        return ''
+      },
+    },
+    { field: 'description', headerName: 'Miêu tả', width: 200 },
     {
       field: 'imageUrl',
       headerName: 'Hình ảnh',
@@ -87,13 +98,16 @@ const TableCustomerDrawings = ({ contestId, contest }: Props) => {
       sortable: false,
       filterable: false,
     },
-    // {
-    //   field: 'insertedDate',
-    //   headerName: 'Ngày tạo',
-    //   type: 'date',
-    //   width: 130,
-    //   valueGetter: (params: GridValueGetterParams) => new Date(params.row.insertedDate),
-    // },
+    {
+      field: 'insertedDate',
+      headerName: 'Thời gian tham gia',
+      width: 180,
+      renderCell: (params: GridRenderCellParams) => {
+        const date = new Date(params.row.insertedDate)
+        const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`
+        return formattedDate
+      },
+    },
 
     {
       field: 'totalVotes',
@@ -101,13 +115,13 @@ const TableCustomerDrawings = ({ contestId, contest }: Props) => {
       width: 150,
       valueGetter: (params: GridValueGetterParams) => params.row.votes.length,
     },
-    {
-      field: 'active',
-      headerName: 'Hoạt động',
-      type: 'boolean',
-      width: 130,
-      sortable: false,
-    },
+    // {
+    //   field: 'active',
+    //   headerName: 'Hoạt động',
+    //   type: 'boolean',
+    //   width: 130,
+    //   sortable: false,
+    // },
     {
       field: 'status',
       headerName: 'Trạng thái',
@@ -124,11 +138,10 @@ const TableCustomerDrawings = ({ contestId, contest }: Props) => {
       },
     },
     {
-      // field: 'u',
       field: '',
       headerName: 'Hành động',
       description: 'Cập nhật hoặc ẩn post',
-      width: 250,
+      width: 310,
       renderCell: (params: GridRenderCellParams) => (
         <div>
           {params.row.status === CustomerDrawingStatus.PENDING &&
@@ -174,7 +187,7 @@ const TableCustomerDrawings = ({ contestId, contest }: Props) => {
                   }}
                   sx={{ marginRight: '10px' }}
                 >
-                  Ban
+                  Cấm
                 </Button>
               </>
             )}
@@ -190,7 +203,7 @@ const TableCustomerDrawings = ({ contestId, contest }: Props) => {
   }, [contestId])
 
   return (
-    <div style={{ height: 800, width: '100%' }}>
+    <div style={{ height: 700, width: '100%' }}>
       <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange}>

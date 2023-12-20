@@ -1,7 +1,7 @@
 import GrainIcon from '@mui/icons-material/Grain'
 import HomeIcon from '@mui/icons-material/Home'
 import WhatshotIcon from '@mui/icons-material/Whatshot'
-import { Breadcrumbs, Container, Link, Typography } from '@mui/material'
+import { Breadcrumbs, Container, Link, Paper, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -62,49 +62,56 @@ const ContestDetailContainer = ({ contestId }: Props) => {
   console.log('current status:', contest?.status)
 
   return contest ? (
-    <Container maxWidth={false} sx={{
-      backgroundImage: `url("https://img.freepik.com/free-vector/watercolor-art-supplies-background_23-2150587444.jpg")`,
-      backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat',
-      margin: '-50px 0',
-    }}>
-      <Container maxWidth="lg" style={{ padding: '20px', borderRadius: '10px' }}>
-        <Breadcrumbs sx={{ color: MainColor.YELLOW_500, marginBottom: '10px' }}>
-          <Link
-            underline="hover"
-            sx={{ display: 'flex', alignItems: 'center', color: MainColor.YELLOW_500 }}
-            color="inherit"
-            href="/"
-          >
-            <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-            Trang chủ
-          </Link>
-          <Link
-            underline="hover"
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              color: MainColor.YELLOW_500,
-              cursor: 'pointer',
-            }}
-            color="inherit"
-            onClick={() => navigate('/contest')}
-          >
-            <WhatshotIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-            Cuộc thi
-          </Link>
-          <Typography
-            sx={{ display: 'flex', alignItems: 'center', color: '#9c7d21' }}
-            color="text.primary"
-          >
-            <GrainIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+    <Container
+      maxWidth={false}
+      sx={{
+        backgroundImage: `url("https://img.freepik.com/free-vector/watercolor-art-supplies-background_23-2150587444.jpg")`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        margin: '-50px 0',
+      }}
+    >
+      <Container maxWidth="lg" sx={{ paddingY: '40px' }}>
+        <Paper sx={{ padding: '20px' }} elevation={10}>
+          <Breadcrumbs sx={{ color: MainColor.YELLOW_500, marginBottom: '10px' }}>
+            <Link
+              underline="hover"
+              sx={{ display: 'flex', alignItems: 'center', color: MainColor.YELLOW_500 }}
+              color="inherit"
+              href="/"
+            >
+              <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+              Trang chủ
+            </Link>
+            <Link
+              underline="hover"
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                color: MainColor.YELLOW_500,
+                cursor: 'pointer',
+              }}
+              color="inherit"
+              onClick={() => navigate('/contest')}
+            >
+              <WhatshotIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+              Cuộc thi
+            </Link>
+            <Typography
+              sx={{ display: 'flex', alignItems: 'center', color: '#9c7d21' }}
+              color="text.primary"
+            >
+              <GrainIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+              {contest.title}
+            </Typography>
+          </Breadcrumbs>
+
+          <Typography style={{ fontWeight: 'bold', marginBottom: '20px', fontSize: 30 }}>
             {contest.title}
           </Typography>
-        </Breadcrumbs>
-        <Typography style={{ fontWeight: 'bold', marginBottom: '20px', fontSize: 30 }}>
-          {contest.title}
-        </Typography>
-        <TabsContestDetail contest={contest} />
+
+          <TabsContestDetail contest={contest} />
+        </Paper>
       </Container>
     </Container>
   ) : (

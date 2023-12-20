@@ -43,7 +43,6 @@ const TableCourses = ({ courses, onEditRow, value, fetchCourses }: Props) => {
   const [loading, setLoading] = useState(false)
 
   const columns: GridColDef[] = [
-    // { field: 'id', headerName: 'ID', width: 70, sortable: false, filterable: false },
     { field: 'title', headerName: 'Tiêu đề', width: 130 },
     // { field: 'price', headerName: 'Giá tiền', type: 'number', width: 130 },
     { field: 'totalChapter', headerName: 'Số lượng bài giảng', width: 130 },
@@ -138,7 +137,7 @@ const TableCourses = ({ courses, onEditRow, value, fetchCourses }: Props) => {
                 setReasonBan('')
               }}
             >
-              Ban
+              Cấm
             </Button>
           )}
         </div>
@@ -200,7 +199,7 @@ const TableCourses = ({ courses, onEditRow, value, fetchCourses }: Props) => {
           setCourseBan(null)
         }}
       >
-        <DialogTitle>Bạn có chắc ban khóa học này không?</DialogTitle>
+        <DialogTitle>Bạn có chắc cấm khóa học này không?</DialogTitle>
         <DialogContent>
           <DialogContentText>Ghi rõ lý do</DialogContentText>
           <TextField

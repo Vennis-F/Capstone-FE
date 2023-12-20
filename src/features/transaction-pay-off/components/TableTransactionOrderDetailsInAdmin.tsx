@@ -45,17 +45,31 @@ Props) => {
     },
     {
       field: 'paymentAmount',
-      headerName: 'Tiền thanh toán',
-      width: 150,
+      headerName: 'Tiền thanh toán (80%)',
+      width: 180,
       valueGetter: (params: GridValueGetterParams) =>
         params.row.paymentAmount === 0 ? 0 : `${formatCurrency(params.row.paymentAmount)}VND`,
     },
     {
+      field: 'systemPaymentAmount',
+      headerName: 'Tiền hệ thống nhận (20%)',
+      width: 200,
+      valueGetter: (params: GridValueGetterParams) =>
+        params.row.paymentAmount === 0 ? 0 : `${formatCurrency(params.row.systemPaymentAmount)}VND`,
+    },
+    {
       field: 'refundAmount',
-      headerName: 'Tiền hoàn trả',
-      width: 150,
+      headerName: 'Tiền hoàn trả (80%)',
+      width: 180,
       valueGetter: (params: GridValueGetterParams) =>
         params.row.refundAmount === 0 ? 0 : `${formatCurrency(params.row.refundAmount)}VND`,
+    },
+    {
+      field: 'systemRefundAmount',
+      headerName: 'Tiền hệ thống hoàn trả (20%)',
+      width: 200,
+      valueGetter: (params: GridValueGetterParams) =>
+        params.row.refundAmount === 0 ? 0 : `${formatCurrency(params.row.systemRefundAmount)}VND`,
     },
     {
       field: 'insertedDate',
@@ -70,15 +84,7 @@ Props) => {
     {
       field: 'author',
       headerName: 'Tên tác giả',
-      width: 130,
-    },
-    {
-      field: 'active',
-      headerName: 'Hoạt động',
-      type: 'boolean',
-      width: 130,
-      valueGetter: (params: GridValueGetterParams) =>
-        params.row.active !== null ? params.row.active : null,
+      width: 180,
     },
   ]
 
@@ -87,8 +93,18 @@ Props) => {
     0,
   )
 
+  const totalSystemPaymentAmount = transactionOrderDetailsResponse.reduce(
+    (total, transaction) => total + transaction.systemPaymentAmount,
+    0,
+  )
+
   const totalRefundAmount = transactionOrderDetailsResponse.reduce(
     (total, transaction) => total + transaction.refundAmount,
+    0,
+  )
+
+  const totalSystemRefundAmount = transactionOrderDetailsResponse.reduce(
+    (total, transaction) => total + transaction.systemRefundAmount,
     0,
   )
 
@@ -105,7 +121,9 @@ Props) => {
       id: 'totalRow', // ID đặc biệt cho dòng tổng
       buyer: 'Tổng:', // Các giá trị khác bạn có thể thay đổi tùy thuộc vào cột
       paymentAmount: totalPaymentAmount, // Gán tổng paymentAmount vào cột
+      systemPaymentAmount: totalSystemPaymentAmount, // Gán tổng paymentAmount vào cột
       refundAmount: totalRefundAmount, // Gán tổng refundAmount vào cột
+      systemRefundAmount: totalSystemRefundAmount, // Gán tổng refundAmount vào cột
       insertedDate: null, // Ví dụ, null cho các cột không có dữ liệu ngày
       courseName: null,
       author: null,
@@ -124,16 +142,6 @@ Props) => {
           },
         }}
         pageSizeOptions={[5, 10, 15]}
-        // checkboxSelection
-        // sortModel={[
-        //   {
-        //     field: 'age',
-        //     sort: 'asc', // Default sorting order for the 'age' column
-        //   },
-        // ]}
-        // onSortModelChange={model => handleSortModelChange(model)}
-        // onPaginationModelChange={model => handelPaginationModelChange(model)}
-        // onFilterModelChange={model => console.log(model)}
         density="comfortable"
       />
     </div>

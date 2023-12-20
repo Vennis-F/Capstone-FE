@@ -120,4 +120,12 @@ export type ViewWinner = {
   imageUrl: string
   title: string
   description: string
+  totalVotes: number
+}
+
+export enum CustomerDrawingSortOptions {
+  VOTE_ASC = 'VOTE_ASC',
+  VOTE_DESC = 'VOTE_DESC',
+  UPDATED_DATE_ASC = 'UPDATED_DATE_ASC',
+  UPDATED_DATE_DESC = 'UPDATED_DATE_DESC',
 }

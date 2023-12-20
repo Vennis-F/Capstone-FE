@@ -38,21 +38,21 @@ const TableStaffs = ({ staffs, onBanStaff, onEditRow, onReactiveStaff }: Props) 
     //   width: 130,
     // },
     { field: 'userName', headerName: 'Tên đăng nhập', width: 160 },
-    {
-      field: 'avatar',
-      headerName: 'Ảnh đại diện',
-      width: 130,
-      renderCell: (params: GridRenderCellParams) => (
-        <RenderImage
-          src={getImage(params.row.avatar)}
-          alt="Preview"
-          style={{ height: '48px', width: '144px', padding: 0 }}
-          imageStyle={{ height: '48px', width: '144px' }}
-        />
-      ),
-      sortable: false,
-      filterable: false,
-    },
+    // {
+    //   field: 'avatar',
+    //   headerName: 'Ảnh đại diện',
+    //   width: 130,
+    //   renderCell: (params: GridRenderCellParams) => (
+    //     <RenderImage
+    //       src={getImage(params.row.avatar)}
+    //       alt="Preview"
+    //       style={{ height: '48px', width: '144px', padding: 0 }}
+    //       imageStyle={{ height: '48px', width: '144px' }}
+    //     />
+    //   ),
+    //   sortable: false,
+    //   filterable: false,
+    // },
     {
       field: 'phoneNumber',
       headerName: 'Số điện thoại',

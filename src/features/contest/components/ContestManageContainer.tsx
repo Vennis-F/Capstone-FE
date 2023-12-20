@@ -21,6 +21,7 @@ import {
 } from '../api'
 import { Contest, ContestStatus } from '../types'
 
+import ContestWinnerTableDialog from './ContestWinnerTableDialog'
 import CreateContestDialogForm from './CreateContestDialogForm'
 import EditContestDialogForm from './EditContestDialogForm'
 import TableContests from './TableContests'
@@ -36,6 +37,7 @@ const ContestManageContainer = () => {
   const [currentContestNeedApprove, setCurrentContestNeedApprove] = useState<string | null>(null)
   const [currentContestDelete, setCurrentContestDelete] = useState<string | null>(null)
   const [loadingDelete, setLoadingDelete] = useState(false)
+  const [currentContestWinner, setCurrentContestWinner] = useState<Contest | null>(null)
 
   const fetchContests = async (newValue: number) => {
     let status
@@ -112,6 +114,9 @@ const ContestManageContainer = () => {
           }}
           onDeleteRow={contestId => {
             setCurrentContestDelete(contestId)
+          }}
+          onWinnerContest={contest => {
+            setCurrentContestWinner(contest)
           }}
           onApproveContest={contestId => setCurrentContestNeedApprove(contestId)}
         />
@@ -239,10 +244,10 @@ const ContestManageContainer = () => {
             setCurrentContestNeedApprove(null)
           }}
           fullWidth={true}
-          maxWidth="lg"
+          maxWidth="xl"
         >
           <DialogTitle>Danh sách chi tiết các bài vẽ</DialogTitle>
-          <DialogContent>
+          <DialogContent sx={{ height: 800 }}>
             <TableCustomerDrawings
               contestId={currentContestNeedApprove}
               contest={
@@ -275,6 +280,14 @@ const ContestManageContainer = () => {
             setCurrentContestDelete(null)
           }}
           clickCloseModal={() => setCurrentContestDelete(null)}
+        />
+      )}
+
+      {currentContestWinner && (
+        <ContestWinnerTableDialog
+          contest={currentContestWinner}
+          openDialog={Boolean(currentContestWinner)}
+          handleCloseDialog={() => setCurrentContestWinner(null)}
         />
       )}
     </Container>

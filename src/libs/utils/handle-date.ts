@@ -21,7 +21,7 @@ export const getStringMinuteHourDayMonthYear = (dateString: string) => {
   const formatter = new Intl.DateTimeFormat('vi-VN', options)
   const formattedDate = formatter.format(date)
 
-  return formattedDate.replace(',', ' lúc')
+  return formattedDate.replace(',', '')
 }
 
 export const getCurrentDateWithPlus1Year = () => {

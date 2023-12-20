@@ -21,6 +21,12 @@ export const getCustomerDrawingsByContest = (
 ): Promise<PageResponse<CustomerDrawing>> =>
   api.post(`${CUSTOMER_DRAWING_BASE_URL}/contest?contestId=${contestId}`, body)
 
+export const getCustomerDrawingsByContestForGuest = (
+  contestId: string,
+  body: FilterCustomerDrawingBodyRequest,
+): Promise<PageResponse<CustomerDrawing>> =>
+  api.post(`${CUSTOMER_DRAWING_BASE_URL}/contest/guest?contestId=${contestId}`, body)
+
 export const getCustomerDrawings = (
   body: FilterCustomerDrawingBodyRequest,
 ): Promise<PageResponse<CustomerDrawing>> => api.post(`${CUSTOMER_DRAWING_BASE_URL}`, body)

@@ -130,9 +130,9 @@ const CourseCartBougthCardView = ({ courseDetail }: Props) => {
 
   return (
     <Card sx={{ width: '100%', position: 'absolute', top: 0, right: 0 }}>
-      <div>{`value: ${value !== null ? `'${value.id}'` : 'null'}`}</div>
+      {/* <div>{`value: ${value !== null ? `'${value.id}'` : 'null'}`}</div>
       <div>{`inputValue: '${inputValue}'`}</div>
-      <br />
+      <br /> */}
       <Box marginTop="20px" />
       <CardMedia
         sx={{ height: 200 }}

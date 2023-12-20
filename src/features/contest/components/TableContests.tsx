@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/indent */
 import { Button, Typography } from '@mui/material'
 import { DataGrid, GridColDef, GridRenderCellParams, GridValueGetterParams } from '@mui/x-data-grid'
 import RenderImage from 'material-ui-image'
@@ -13,21 +14,28 @@ interface Props {
   onEditRow: (id: string) => void
   onDeleteRow: (id: string) => void
   onApproveContest: (id: string) => void
+  onWinnerContest: (contest: Contest) => void
 }
 
-const TableContests = ({ contests, onEditRow, onApproveContest, onDeleteRow }: Props) => {
+const TableContests = ({
+  contests,
+  onEditRow,
+  onApproveContest,
+  onDeleteRow,
+  onWinnerContest,
+}: Props) => {
   const columns: GridColDef[] = [
     { field: 'title', headerName: 'Tiêu đề', width: 130 },
     {
       field: 'startedDate',
-      headerName: 'Ngày bắt đầu',
+      headerName: 'Thời gian bắt đầu',
       type: 'date',
       width: 130,
       valueGetter: (params: GridValueGetterParams) => new Date(params.row.startedDate),
     },
     {
       field: 'expiredDate',
-      headerName: 'Ngày kết thúc',
+      headerName: 'Thời gian kết thúc',
       type: 'date',
       width: 130,
       valueGetter: (params: GridValueGetterParams) => new Date(params.row.expiredDate),
@@ -83,8 +91,8 @@ const TableContests = ({ contests, onEditRow, onApproveContest, onDeleteRow }: P
     {
       field: '',
       headerName: 'Hành động',
-      description: 'Cập nhật hoặc ẩn post',
-      width: 350,
+      description: 'Hành động',
+      width: 500,
       renderCell: (params: GridRenderCellParams) => (
         <div>
           <Button
@@ -96,15 +104,29 @@ const TableContests = ({ contests, onEditRow, onApproveContest, onDeleteRow }: P
           >
             Chi tiết
           </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            size="small"
-            onClick={() => onApproveContest(params.row.id)}
-            sx={{ marginRight: '10px' }}
-          >
-            Xét duyệt bài vẽ
-          </Button>
+          {(params.row.status === ContestStatus.ACTIVE ||
+            params.row.status === ContestStatus.EXPIRED) && (
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              onClick={() => onApproveContest(params.row.id)}
+              sx={{ marginRight: '10px' }}
+            >
+              {params.row.status === ContestStatus.ACTIVE ? 'Xét duyệt bài vẽ' : 'Chi tiết bài vẽ'}
+            </Button>
+          )}
+          {params.row.status === ContestStatus.EXPIRED && (
+            <Button
+              variant="contained"
+              color="success"
+              size="small"
+              onClick={() => onWinnerContest(params.row)} // Thay handleEdit bằng hàm xử lý sự kiện edit
+              sx={{ marginRight: '10px' }}
+            >
+              Người chiến thắng
+            </Button>
+          )}
           <Button
             variant="contained"
             color="error"

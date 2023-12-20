@@ -96,7 +96,7 @@ const CartItemCardView = ({ cartItem: { course, id, promotionCourse } }: Props) 
                   sx={{ fontSize: '16px', marginRight: '10px' }}
                 />
                 <Typography component="span" sx={{ fontSize: '14px' }}>
-                  ({course.totalBought} người học)
+                  ({course.totalBought ? course.totalBought : 0} người học)
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>

@@ -123,7 +123,7 @@ const ManageApprovedInstructor = () => {
             setCurrTransactionOrderDetail(null)
           }}
           fullWidth={true}
-          maxWidth="lg"
+          maxWidth="xl"
         >
           <DialogTitle>Bản chi tiết giao dịch</DialogTitle>
           <DialogContent>

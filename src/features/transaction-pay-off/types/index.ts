@@ -1,7 +1,9 @@
 export type TransactionOrderDetailResponse = {
-  refundId: string
+  refundId: string | null
   paymentAmount: number
+  systemPaymentAmount: number
   refundAmount: number
+  systemRefundAmount: number
   insertedDate: string
   active: boolean
   courseName: string

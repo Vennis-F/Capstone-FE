@@ -1,12 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Button } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import { DataGrid, GridColDef, GridRenderCellParams, GridValueGetterParams } from '@mui/x-data-grid'
 import RenderImage from 'material-ui-image'
 
 import { getImage } from 'features/image/components/apis'
 import { formatFullName } from 'libs/utils/handle-name'
 
-import { InstructorFilterResponse, InstructorStatus } from '../types'
+import {
+  InstructorFilterResponse,
+  InstructorStatus,
+  InstructorStatusInfo,
+  instructorStatusInfors,
+} from '../types'
 
 interface Props {
   instructors: InstructorFilterResponse[]
@@ -51,7 +56,18 @@ const TableInstructorsRejected = ({ instructors, onEditRow }: Props) => {
     {
       field: 'status',
       headerName: 'Trạng thái',
-      width: 130,
+      width: 150,
+      renderCell: (params: GridRenderCellParams) => {
+        const statusInfor: InstructorStatusInfo = instructorStatusInfors.find(
+          infor => infor.status === params.row.status,
+        ) as InstructorStatusInfo
+
+        return (
+          <Typography color={statusInfor.color} fontWeight="bold">
+            {statusInfor.vietnamese}
+          </Typography>
+        )
+      },
     },
     {
       field: 'action1',

@@ -158,7 +158,7 @@ const ManagePendingInstructor = () => {
               return handleSetStatusForInstructor()
             }}
           >
-            {!isLoading ? 'Loại bỏ' : <CircularProgress size="26px" />}
+            {!isLoading ? 'Từ chối' : <CircularProgress size="26px" />}
           </Button>
         </DialogActions>
       </Dialog>
