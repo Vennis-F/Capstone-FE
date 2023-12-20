@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { getImage } from 'features/image/components/apis'
 import { formatCurrency } from 'libs/utils/handle-price'
-import { formatSecondToMinute } from 'libs/utils/handle-time'
+import { formatSecondToHour } from 'libs/utils/handle-time'
 
 import { Course } from '../types'
 
@@ -35,7 +35,6 @@ const CousreBoughtCardView = ({ course }: Props) => {
           <CardMedia
             component="img"
             sx={{ flex: 1, width: '240px !important' }}
-            //   image={course.thumbnailUrl}
             image={getImage(course.thumbnailUrl)}
             alt="Ảnh khóa học"
           />
@@ -68,7 +67,7 @@ const CousreBoughtCardView = ({ course }: Props) => {
               </Box>
               <Box>
                 <Typography variant="subtitle2" color="text.secondary" component="span">
-                  {`${formatSecondToMinute(course.totalLength)} giờ học - ${
+                  {`${formatSecondToHour(course.totalLength)} giờ học - ${
                     course.totalChapter ? course.totalChapter : 0
                   } bài giảng - ${course.level}`}
                 </Typography>
