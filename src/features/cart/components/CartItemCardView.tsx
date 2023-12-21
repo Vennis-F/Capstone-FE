@@ -20,7 +20,7 @@ import { getImage } from 'features/image/components/apis'
 import DialogBinaryQuestion from 'libs/ui/components/DialogBinaryQuestion'
 import ReadMoreText from 'libs/ui/components/ReadMoreText'
 import { formatCurrency } from 'libs/utils/handle-price'
-import { formatSecondToMinute } from 'libs/utils/handle-time'
+import { formatSecondToHour } from 'libs/utils/handle-time'
 
 import { useCartService } from '../hooks'
 import { CartItem } from '../types'
@@ -101,7 +101,7 @@ const CartItemCardView = ({ cartItem: { course, id, promotionCourse } }: Props) 
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography component="span" sx={{ fontSize: '13px', color: 'GrayText' }}>
-                  {formatSecondToMinute(course.totalLength)} Tổng số giờ học
+                  {formatSecondToHour(course.totalLength)} Tổng số giờ học
                 </Typography>
                 <CircleSharpIcon
                   sx={{
