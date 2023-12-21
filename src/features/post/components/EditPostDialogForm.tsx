@@ -6,7 +6,7 @@ import { UseFormReset, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
 import { MainColor } from 'libs/const/color'
-import UploadImage from 'libs/ui/components/UploadImage'
+import UploadImageForPost from 'libs/ui/components/UploadImageForPost'
 import FormReactQuillField from 'libs/ui/form-components/FormReactQuillField'
 import FormSwitchField from 'libs/ui/form-components/FormSwitchField'
 import { FormTextField } from 'libs/ui/form-components/FormTextField'
@@ -108,7 +108,7 @@ const EditPostDialogForm = (props: Props) => {
           <FormSwitchField name="active" control={control} />
         </Box>
         <Box sx={{ height: '60px', marginBottom: '40px' }}>
-          <UploadImage
+          <UploadImageForPost
             url={otherValues.url}
             onUploadToServer={async formData => {
               await updatePostThumbnailByStaff(otherValues.postId, formData)
