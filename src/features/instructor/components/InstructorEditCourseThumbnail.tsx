@@ -1,6 +1,6 @@
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import UploadIcon from '@mui/icons-material/Upload'
-import { Box, Link, CircularProgress } from '@mui/material'
+import { Box, CircularProgress } from '@mui/material'
 import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
 import RenderImage from 'material-ui-image'
