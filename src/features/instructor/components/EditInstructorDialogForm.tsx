@@ -79,13 +79,13 @@ const EditInstructorDialogForm = (props: Props) => {
       </DialogTitle>
       <Stack sx={{ padding: '20px' }} direction="column" spacing={1} justifyContent="center">
         <Box sx={{ height: '60px' }}>
-          <FormTextField name="firstName" label="Họ" disable control={control} size="small" />
+          <FormTextField name="firstName" label="Tên" disable control={control} size="small" />
         </Box>
         <Box sx={{ height: '60px' }}>
           <FormTextField name="middleName" label="Tên đêm" disable control={control} size="small" />
         </Box>
         <Box sx={{ height: '60px', marginBottom: '25px' }}>
-          <FormTextField name="lastName" label="Tên" disable control={control} size="small" />
+          <FormTextField name="lastName" label="Nguyễn" disable control={control} size="small" />
         </Box>
         <Box sx={{ height: '60px' }}>
           <FormTextField
@@ -110,7 +110,7 @@ const EditInstructorDialogForm = (props: Props) => {
         </Box>
         <Box sx={{ height: '60px' }}>
           <FormTextField
-            name="status"
+            name="phoneNumber"
             label="Số điện thoại"
             disable
             control={control}

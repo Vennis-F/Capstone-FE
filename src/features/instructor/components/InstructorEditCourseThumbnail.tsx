@@ -125,11 +125,8 @@ const InstructorEditCourseThumbnail = ({
       title="Hình ảnh khóa học"
       introduction={
         <>
-          Tải hình ảnh khóa học lên tại đây. Để được chấp nhận, hình ảnh phải đáp ứng &nbsp;
-          <Link href="https://support.udemy.com/hc/en-us/articles/229232347">
-            tiêu chuẩn chất lượng hình ảnh khóa học
-          </Link>
-          . Hướng dẫn quan trọng: .jpg, .jpeg,. gif, hoặc .png. và không có chữ trên hình ảnh.
+          Tải hình ảnh khóa học lên tại đây. Hướng dẫn quan trọng: .jpg, .jpeg,. gif, hoặc .png. và
+          không có chữ trên hình ảnh.
         </>
       }
     >

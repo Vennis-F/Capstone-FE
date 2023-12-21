@@ -141,6 +141,7 @@ const ContestPaint = ({ contest }: Props) => {
           </Select>
         </FormControl>
       )}
+
       <Box sx={{ paddingTop: 2, paddingBottom: 2, marginTop: '20px' }}>
         <Grid container spacing={5}>
           {customerDrawings.length > 0 &&
@@ -167,8 +168,7 @@ const ContestPaint = ({ contest }: Props) => {
                     Số lượng vote: {customerDrawing.totalVotes}
                   </Typography>
                   {getUserRoleOrNull() &&
-                    (getUserRoleOrNull() === UserRole.CUSTOMER ||
-                      getUserRoleOrNull() === UserRole.LEARNER) &&
+                    getUserRoleOrNull() === UserRole.CUSTOMER &&
                     !customerDrawing.isOwned &&
                     !customerDrawing.isVoted && (
                       <Button

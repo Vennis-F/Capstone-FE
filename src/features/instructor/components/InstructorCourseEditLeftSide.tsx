@@ -199,9 +199,7 @@ const InstructorCourseEditLeftSide = ({ currentType, course, handleGetCourse }: 
           >
             Không
           </Button>
-          <Button onClick={() => handleApprovalOrReject(CourseStatus.REJECTED)}>
-            Không thành công
-          </Button>
+          <Button onClick={() => handleApprovalOrReject(CourseStatus.REJECTED)}>Từ chối</Button>
         </DialogActions>
       </Dialog>
     </Paper>
