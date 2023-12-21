@@ -29,7 +29,7 @@ import { OrderType, UserRole } from 'types'
 
 import { getCustomerDrawingsByContestForGuest } from '../../customer-drawing/api/index'
 import { createVoteCustomerDrawing } from '../api'
-import { Contest, CustomerDrawingSortOptions } from '../types'
+import { Contest, ContestStatus, CustomerDrawingSortOptions } from '../types'
 
 type Props = {
   contest: Contest
@@ -167,7 +167,8 @@ const ContestPaint = ({ contest }: Props) => {
                   <Typography style={{ fontSize: 14, fontWeight: 'bold', color: 'inherit' }}>
                     Số lượng vote: {customerDrawing.totalVotes}
                   </Typography>
-                  {getUserRoleOrNull() &&
+                  {contest.status === ContestStatus.ACTIVE &&
+                    getUserRoleOrNull() &&
                     getUserRoleOrNull() === UserRole.CUSTOMER &&
                     !customerDrawing.isOwned &&
                     !customerDrawing.isVoted && (
