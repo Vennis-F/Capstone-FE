@@ -82,10 +82,10 @@ const EditInstructorDialogForm = (props: Props) => {
           <FormTextField name="firstName" label="Tên" disable control={control} size="small" />
         </Box>
         <Box sx={{ height: '60px' }}>
-          <FormTextField name="middleName" label="Tên đêm" disable control={control} size="small" />
+          <FormTextField name="middleName" label="Tên đệm" disable control={control} size="small" />
         </Box>
         <Box sx={{ height: '60px', marginBottom: '25px' }}>
-          <FormTextField name="lastName" label="Nguyễn" disable control={control} size="small" />
+          <FormTextField name="lastName" label="Họ" disable control={control} size="small" />
         </Box>
         <Box sx={{ height: '60px' }}>
           <FormTextField
@@ -98,15 +98,6 @@ const EditInstructorDialogForm = (props: Props) => {
         </Box>
         <Box sx={{ height: '60px' }}>
           <FormTextField name="email" label="Email" disable control={control} size="small" />
-        </Box>
-        <Box sx={{ height: '60px' }}>
-          <FormTextField
-            name="phoneNumber"
-            label="Số điện thoại"
-            disable
-            control={control}
-            size="small"
-          />
         </Box>
         <Box sx={{ height: '60px' }}>
           <FormTextField

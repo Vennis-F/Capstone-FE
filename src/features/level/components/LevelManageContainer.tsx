@@ -61,8 +61,8 @@ const LevelManageContainer = () => {
       </LayoutBodyContainer>
       {currentLevelId && (
         <DialogBinaryQuestion
-          titleText="Bạn có chắc muốn xóa cấp độ này không"
-          contentText="Xóa nhé"
+          titleText="xóa cấp độ"
+          contentText="Bạn có chắc muốn xóa cấp độ này không?"
           open={openDelete}
           clickAcceptAction={async () => {
             try {
