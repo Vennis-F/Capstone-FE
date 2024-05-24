@@ -68,7 +68,7 @@ const HomePageContainer = () => {
               variant="h3"
               sx={{ fontWeight: '600', marginBottom: '15px', fontFamily: '' }}
             >
-              Nền tảng cung cấp các khóa học vẽ cho
+              Nền tảnggg cung cấp các khóa học vẽ cho
               <Typography variant="inherit" component="span" sx={{ color: '#fde047' }}>
                 &nbsp;trẻ em
               </Typography>
