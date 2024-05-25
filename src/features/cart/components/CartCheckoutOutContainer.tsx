@@ -84,7 +84,7 @@ const CartCheckoutOutContainer = () => {
         returnUrl: `${
           process.env.NODE_ENV === 'development'
             ? 'http://localhost:3001'
-            : 'https://vecungtreem.online/'
+            : 'https://drawitup.site/'
         }/payment/check`,
       })
       console.log('INHERE BY VNPAY', paymentURL)
@@ -102,9 +102,7 @@ const CartCheckoutOutContainer = () => {
     try {
       const order = await createOrder()
       const paymentURL = `${
-        process.env.NODE_ENV === 'development'
-          ? 'http://localhost:3001'
-          : 'https://vecungtreem.online/'
+        process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : 'https://drawitup.site/'
       }/payment/check?paymentBy=MoMo&vnp_Amount=${order.totalPriceAfterPromotion}&vnp_TxnRef=${
         order.id
       }`
@@ -215,9 +213,9 @@ const CartCheckoutOutContainer = () => {
               {!isVNPAYorMomo && (
                 <>
                   <Image
-                    src={`https://backend-loc-exe-99d262cc5568.herokuapp.com/image?path=categories/thumbnails/adf171a1-4119-4822-9ba0-3fff0c282554.jpg`}
-                    style={{ height: '125px', width: '120px', padding: 0 }}
-                    imageStyle={{ height: '125px', width: '120px', elevation: 5, borderRadius: 3 }}
+                    src={`https://backend-loc-exe-99d262cc5568.herokuapp.com/image?path=categories/thumbnails/22ca4800-7b76-455b-b157-af09b6722ba5.jpg`}
+                    style={{ height: '350px', width: '270px', padding: 0 }}
+                    imageStyle={{ height: '350px', width: '270px', elevation: 5, borderRadius: 3 }}
                   />
                   <Typography
                     variant="body2"
