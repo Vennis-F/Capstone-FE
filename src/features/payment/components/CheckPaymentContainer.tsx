@@ -27,9 +27,10 @@ const CheckPaymentContainer = () => {
   const vnpResponseCode = searchParams.get('vnp_ResponseCode')
   const vnpTransactionNo = searchParams.get('vnp_TransactionNo')
   const vnpTxnRef = searchParams.get('vnp_TxnRef')
+  const paymentBy = searchParams.get('paymentBy')
   const [loading, setLoading] = useState(true)
 
-  const checkPayment = async () => {
+  const checkPaymentByVNPAY = async () => {
     const isValidToCheckPayment =
       vnpTxnRef && vnpAmount && vnpBankCode && vnpCardType && vnpResponseCode
 
@@ -85,6 +86,67 @@ const CheckPaymentContainer = () => {
     setLoading(false)
   }
 
+  const checkPaymentByMoMo = async () => {
+    console.log('<><><><><>', paymentBy, vnpTxnRef, vnpAmount)
+    const isValidToCheckPayment = vnpTxnRef && vnpAmount
+
+    if (!isValidToCheckPayment) {
+      navigate('/')
+      toastWarn({
+        message: 'Bạn chưa thanh toán, vui lòng mua các khóa học cho bé tại trang chủ!',
+      })
+      setLoading(false)
+      return
+    }
+
+    // Create a new transaction
+    let orderStatusName = NameOrderStatus.Success
+    const paymentAmount = Number(vnpAmount)
+    const transactionBody: CreateTransactionBody = {
+      orderId: vnpTxnRef,
+      paymentAmount,
+      bankCode: 'MOMO',
+      bankTranNo: 'MOMO',
+      cardType: 'QRCODE',
+      responseCode: '00',
+    }
+
+    try {
+      const response = await createTrasaction(transactionBody)
+
+      if (response.status !== TransactionStatus.Success) {
+        setLoading(false)
+        navigate('/cart')
+        toastError({
+          message: 'Thanh toán thất bại, vui lòng kiểm tra lại giỏ hàng và thanh toán lại',
+        })
+      } else {
+        deleteAllCartItems()
+        orderStatusName = NameOrderStatus.Success
+      }
+    } catch (error) {
+      console.log('error', error)
+      setLoading(false)
+      navigate('/cart')
+      showErrorResponseSaga({
+        error,
+        defaultMessage: 'Thanh toán thất bại, vui lòng kiểm tra lại giỏ hàng và thanh toán lai',
+      })
+    }
+
+    // Update order status
+    await updateOrder({
+      orderId: vnpTxnRef,
+      nameOrderStatus: orderStatusName,
+    })
+    setLoading(false)
+  }
+
+  const checkPayment = async () => {
+    if (paymentBy === 'MoMo') checkPaymentByMoMo()
+    else checkPaymentByVNPAY()
+  }
+
   useEffect(() => {
     checkPayment()
   }, [])
@@ -111,9 +173,17 @@ const CheckPaymentContainer = () => {
             />
           </Typography>
 
-          <EqualTitle titleLeft="Thể loại thanh toán" titleRight="VnPay" />
-          <EqualTitle titleLeft="Ngân hàng" titleRight={vnpBankCode} />
-          <EqualTitle titleLeft="Mã giao dịch" titleRight={vnpTransactionNo} />
+          <EqualTitle
+            titleLeft="Thể loại thanh toán"
+            titleRight={paymentBy !== 'MoMo' ? 'VNPAY' : 'MoMo'}
+          />
+          {paymentBy !== 'MoMo' && (
+            <>
+              <EqualTitle titleLeft="Ngân hàng" titleRight={vnpBankCode} />
+              <EqualTitle titleLeft="Mã giao dịch" titleRight={vnpTransactionNo} />
+            </>
+          )}
+
           <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
             <Typography
               sx={{ width: '40%', color: 'GrayText', fontSize: '18px', fontWeight: '600' }}
@@ -123,7 +193,10 @@ const CheckPaymentContainer = () => {
             <Typography
               sx={{ width: '60%', textAlign: 'right', fontWeight: '600', fontSize: '20px' }}
             >
-              {formatCurrency(Number(vnpAmount) / 100)} VND
+              {paymentBy !== 'MoMo'
+                ? formatCurrency(Number(vnpAmount) / 100)
+                : formatCurrency(Number(vnpAmount))}
+              VND
             </Typography>
           </Box>
           <Box sx={{ textAlign: 'center', marginTop: '39px' }}>
