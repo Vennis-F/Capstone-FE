@@ -173,7 +173,7 @@ const ContestHomePageContainer = () => {
             <ListItemIcon>
               <StarIcon style={{ color: '#FFf' }} />
             </ListItemIcon>
-            <ListItemText primary="Chào mừng các bạn đến với cuộc thi vẽ dành cho trẻ em trên trang web của chúng tôi! Đây là một cơ hội tuyệt vời để các bạn thể hiện tài năng sáng tạo của mình và tạo ra những tác phẩm nghệ thuật đẹp mắt. Bạn có biết rằng vẽ có thể giúp bạn phát triển trí não, tăng khả năng tưởng tượng và cải thiện kỹ năng giao tiếp không? Hãy cùng chúng tôi khám phá thế giới màu sắc và hình ảnh qua cuộc thi vẽ này nhé!" />
+            <ListItemText primary="Chào mừng các bạn đến với cuộc thi vẽ trên trang web của chúng tôi! Đây là một cơ hội tuyệt vời để các bạn thể hiện tài năng sáng tạo của mình và tạo ra những tác phẩm nghệ thuật đẹp mắt. Bạn có biết rằng vẽ có thể giúp bạn phát triển trí não, tăng khả năng tưởng tượng và cải thiện kỹ năng giao tiếp không? Hãy cùng chúng tôi khám phá thế giới màu sắc và hình ảnh qua cuộc thi vẽ này nhé!" />
           </ListItem>
           <ListItem disablePadding>
             <ListItemIcon>

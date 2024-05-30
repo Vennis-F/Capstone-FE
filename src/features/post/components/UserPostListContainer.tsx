@@ -43,7 +43,7 @@ const UserPostListContainer = () => {
       <Typography variant="h4" fontWeight="bold" marginBottom="40px">
         Blog&nbsp;
         <Typography component="span" variant="inherit" color={MainColor.RED_500}>
-          Vẽ cùng trẻ em
+          DrawItUp
         </Typography>
       </Typography>
       <Grid container spacing={5}>
