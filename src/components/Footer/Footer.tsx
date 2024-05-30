@@ -13,7 +13,7 @@ const Copyright = () => (
   <Typography variant="body2" color="text.secondary">
     {'Copyright © '}
     <Link color="inherit" href="https://capstone-fe-git-main-vennis-f.vercel.app/">
-      Vẽ cùng trẻ em
+      DrawItUp
     </Link>
     {new Date().getFullYear()}
   </Typography>
@@ -47,7 +47,7 @@ const Footer = () => {
           }}
         >
           <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center' }}>
-            <PaletteIcon sx={{ marginRight: '2px' }} /> Vẽ cùng trẻ em
+            <PaletteIcon sx={{ marginRight: '2px' }} /> DrawItUp
           </Typography>
         </Box>
         <Divider sx={{ color: 'gray', my: '8px' }} />

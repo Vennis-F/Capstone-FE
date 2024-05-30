@@ -70,7 +70,7 @@ const HomePageContainer = () => {
             >
               Nền tảng cung cấp các khóa học vẽ cho
               <Typography variant="inherit" component="span" sx={{ color: '#fde047' }}>
-                &nbsp;trẻ em
+                &nbsp;mọi người
               </Typography>
             </Typography>
             <Typography variant="body2" sx={{ color: 'GrayText', marginBottom: '20px' }}>

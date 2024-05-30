@@ -47,7 +47,8 @@ export const GuestLoginContainer = () => {
         navigate('/staff/manage/posts')
         break
       case UserRole.ADMIN:
-        navigate('/admin/manage/dashboard')
+        // navigate('/admin/manage/dashboard')
+        navigate('/admin/manage/categories')
         break
       default:
         break

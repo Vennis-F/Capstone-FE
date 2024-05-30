@@ -175,7 +175,7 @@ const HeaderLOL = () => {
                     fontWeight: '600',
                   }}
                 >
-                  <PaletteIcon /> {'Vẽ cùng trẻ em'}
+                  <PaletteIcon /> {'DRAWITUP'}
                 </Typography>
               </Button>
             </Grid>

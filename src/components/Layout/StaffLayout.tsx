@@ -67,7 +67,7 @@ const routesStaff = [
 ]
 
 const routesAdmin = [
-  { path: '/admin/manage/dashboard', icon: <BarChartIcon />, title: 'Thống kê' },
+  // { path: '/admin/manage/dashboard', icon: <BarChartIcon />, title: 'Thống kê' },
   { path: '/admin/manage/categories', icon: <CategoryIcon />, title: 'Thể loại' },
   { path: '/admin/manage/levels', icon: <AccessibilityIcon />, title: 'Cấp độ' },
   // {
