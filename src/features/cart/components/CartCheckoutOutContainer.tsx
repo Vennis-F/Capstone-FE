@@ -213,7 +213,7 @@ const CartCheckoutOutContainer = () => {
               {!isVNPAYorMomo && (
                 <>
                   <Image
-                    src={`https://backend-loc-exe-99d262cc5568.herokuapp.com/image?path=users/avatar/4737aa84-1e41-4090-8215-196d2aef1cbejpg`}
+                    src={`https://tetst-b067cac9eee0.herokuapp.com/image?path=users/avatar/4737aa84-1e41-4090-8215-196d2aef1cbejpg`}
                     style={{ height: '350px', width: '270px', padding: 0 }}
                     imageStyle={{ height: '350px', width: '270px', elevation: 5, borderRadius: 3 }}
                   />
